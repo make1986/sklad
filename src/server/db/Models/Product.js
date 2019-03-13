@@ -45,6 +45,17 @@ const ProductSchema = new Schema(
     },
     youtube: {
       type: String
+    },
+    price: {
+      type: Number
+    },
+    qt: {
+      type: Number,
+      default: 0
+    },
+    sold: {
+      type: Number,
+      default: 0
     }
   },
   { timestamps: { createdAt: "created_at" } }

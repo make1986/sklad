@@ -16,7 +16,11 @@ module.exports.loadImage = (stream, data, socket) => {
     const ws = fs.createWriteStream(filepath);
     stream.pipe(ws);
     ws.on("finish", () => {
-      socket.emit("load_successful", filename);
+      if ((data.idx || data.idx === 0) && data.idx !== undefined) {
+        socket.emit("load_successful", { filename, idx: data.idx });
+      } else {
+        socket.emit("load_successful", filename);
+      }
     });
   }
 };

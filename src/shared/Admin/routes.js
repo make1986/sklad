@@ -1,6 +1,8 @@
 import Home from "./Pages/Home";
 import Categories from "./Pages/Categories";
 import AddCategory from "./Pages/AddCategory";
+import Catalog from "./Pages/Catalog";
+import AddProduct from "./Pages/AddProduct";
 
 import { MultiBootloader } from "./api/load";
 
@@ -34,7 +36,7 @@ const routes = [
     path: "/admin/add-category",
     exact: false,
     component: AddCategory,
-    title: "Создать категорию"
+    title: "Категория товаров"
   },
   {
     path: "/admin/edit-category/:id",
@@ -45,7 +47,24 @@ const routes = [
       url: "categories/get_by_id",
       params: path => getParams(path, "/admin/edit-category/")
     },
-    title: "Категории"
+    title: "Категория товаров"
+  },
+  {
+    path: "/admin/catalog",
+    exact: false,
+    component: Catalog,
+    handlerClass: MultiBootloader,
+    params: {
+      url: "products/get_by_params",
+      params: path => getParams(path, "/admin/catalog/")
+    },
+    title: "Каталог товаров"
+  },
+  {
+    path: "/admin/add-product",
+    exact: false,
+    component: AddProduct,
+    title: "Товар"
   }
 ];
 

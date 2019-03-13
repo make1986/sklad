@@ -17,7 +17,7 @@ import db from "./db/connect";
 import sessionStore from "./sessionStore";
 
 import routes from "./router";
-import { file, categories } from "./api";
+import { file, categories, products } from "./api";
 import { loadImage, deleteFile } from "./socket/files";
 
 db.setUpConnect();
@@ -41,6 +41,7 @@ app.use(
 
 app.use("/api/upload", file);
 app.use("/api/categories", categories);
+app.use("/api/products", products);
 
 app.use(express.static("public"));
 app.use(routes);

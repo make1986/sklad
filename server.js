@@ -212,6 +212,14 @@ var _AddCategory = __webpack_require__(37);
 
 var _AddCategory2 = _interopRequireDefault(_AddCategory);
 
+var _Catalog = __webpack_require__(72);
+
+var _Catalog2 = _interopRequireDefault(_Catalog);
+
+var _AddProduct = __webpack_require__(74);
+
+var _AddProduct2 = _interopRequireDefault(_AddProduct);
+
 var _load = __webpack_require__(12);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -245,7 +253,7 @@ var routes = [{
   path: "/admin/add-category",
   exact: false,
   component: _AddCategory2.default,
-  title: "Создать категорию"
+  title: "Категория товаров"
 }, {
   path: "/admin/edit-category/:id",
   exact: false,
@@ -257,7 +265,24 @@ var routes = [{
       return getParams(path, "/admin/edit-category/");
     }
   },
-  title: "Категории"
+  title: "Категория товаров"
+}, {
+  path: "/admin/catalog",
+  exact: false,
+  component: _Catalog2.default,
+  handlerClass: _load.MultiBootloader,
+  params: {
+    url: "products/get_by_params",
+    params: function params(path) {
+      return getParams(path, "/admin/catalog/");
+    }
+  },
+  title: "Каталог товаров"
+}, {
+  path: "/admin/add-product",
+  exact: false,
+  component: _AddProduct2.default,
+  title: "Товар"
 }];
 
 exports.default = routes;
@@ -459,6 +484,7 @@ app.use((0, _expressSession2.default)({
 
 app.use("/api/upload", _api.file);
 app.use("/api/categories", _api.categories);
+app.use("/api/products", _api.products);
 
 app.use(_express2.default.static("public"));
 app.use(_router2.default);
@@ -1404,7 +1430,7 @@ var categoriesPage = function categoriesPage(_ref) {
     _react2.default.createElement(
       "h2",
       { className: "title-page" },
-      "\u041D\u043E\u0432\u0430\u044F \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F \u0442\u043E\u0432\u0430\u0440\u043E\u0432"
+      "\u041A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F \u0442\u043E\u0432\u0430\u0440\u043E\u0432"
     ),
     _react2.default.createElement(
       "div",
@@ -1442,7 +1468,7 @@ exports.default = (0, _WithForm2.default)(categoriesPage, {
   edit: "categories/edit",
   redirect: "/admin/categories",
   get: "categories/get_by_id"
-}, "Создать категорию", { name: true, description: true, image: false });
+}, "Категория", { name: true, description: true, image: false });
 
 /***/ }),
 /* 38 */
@@ -2198,6 +2224,35 @@ exports.default = SaveButton;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var p404 = function p404() {
+  return _react2.default.createElement(
+    "div",
+    { className: "page__container p404" },
+    _react2.default.createElement(
+      "h3",
+      { className: "title-page" },
+      "404"
+    ),
+    _react2.default.createElement(
+      "p",
+      null,
+      "\u0421\u0442\u0440\u0430\u043D\u0438\u0446\u0430 \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u0430"
+    )
+  );
+};
+
+exports.default = p404;
+
 /***/ }),
 /* 48 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -2607,6 +2662,10 @@ var _categories = __webpack_require__(57);
 
 var _categories2 = _interopRequireDefault(_categories);
 
+var _products = __webpack_require__(73);
+
+var _products2 = _interopRequireDefault(_products);
+
 var _file = __webpack_require__(60);
 
 var _file2 = _interopRequireDefault(_file);
@@ -2615,7 +2674,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 module.exports = {
   file: _file2.default,
-  categories: _categories2.default
+  categories: _categories2.default,
+  products: _products2.default
 };
 
 /***/ }),
@@ -3386,7 +3446,11 @@ module.exports.loadImage = function (stream, data, socket) {
     var ws = _fs2.default.createWriteStream(filepath);
     stream.pipe(ws);
     ws.on("finish", function () {
-      socket.emit("load_successful", filename);
+      if ((data.idx || data.idx === 0) && data.idx !== undefined) {
+        socket.emit("load_successful", { filename: filename, idx: data.idx });
+      } else {
+        socket.emit("load_successful", filename);
+      }
     });
   }
 };
@@ -3670,10 +3734,493 @@ var ProductSchema = new Schema({
   },
   youtube: {
     type: String
+  },
+  price: {
+    type: Number
+  },
+  qt: {
+    type: Number,
+    default: 0
+  },
+  sold: {
+    type: Number,
+    default: 0
   }
 }, { timestamps: { createdAt: "created_at" } });
 
 var Product = mongoose.model("Product", ProductSchema);
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(3);
+
+var _WithMany = __webpack_require__(35);
+
+var _WithMany2 = _interopRequireDefault(_WithMany);
+
+var _AddButton = __webpack_require__(36);
+
+var _AddButton2 = _interopRequireDefault(_AddButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var catalogPage = function catalogPage(_ref) {
+  var data = _ref.data,
+      confirmToggle = _ref.confirmToggle,
+      deleteField = _ref.deleteField;
+  return _react2.default.createElement(
+    "div",
+    { className: "page__container catalog-page" },
+    _react2.default.createElement(
+      "h2",
+      { className: "title-page" },
+      "\u0412\u0441\u0435 \u0442\u043E\u0432\u0430\u0440\u044B"
+    ),
+    _react2.default.createElement(
+      "div",
+      { className: "categories-page__container" },
+      "All"
+    ),
+    _react2.default.createElement(_AddButton2.default, { src: "/admin/add-product" })
+  );
+};
+
+exports.default = (0, _WithMany2.default)(catalogPage, "products/get_by_params", "Каталог товаров");
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _express = __webpack_require__(4);
+
+var _express2 = _interopRequireDefault(_express);
+
+var _mongoose = __webpack_require__(2);
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+var _files = __webpack_require__(65);
+
+__webpack_require__(58);
+
+__webpack_require__(71);
+
+var _Queries = __webpack_require__(59);
+
+var _Queries2 = _interopRequireDefault(_Queries);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var router = _express2.default.Router();
+
+var Category = _mongoose2.default.model("Category");
+
+var Product = _mongoose2.default.model("Product");
+
+router.get("/get_by_params", function (req, res) {
+  var products = new _Queries2.default(Product);
+  products.getByParams({ limit: 10 }).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+module.exports = router;
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _WithForm = __webpack_require__(38);
+
+var _WithForm2 = _interopRequireDefault(_WithForm);
+
+var _TextField = __webpack_require__(40);
+
+var _TextField2 = _interopRequireDefault(_TextField);
+
+var _UploadBlock = __webpack_require__(42);
+
+var _UploadBlock2 = _interopRequireDefault(_UploadBlock);
+
+var _Gallery = __webpack_require__(75);
+
+var _Gallery2 = _interopRequireDefault(_Gallery);
+
+var _SaveButton = __webpack_require__(46);
+
+var _SaveButton2 = _interopRequireDefault(_SaveButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var productPage = function productPage(_ref) {
+  var handlerChange = _ref.handlerChange,
+      data = _ref.data,
+      onSave = _ref.onSave,
+      isEmpty = _ref.isEmpty;
+  return _react2.default.createElement(
+    "div",
+    { className: "page__container add-categories-page" },
+    _react2.default.createElement(
+      "h2",
+      { className: "title-page" },
+      "\u0422\u043E\u0432\u0430\u0440"
+    ),
+    _react2.default.createElement(
+      "div",
+      { className: "form" },
+      _react2.default.createElement(_Gallery2.default, {
+        handlerChange: handlerChange,
+        value: data.gallery,
+        name: "gallery",
+        placeholder: "\u0413\u0430\u043B\u0435\u0440\u0435\u044F"
+      }),
+      _react2.default.createElement(_TextField2.default, {
+        type: "input",
+        placeholder: "\u0418\u043C\u044F",
+        name: "name",
+        handlerChange: handlerChange,
+        value: data.name,
+        isEmpty: isEmpty.name ? true : false
+      }),
+      _react2.default.createElement(_TextField2.default, {
+        type: "textarea",
+        placeholder: "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435",
+        name: "description",
+        handlerChange: handlerChange,
+        value: data.description,
+        isEmpty: isEmpty.description ? true : false
+      }),
+      _react2.default.createElement(_TextField2.default, {
+        type: "input",
+        placeholder: "\u0410\u0440\u0442\u0438\u043A\u0443\u043B",
+        name: "article",
+        handlerChange: handlerChange,
+        value: data.article,
+        isEmpty: isEmpty.article ? true : false
+      }),
+      _react2.default.createElement(_TextField2.default, {
+        type: "input",
+        placeholder: "\u0428\u0442\u0440\u0438\u0445\u043A\u043E\u0434",
+        name: "barcode",
+        handlerChange: handlerChange,
+        value: data.barcode,
+        isEmpty: isEmpty.barcode ? true : false
+      }),
+      _react2.default.createElement(_UploadBlock2.default, {
+        handlerChange: handlerChange,
+        name: "image",
+        placeholder: "\u0413\u043B\u0430\u0432\u043D\u043E\u0435 \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435",
+        isEmpty: isEmpty.image ? true : false,
+        value: data.image || ""
+      }),
+      _react2.default.createElement(_SaveButton2.default, { name: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C", submit: onSave })
+    )
+  );
+};
+
+exports.default = (0, _WithForm2.default)(productPage, {
+  set: "products/add",
+  edit: "products/edit",
+  redirect: "/admin/catalog",
+  get: "products/get_by_id"
+}, "Товар", {
+  name: true,
+  description: true,
+  image: true,
+  article: true,
+  barcode: true,
+  gallery: false
+});
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Gallery = __webpack_require__(76);
+
+var _Gallery2 = _interopRequireDefault(_Gallery);
+
+var _config = __webpack_require__(1);
+
+var _ImageBlock = __webpack_require__(15);
+
+var _ImageBlock2 = _interopRequireDefault(_ImageBlock);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Gallery = function Gallery(_ref) {
+  var files = _ref.files,
+      deleteFile = _ref.deleteFile,
+      uploadFiles = _ref.uploadFiles,
+      name = _ref.name,
+      load = _ref.load;
+  return _react2.default.createElement(
+    "div",
+    { className: "gallery" },
+    files.map(function (file, idx) {
+      return _react2.default.createElement(
+        "div",
+        { className: "gallery__item", key: idx },
+        file ? _react2.default.createElement(
+          _react2.default.Fragment,
+          null,
+          _react2.default.createElement(_ImageBlock2.default, { src: _config.IMAGE_PREFIX + "/" + file, classes: "image" }),
+          _react2.default.createElement(
+            "div",
+            { onClick: function onClick() {
+                return deleteFile(idx);
+              }, className: "close clickable" },
+            "\xD7"
+          )
+        ) : _react2.default.createElement("div", {
+          style: {
+            width: load[idx] + "%",
+            display: load[idx] < 100 ? "block" : "none"
+          },
+          className: "loading"
+        })
+      );
+    }),
+    _react2.default.createElement("input", {
+      multiple: "multiple",
+      onChange: uploadFiles,
+      type: "file",
+      name: name,
+      id: name
+    }),
+    _react2.default.createElement(
+      "label",
+      { className: "clickable", htmlFor: name },
+      "+"
+    )
+  );
+};
+
+exports.default = (0, _Gallery2.default)(Gallery);
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _config = __webpack_require__(1);
+
+var _socket = __webpack_require__(44);
+
+var _socket2 = _interopRequireDefault(_socket);
+
+var _socket3 = __webpack_require__(5);
+
+var _socket4 = _interopRequireDefault(_socket3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var socket = (0, _socket2.default)(_config.API_PREFIX);
+
+var withLoaderArr = function withLoaderArr(Component, API_URLS, title) {
+  var WithLoaderArr = function (_React$Component) {
+    _inherits(WithLoaderArr, _React$Component);
+
+    function WithLoaderArr(props) {
+      _classCallCheck(this, WithLoaderArr);
+
+      var _this = _possibleConstructorReturn(this, (WithLoaderArr.__proto__ || Object.getPrototypeOf(WithLoaderArr)).call(this, props));
+
+      _this.state = _defineProperty({
+        load: [],
+        fieldName: "",
+        files: _this.props.value || []
+      }, "fieldName", "");
+      _this.socketConnect = _this.socketConnect.bind(_this);
+      _this.uploadFiles = _this.uploadFiles.bind(_this);
+      _this.deleteFile = _this.deleteFile.bind(_this);
+      _this.loadSuccessful = _this.loadSuccessful.bind(_this);
+      return _this;
+    }
+
+    _createClass(WithLoaderArr, [{
+      key: "componentDidMount",
+      value: function componentDidMount() {
+        this.socketConnect();
+        this.loadSuccessful();
+      }
+    }, {
+      key: "loadSuccessful",
+      value: function loadSuccessful() {
+        var _this2 = this;
+
+        socket.on("load_successful", function (response) {
+          if (response) {
+            var files = _this2.state.files;
+            var filename = response.filename,
+                idx = response.idx;
+
+            files[idx] = filename;
+            _this2.setState({ files: files }, function () {
+              var _state = _this2.state,
+                  fieldName = _state.fieldName,
+                  files = _state.files;
+
+              _this2.props.handlerChange(fieldName, files);
+            });
+          }
+        });
+      }
+    }, {
+      key: "socketConnect",
+      value: function socketConnect() {
+        socket.on("connect", function () {
+          console.log("client");
+        });
+      }
+    }, {
+      key: "deleteFile",
+      value: function deleteFile(idx) {
+        var _this3 = this;
+
+        var files = this.state.files;
+
+        var file = files[idx];
+        files.splice(idx, 1);
+        this.setState({ files: files }, function () {
+          socket.emit("delete_file", file);
+          _this3.props.handlerChange(_this3.state.fieldName, _this3.state.files);
+        });
+      }
+    }, {
+      key: "uploadFiles",
+      value: function uploadFiles(e) {
+        var _this4 = this;
+
+        var _e$target = e.target,
+            files = _e$target.files,
+            name = _e$target.name;
+
+        this.setState({ fieldName: name });
+        var load = this.state.load;
+
+        var order = load.length;
+        var allFiles = this.state.files;
+
+        var _loop = function _loop(i) {
+          load[order + i] = 0;
+          allFiles[order + i] = "";
+          _this4.setState({ files: allFiles });
+          var file = files[i];
+          var filename = file.name;
+          var filesize = file.size;
+          var enc = e.target.encoding;
+          var stream = _socket4.default.createStream();
+          (0, _socket4.default)(socket).emit("upload_img", stream, {
+            data: file,
+            size: filesize,
+            name: filename,
+            enc: enc,
+            idx: order + i
+          });
+          var blobStream = _socket4.default.createBlobReadStream(file);
+          var size = 0;
+          blobStream.on("data", function (chunk) {
+            size += chunk.length;
+            var percent = Math.floor(size / file.size * 100);
+            load[order + i] = percent;
+            _this4.setState({ load: load });
+            // console.log(this.state.load);
+          });
+          blobStream.pipe(stream);
+        };
+
+        for (var i = 0; i < files.length; i++) {
+          _loop(i);
+        }
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var _state2 = this.state,
+            load = _state2.load,
+            files = _state2.files;
+
+        return _react2.default.createElement(Component, _extends({
+          uploadFiles: this.uploadFiles
+        }, this.props, {
+          load: load,
+          deleteFile: this.deleteFile,
+          files: files
+        }));
+      }
+    }]);
+
+    return WithLoaderArr;
+  }(_react2.default.Component);
+
+  WithLoaderArr.displayName = "WithLoaderArr(" + (Component.displayName || Component.name || "Component") + ")";
+  return WithLoaderArr;
+};
+
+exports.default = withLoaderArr;
 
 /***/ })
 /******/ ]);

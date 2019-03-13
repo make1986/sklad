@@ -7,7 +7,7 @@ import SaveButton from "../../Components/SaveButton";
 
 const categoriesPage = ({ handlerChange, data, onSave, isEmpty }) => (
   <div className="page__container add-categories-page">
-    <h2 className="title-page">Новая категория товаров</h2>
+    <h2 className="title-page">Категория товаров</h2>
     <div className="form">
       <TextField
         type="input"
@@ -45,6 +45,6 @@ export default withForm(
     redirect: "/admin/categories",
     get: "categories/get_by_id"
   },
-  "Создать категорию",
+  "Категория",
   { name: true, description: true, image: false }
 );

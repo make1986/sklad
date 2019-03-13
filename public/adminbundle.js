@@ -25561,6 +25561,14 @@ var _AddCategory = __webpack_require__(141);
 
 var _AddCategory2 = _interopRequireDefault(_AddCategory);
 
+var _Catalog = __webpack_require__(215);
+
+var _Catalog2 = _interopRequireDefault(_Catalog);
+
+var _AddProduct = __webpack_require__(216);
+
+var _AddProduct2 = _interopRequireDefault(_AddProduct);
+
 var _load = __webpack_require__(52);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -25594,7 +25602,7 @@ var routes = [{
   path: "/admin/add-category",
   exact: false,
   component: _AddCategory2.default,
-  title: "Создать категорию"
+  title: "Категория товаров"
 }, {
   path: "/admin/edit-category/:id",
   exact: false,
@@ -25606,7 +25614,24 @@ var routes = [{
       return getParams(path, "/admin/edit-category/");
     }
   },
-  title: "Категории"
+  title: "Категория товаров"
+}, {
+  path: "/admin/catalog",
+  exact: false,
+  component: _Catalog2.default,
+  handlerClass: _load.MultiBootloader,
+  params: {
+    url: "products/get_by_params",
+    params: function params(path) {
+      return getParams(path, "/admin/catalog/");
+    }
+  },
+  title: "Каталог товаров"
+}, {
+  path: "/admin/add-product",
+  exact: false,
+  component: _AddProduct2.default,
+  title: "Товар"
 }];
 
 exports.default = routes;
@@ -27338,7 +27363,7 @@ var categoriesPage = function categoriesPage(_ref) {
     _react2.default.createElement(
       "h2",
       { className: "title-page" },
-      "\u041D\u043E\u0432\u0430\u044F \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F \u0442\u043E\u0432\u0430\u0440\u043E\u0432"
+      "\u041A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F \u0442\u043E\u0432\u0430\u0440\u043E\u0432"
     ),
     _react2.default.createElement(
       "div",
@@ -27376,7 +27401,7 @@ exports.default = (0, _WithForm2.default)(categoriesPage, {
   edit: "categories/edit",
   redirect: "/admin/categories",
   get: "categories/get_by_id"
-}, "Создать категорию", { name: true, description: true, image: false });
+}, "Категория", { name: true, description: true, image: false });
 
 /***/ }),
 /* 142 */
@@ -33902,6 +33927,35 @@ exports.default = SaveButton;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var p404 = function p404() {
+  return _react2.default.createElement(
+    "div",
+    { className: "page__container p404" },
+    _react2.default.createElement(
+      "h3",
+      { className: "title-page" },
+      "404"
+    ),
+    _react2.default.createElement(
+      "p",
+      null,
+      "\u0421\u0442\u0440\u0430\u043D\u0438\u0446\u0430 \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u0430"
+    )
+  );
+};
+
+exports.default = p404;
+
 /***/ }),
 /* 199 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -34359,7 +34413,7 @@ exports = module.exports = __webpack_require__(209)(false);
 exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|PT+Sans+Narrow:400,700&subset=cyrillic);", ""]);
 
 // module
-exports.push([module.i, "body,\nhtml {\n  margin: 0;\n  padding: 0;\n  font-family: \"Montserrat\", sans-serif; }\n\na {\n  text-decoration: none;\n  outline: none; }\n\ninput,\ntextarea {\n  outline: none;\n  resize: none; }\n\n.page {\n  width: 100%;\n  max-width: 1440px;\n  margin: 0 auto; }\n  .page__container {\n    padding-top: 60px;\n    min-height: calc(100% - $header_height); }\n    .page__container .title-page {\n      font-size: 44px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      margin-top: 36px;\n      margin-bottom: 44px;\n      text-align: center; }\n    .page__container .form {\n      display: flex;\n      flex-direction: column;\n      width: 600px;\n      margin-left: auto;\n      margin-right: auto; }\n\n.clickable:hover {\n  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149); }\n\n.clickable:active {\n  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149); }\n\n@keyframes empty {\n  from {\n    border: 1px solid #d93025; }\n  25% {\n    border: 1px solid #d93025; }\n  26% {\n    border: 1px solid grey; }\n  50% {\n    border: 1px solid grey; }\n  51% {\n    border: 1px solid #d93025; }\n  75% {\n    border: 1px solid #d93025; }\n  76% {\n    border: 1px solid grey; }\n  99% {\n    border: 1px solid grey; }\n  to {\n    border: 1px solid #d93025; } }\n\n.empty {\n  animation: empty 1s linear forwards; }\n\n.preloader {\n  width: 100%;\n  height: 100%;\n  background-color: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  left: 0;\n  top: 0; }\n  .preloader img {\n    width: 50%; }\n\n.error {\n  position: fixed;\n  width: 100%;\n  height: 100vh;\n  left: 0;\n  top: 0;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000; }\n  .error div {\n    padding: 30px;\n    background-color: #fff;\n    border-radius: 24px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center; }\n    .error div p {\n      color: #17181a;\n      font-size: 16px; }\n    .error div .button {\n      padding: 0;\n      border-radius: 100px;\n      background-color: #ec5d61;\n      color: #fff;\n      height: 40px;\n      width: 100px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      cursor: pointer; }\n      .error div .button:hover {\n        -webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);\n        -moz-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);\n        box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75); }\n\n.add-button {\n  position: fixed;\n  right: 30px;\n  bottom: 30px;\n  background-color: #fff;\n  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: #222;\n  font-weight: 600;\n  font-size: 32px;\n  width: 60px;\n  height: 60px;\n  border-radius: 50%;\n  transition: box-shadow 0.08s linear, min-width 0.15s cubic-bezier(0.4, 0, 0.2, 1); }\n  .add-button:hover {\n    background-color: #fafafb;\n    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149); }\n  .add-button:active {\n    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149); }\n\n.text-field {\n  position: relative;\n  width: 100%;\n  margin: 4px 0; }\n  .text-field input,\n  .text-field textarea {\n    background-color: #fff;\n    border: 1px solid #dfe1e5;\n    width: calc(100% - 32px);\n    resize: none;\n    padding: 0 16px;\n    border-radius: 24px;\n    font-size: 16px;\n    font-family: \"Montserrat\", sans-serif;\n    font-weight: 600;\n    color: #222; }\n    .text-field input:hover, .text-field input:focus,\n    .text-field textarea:hover,\n    .text-field textarea:focus {\n      border-color: rgba(223, 225, 229, 0);\n      box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28); }\n  .text-field input {\n    height: 52px;\n    padding-top: 4px; }\n  .text-field textarea {\n    height: 160px;\n    padding: 16px 16px; }\n  .text-field__count {\n    position: absolute;\n    bottom: 8px;\n    right: 16px;\n    color: #ff5252;\n    font-size: 12px; }\n  .text-field__label {\n    position: absolute;\n    left: 16px;\n    top: 16px;\n    font-size: 16px;\n    color: #222;\n    transition: all 0.2s linear; }\n    .text-field__label.active {\n      transform: translateY(-10px);\n      font-size: 12px; }\n\n.upload-block {\n  margin: 4px 0; }\n  .upload-block input {\n    display: none; }\n  .upload-block__img {\n    position: relative; }\n    .upload-block__img .close {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 24px;\n      height: 24px;\n      cursor: pointer;\n      background-color: #d93025;\n      color: #fff;\n      display: flex;\n      align-items: center;\n      justify-content: center; }\n    .upload-block__img .image {\n      width: 100%; }\n  .upload-block label {\n    cursor: pointer;\n    background-color: #35ac19;\n    border-radius: 4px;\n    color: #fff;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    height: 54px;\n    font-size: 16px; }\n  .upload-block .progress-block {\n    display: flex;\n    background-color: #35ac19;\n    border-radius: 4px;\n    overflow: hidden;\n    height: 54px;\n    position: relative; }\n    .upload-block .progress-block span {\n      position: absolute;\n      left: 50%;\n      top: 50%;\n      transform: translate(-50%, -50%);\n      color: #fff;\n      font-weight: 600;\n      font-size: 16px; }\n    .upload-block .progress-block__line {\n      position: relative;\n      height: 100%;\n      width: 100%; }\n      .upload-block .progress-block__line .progress {\n        position: absolute;\n        left: 0;\n        top: 0;\n        background-color: #1a73e8;\n        height: 100%;\n        width: 100%; }\n\n.image-block {\n  position: relative; }\n  .image-block img {\n    width: 100%; }\n\n.save-button {\n  cursor: pointer;\n  background-color: #1a73e8;\n  border-radius: 4px;\n  color: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 54px;\n  font-size: 16px;\n  border: none;\n  outline: none;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin: 4px 0; }\n\n.header {\n  display: flex;\n  position: fixed;\n  width: 100%;\n  height: 60px;\n  left: 0;\n  top: 0;\n  justify-content: space-between;\n  align-items: center;\n  z-index: 600;\n  border-bottom: 1px solid #777;\n  background-color: #fff; }\n  .header__user {\n    margin-right: 30px;\n    display: flex;\n    align-items: center;\n    justify-content: center; }\n    .header__user .name {\n      margin: 0;\n      color: #35ac19;\n      font-family: \"PT Sans Narrow\", sans-serif; }\n    .header__user .logout {\n      padding: 8px;\n      margin-left: 8px;\n      background-color: #d93025;\n      color: #fff;\n      cursor: pointer;\n      border-radius: 8px; }\n  .header__logo {\n    width: 70px;\n    padding-left: 30px; }\n    .header__logo .img {\n      width: 100%; }\n  .header__menu {\n    display: flex;\n    height: 100%;\n    align-items: center;\n    font-family: \"PT Sans Narrow\", sans-serif;\n    font-size: 16px; }\n    .header__menu .item {\n      height: 100%;\n      position: relative;\n      margin-left: 16px;\n      margin-right: 16px; }\n      .header__menu .item:hover .item__drop {\n        color: #35ac19; }\n      .header__menu .item:hover .item__down {\n        display: flex; }\n      .header__menu .item__drop, .header__menu .item__link {\n        height: 100%;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        color: #777;\n        cursor: pointer; }\n        .header__menu .item__drop:hover, .header__menu .item__link:hover {\n          color: #35ac19; }\n      .header__menu .item__down {\n        position: absolute;\n        display: none;\n        flex-direction: column;\n        background-color: #fff;\n        padding: 8px;\n        top: 100%;\n        left: 50%;\n        transform: translateX(-50%);\n        border: 1px solid #777;\n        border-top: none; }\n        .header__menu .item__down .link {\n          color: #777;\n          display: flex;\n          justify-content: center;\n          align-items: center;\n          word-wrap: normal;\n          white-space: nowrap; }\n          .header__menu .item__down .link:hover {\n            color: #35ac19; }\n\n.confirm {\n  position: fixed;\n  width: 100%;\n  height: 100vh;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  left: 0;\n  top: 0;\n  z-index: 800; }\n  .confirm__container {\n    padding: 30px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    background-color: #fff;\n    border-radius: 24px; }\n    .confirm__container .text {\n      font-size: 24px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      font-weight: bold;\n      margin-top: 0;\n      margin-bottom: 24px; }\n    .confirm__container .menu {\n      display: flex; }\n      .confirm__container .menu span {\n        width: 120px;\n        height: 40px;\n        border-radius: 8px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        margin: 0 8px;\n        cursor: pointer;\n        color: #fff; }\n      .confirm__container .menu__true {\n        background-color: #35ac19; }\n      .confirm__container .menu__false {\n        background-color: #d93025; }\n\n.categories-page__container {\n  width: 1080px;\n  margin: auto; }\n  .categories-page__container .drag {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    cursor: grab;\n    background-color: #777;\n    border-radius: 24px;\n    padding: 16px; }\n    .categories-page__container .drag:active {\n      cursor: grabbing; }\n    .categories-page__container .drag__name {\n      color: #fff;\n      font-weight: 600;\n      font-size: 18px; }\n    .categories-page__container .drag__menu {\n      display: flex; }\n      .categories-page__container .drag__menu .edit-button,\n      .categories-page__container .drag__menu .delete-button {\n        width: 160px;\n        height: 48px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        border-radius: 8px;\n        color: #fff; }\n      .categories-page__container .drag__menu .edit-button {\n        margin-right: 8px;\n        background-color: #35ac19; }\n      .categories-page__container .drag__menu .delete-button {\n        background-color: #d93025; }\n  .categories-page__container .drop {\n    height: 10px;\n    width: 100%; }\n", ""]);
+exports.push([module.i, "body,\nhtml {\n  margin: 0;\n  padding: 0;\n  font-family: \"Montserrat\", sans-serif; }\n\na {\n  text-decoration: none;\n  outline: none; }\n\ninput,\ntextarea {\n  outline: none;\n  resize: none; }\n\n.page {\n  width: 100%;\n  max-width: 1440px;\n  margin: 0 auto; }\n  .page__container {\n    padding-top: 60px;\n    min-height: calc(100% - $header_height); }\n    .page__container .title-page {\n      font-size: 44px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      margin-top: 36px;\n      margin-bottom: 44px;\n      text-align: center; }\n    .page__container .form {\n      display: flex;\n      flex-direction: column;\n      width: 600px;\n      margin-left: auto;\n      margin-right: auto; }\n\n.clickable:hover {\n  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149); }\n\n.clickable:active {\n  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149); }\n\n@keyframes empty {\n  from {\n    border: 1px solid #d93025; }\n  25% {\n    border: 1px solid #d93025; }\n  26% {\n    border: 1px solid grey; }\n  50% {\n    border: 1px solid grey; }\n  51% {\n    border: 1px solid #d93025; }\n  75% {\n    border: 1px solid #d93025; }\n  76% {\n    border: 1px solid grey; }\n  99% {\n    border: 1px solid grey; }\n  to {\n    border: 1px solid #d93025; } }\n\n.empty {\n  animation: empty 1s linear forwards; }\n\n.preloader {\n  width: 100%;\n  height: 100%;\n  background-color: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  left: 0;\n  top: 0; }\n  .preloader img {\n    width: 50%; }\n\n.error {\n  position: fixed;\n  width: 100%;\n  height: 100vh;\n  left: 0;\n  top: 0;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000; }\n  .error div {\n    padding: 30px;\n    background-color: #fff;\n    border-radius: 24px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center; }\n    .error div p {\n      color: #17181a;\n      font-size: 16px; }\n    .error div .button {\n      padding: 0;\n      border-radius: 100px;\n      background-color: #ec5d61;\n      color: #fff;\n      height: 40px;\n      width: 100px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      cursor: pointer; }\n      .error div .button:hover {\n        -webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);\n        -moz-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);\n        box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75); }\n\n.add-button {\n  position: fixed;\n  right: 30px;\n  bottom: 30px;\n  background-color: #fff;\n  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: #222;\n  font-weight: 600;\n  font-size: 32px;\n  width: 60px;\n  height: 60px;\n  border-radius: 50%;\n  transition: box-shadow 0.08s linear, min-width 0.15s cubic-bezier(0.4, 0, 0.2, 1); }\n  .add-button:hover {\n    background-color: #fafafb;\n    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149); }\n  .add-button:active {\n    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149); }\n\n.text-field {\n  position: relative;\n  width: 100%;\n  margin: 4px 0; }\n  .text-field input,\n  .text-field textarea {\n    background-color: #fff;\n    border: 1px solid #dfe1e5;\n    width: calc(100% - 32px);\n    resize: none;\n    padding: 0 16px;\n    border-radius: 24px;\n    font-size: 16px;\n    font-family: \"Montserrat\", sans-serif;\n    font-weight: 600;\n    color: #222; }\n    .text-field input:hover, .text-field input:focus,\n    .text-field textarea:hover,\n    .text-field textarea:focus {\n      border-color: rgba(223, 225, 229, 0);\n      box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28); }\n  .text-field input {\n    height: 52px;\n    padding-top: 4px; }\n  .text-field textarea {\n    height: 160px;\n    padding: 16px 16px; }\n  .text-field__count {\n    position: absolute;\n    bottom: 8px;\n    right: 16px;\n    color: #ff5252;\n    font-size: 12px; }\n  .text-field__label {\n    position: absolute;\n    left: 16px;\n    top: 16px;\n    font-size: 16px;\n    color: #222;\n    transition: all 0.2s linear; }\n    .text-field__label.active {\n      transform: translateY(-10px);\n      font-size: 12px; }\n\n.upload-block {\n  margin: 4px 0; }\n  .upload-block input {\n    display: none; }\n  .upload-block__img {\n    position: relative; }\n    .upload-block__img .close {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 24px;\n      height: 24px;\n      cursor: pointer;\n      background-color: #d93025;\n      color: #fff;\n      display: flex;\n      align-items: center;\n      justify-content: center; }\n    .upload-block__img .image {\n      width: 100%; }\n  .upload-block label {\n    cursor: pointer;\n    background-color: #35ac19;\n    border-radius: 4px;\n    color: #fff;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    height: 54px;\n    font-size: 16px; }\n  .upload-block .progress-block {\n    display: flex;\n    background-color: #35ac19;\n    border-radius: 4px;\n    overflow: hidden;\n    height: 54px;\n    position: relative; }\n    .upload-block .progress-block span {\n      position: absolute;\n      left: 50%;\n      top: 50%;\n      transform: translate(-50%, -50%);\n      color: #fff;\n      font-weight: 600;\n      font-size: 16px; }\n    .upload-block .progress-block__line {\n      position: relative;\n      height: 100%;\n      width: 100%; }\n      .upload-block .progress-block__line .progress {\n        position: absolute;\n        left: 0;\n        top: 0;\n        background-color: #1a73e8;\n        height: 100%;\n        width: 100%; }\n\n.image-block {\n  position: relative; }\n  .image-block img {\n    width: 100%; }\n\n.save-button {\n  cursor: pointer;\n  background-color: #1a73e8;\n  border-radius: 4px;\n  color: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 54px;\n  font-size: 16px;\n  border: none;\n  outline: none;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin: 4px 0; }\n\n.header {\n  display: flex;\n  position: fixed;\n  width: 100%;\n  height: 60px;\n  left: 0;\n  top: 0;\n  justify-content: space-between;\n  align-items: center;\n  z-index: 600;\n  border-bottom: 1px solid #777;\n  background-color: #fff; }\n  .header__user {\n    margin-right: 30px;\n    display: flex;\n    align-items: center;\n    justify-content: center; }\n    .header__user .name {\n      margin: 0;\n      color: #35ac19;\n      font-family: \"PT Sans Narrow\", sans-serif; }\n    .header__user .logout {\n      padding: 8px;\n      margin-left: 8px;\n      background-color: #d93025;\n      color: #fff;\n      cursor: pointer;\n      border-radius: 8px; }\n  .header__logo {\n    width: 70px;\n    padding-left: 30px; }\n    .header__logo .img {\n      width: 100%; }\n  .header__menu {\n    display: flex;\n    height: 100%;\n    align-items: center;\n    font-family: \"PT Sans Narrow\", sans-serif;\n    font-size: 16px; }\n    .header__menu .item {\n      height: 100%;\n      position: relative;\n      margin-left: 16px;\n      margin-right: 16px; }\n      .header__menu .item:hover .item__drop {\n        color: #35ac19; }\n      .header__menu .item:hover .item__down {\n        display: flex; }\n      .header__menu .item__drop, .header__menu .item__link {\n        height: 100%;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        color: #777;\n        cursor: pointer; }\n        .header__menu .item__drop:hover, .header__menu .item__link:hover {\n          color: #35ac19; }\n      .header__menu .item__down {\n        position: absolute;\n        display: none;\n        flex-direction: column;\n        background-color: #fff;\n        padding: 8px;\n        top: 100%;\n        left: 50%;\n        transform: translateX(-50%);\n        border: 1px solid #777;\n        border-top: none; }\n        .header__menu .item__down .link {\n          color: #777;\n          display: flex;\n          justify-content: center;\n          align-items: center;\n          word-wrap: normal;\n          white-space: nowrap; }\n          .header__menu .item__down .link:hover {\n            color: #35ac19; }\n\n.confirm {\n  position: fixed;\n  width: 100%;\n  height: 100vh;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  left: 0;\n  top: 0;\n  z-index: 800; }\n  .confirm__container {\n    padding: 30px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    background-color: #fff;\n    border-radius: 24px; }\n    .confirm__container .text {\n      font-size: 24px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      font-weight: bold;\n      margin-top: 0;\n      margin-bottom: 24px; }\n    .confirm__container .menu {\n      display: flex; }\n      .confirm__container .menu span {\n        width: 120px;\n        height: 40px;\n        border-radius: 8px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        margin: 0 8px;\n        cursor: pointer;\n        color: #fff; }\n      .confirm__container .menu__true {\n        background-color: #35ac19; }\n      .confirm__container .menu__false {\n        background-color: #d93025; }\n\n.gallery {\n  width: 100%;\n  display: flex;\n  flex-wrap: wrap; }\n  .gallery__item {\n    width: calc(20% - 32px / 5);\n    margin-right: 6px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    position: relative;\n    background-color: #777;\n    min-height: 40px;\n    margin-bottom: 8px; }\n    .gallery__item .image {\n      display: flex;\n      align-items: center;\n      justify-content: center; }\n    .gallery__item .loading {\n      position: absolute;\n      left: 0;\n      top: 0;\n      height: 100%;\n      background-color: #35ac19; }\n    .gallery__item .close {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 20px;\n      height: 20px;\n      background-color: #d93025;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      color: #fff;\n      cursor: pointer; }\n  .gallery input {\n    display: none; }\n  .gallery label {\n    min-height: 40px;\n    width: calc(20% - 32px / 5 - 2px);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    border: 1px dashed #777;\n    cursor: pointer;\n    border-radius: 8px;\n    font-size: 24px;\n    color: #777; }\n\n.categories-page__container {\n  width: 1080px;\n  margin: auto; }\n  .categories-page__container .drag {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    cursor: grab;\n    background-color: #777;\n    border-radius: 24px;\n    padding: 16px; }\n    .categories-page__container .drag:active {\n      cursor: grabbing; }\n    .categories-page__container .drag__name {\n      color: #fff;\n      font-weight: 600;\n      font-size: 18px; }\n    .categories-page__container .drag__menu {\n      display: flex; }\n      .categories-page__container .drag__menu .edit-button,\n      .categories-page__container .drag__menu .delete-button {\n        width: 160px;\n        height: 48px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        border-radius: 8px;\n        color: #fff; }\n      .categories-page__container .drag__menu .edit-button {\n        margin-right: 8px;\n        background-color: #35ac19; }\n      .categories-page__container .drag__menu .delete-button {\n        background-color: #d93025; }\n  .categories-page__container .drop {\n    height: 10px;\n    width: 100%; }\n", ""]);
 
 // exports
 
@@ -35145,6 +35199,434 @@ var Confirm = function Confirm(_ref) {
 };
 
 exports.default = Confirm;
+
+/***/ }),
+/* 215 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(16);
+
+var _WithMany = __webpack_require__(120);
+
+var _WithMany2 = _interopRequireDefault(_WithMany);
+
+var _AddButton = __webpack_require__(140);
+
+var _AddButton2 = _interopRequireDefault(_AddButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var catalogPage = function catalogPage(_ref) {
+  var data = _ref.data,
+      confirmToggle = _ref.confirmToggle,
+      deleteField = _ref.deleteField;
+  return _react2.default.createElement(
+    "div",
+    { className: "page__container catalog-page" },
+    _react2.default.createElement(
+      "h2",
+      { className: "title-page" },
+      "\u0412\u0441\u0435 \u0442\u043E\u0432\u0430\u0440\u044B"
+    ),
+    _react2.default.createElement(
+      "div",
+      { className: "categories-page__container" },
+      "All"
+    ),
+    _react2.default.createElement(_AddButton2.default, { src: "/admin/add-product" })
+  );
+};
+
+exports.default = (0, _WithMany2.default)(catalogPage, "products/get_by_params", "Каталог товаров");
+
+/***/ }),
+/* 216 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _WithForm = __webpack_require__(142);
+
+var _WithForm2 = _interopRequireDefault(_WithForm);
+
+var _TextField = __webpack_require__(144);
+
+var _TextField2 = _interopRequireDefault(_TextField);
+
+var _UploadBlock = __webpack_require__(146);
+
+var _UploadBlock2 = _interopRequireDefault(_UploadBlock);
+
+var _Gallery = __webpack_require__(217);
+
+var _Gallery2 = _interopRequireDefault(_Gallery);
+
+var _SaveButton = __webpack_require__(197);
+
+var _SaveButton2 = _interopRequireDefault(_SaveButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var productPage = function productPage(_ref) {
+  var handlerChange = _ref.handlerChange,
+      data = _ref.data,
+      onSave = _ref.onSave,
+      isEmpty = _ref.isEmpty;
+  return _react2.default.createElement(
+    "div",
+    { className: "page__container add-categories-page" },
+    _react2.default.createElement(
+      "h2",
+      { className: "title-page" },
+      "\u0422\u043E\u0432\u0430\u0440"
+    ),
+    _react2.default.createElement(
+      "div",
+      { className: "form" },
+      _react2.default.createElement(_Gallery2.default, {
+        handlerChange: handlerChange,
+        value: data.gallery,
+        name: "gallery",
+        placeholder: "\u0413\u0430\u043B\u0435\u0440\u0435\u044F"
+      }),
+      _react2.default.createElement(_TextField2.default, {
+        type: "input",
+        placeholder: "\u0418\u043C\u044F",
+        name: "name",
+        handlerChange: handlerChange,
+        value: data.name,
+        isEmpty: isEmpty.name ? true : false
+      }),
+      _react2.default.createElement(_TextField2.default, {
+        type: "textarea",
+        placeholder: "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435",
+        name: "description",
+        handlerChange: handlerChange,
+        value: data.description,
+        isEmpty: isEmpty.description ? true : false
+      }),
+      _react2.default.createElement(_TextField2.default, {
+        type: "input",
+        placeholder: "\u0410\u0440\u0442\u0438\u043A\u0443\u043B",
+        name: "article",
+        handlerChange: handlerChange,
+        value: data.article,
+        isEmpty: isEmpty.article ? true : false
+      }),
+      _react2.default.createElement(_TextField2.default, {
+        type: "input",
+        placeholder: "\u0428\u0442\u0440\u0438\u0445\u043A\u043E\u0434",
+        name: "barcode",
+        handlerChange: handlerChange,
+        value: data.barcode,
+        isEmpty: isEmpty.barcode ? true : false
+      }),
+      _react2.default.createElement(_UploadBlock2.default, {
+        handlerChange: handlerChange,
+        name: "image",
+        placeholder: "\u0413\u043B\u0430\u0432\u043D\u043E\u0435 \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435",
+        isEmpty: isEmpty.image ? true : false,
+        value: data.image || ""
+      }),
+      _react2.default.createElement(_SaveButton2.default, { name: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C", submit: onSave })
+    )
+  );
+};
+
+exports.default = (0, _WithForm2.default)(productPage, {
+  set: "products/add",
+  edit: "products/edit",
+  redirect: "/admin/catalog",
+  get: "products/get_by_id"
+}, "Товар", {
+  name: true,
+  description: true,
+  image: true,
+  article: true,
+  barcode: true,
+  gallery: false
+});
+
+/***/ }),
+/* 217 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Gallery = __webpack_require__(218);
+
+var _Gallery2 = _interopRequireDefault(_Gallery);
+
+var _config = __webpack_require__(11);
+
+var _ImageBlock = __webpack_require__(76);
+
+var _ImageBlock2 = _interopRequireDefault(_ImageBlock);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Gallery = function Gallery(_ref) {
+  var files = _ref.files,
+      deleteFile = _ref.deleteFile,
+      uploadFiles = _ref.uploadFiles,
+      name = _ref.name,
+      load = _ref.load;
+  return _react2.default.createElement(
+    "div",
+    { className: "gallery" },
+    files.map(function (file, idx) {
+      return _react2.default.createElement(
+        "div",
+        { className: "gallery__item", key: idx },
+        file ? _react2.default.createElement(
+          _react2.default.Fragment,
+          null,
+          _react2.default.createElement(_ImageBlock2.default, { src: _config.IMAGE_PREFIX + "/" + file, classes: "image" }),
+          _react2.default.createElement(
+            "div",
+            { onClick: function onClick() {
+                return deleteFile(idx);
+              }, className: "close clickable" },
+            "\xD7"
+          )
+        ) : _react2.default.createElement("div", {
+          style: {
+            width: load[idx] + "%",
+            display: load[idx] < 100 ? "block" : "none"
+          },
+          className: "loading"
+        })
+      );
+    }),
+    _react2.default.createElement("input", {
+      multiple: "multiple",
+      onChange: uploadFiles,
+      type: "file",
+      name: name,
+      id: name
+    }),
+    _react2.default.createElement(
+      "label",
+      { className: "clickable", htmlFor: name },
+      "+"
+    )
+  );
+};
+
+exports.default = (0, _Gallery2.default)(Gallery);
+
+/***/ }),
+/* 218 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _config = __webpack_require__(11);
+
+var _socket = __webpack_require__(148);
+
+var _socket2 = _interopRequireDefault(_socket);
+
+var _socket3 = __webpack_require__(176);
+
+var _socket4 = _interopRequireDefault(_socket3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var socket = (0, _socket2.default)(_config.API_PREFIX);
+
+var withLoaderArr = function withLoaderArr(Component, API_URLS, title) {
+  var WithLoaderArr = function (_React$Component) {
+    _inherits(WithLoaderArr, _React$Component);
+
+    function WithLoaderArr(props) {
+      _classCallCheck(this, WithLoaderArr);
+
+      var _this = _possibleConstructorReturn(this, (WithLoaderArr.__proto__ || Object.getPrototypeOf(WithLoaderArr)).call(this, props));
+
+      _this.state = _defineProperty({
+        load: [],
+        fieldName: "",
+        files: _this.props.value || []
+      }, "fieldName", "");
+      _this.socketConnect = _this.socketConnect.bind(_this);
+      _this.uploadFiles = _this.uploadFiles.bind(_this);
+      _this.deleteFile = _this.deleteFile.bind(_this);
+      _this.loadSuccessful = _this.loadSuccessful.bind(_this);
+      return _this;
+    }
+
+    _createClass(WithLoaderArr, [{
+      key: "componentDidMount",
+      value: function componentDidMount() {
+        this.socketConnect();
+        this.loadSuccessful();
+      }
+    }, {
+      key: "loadSuccessful",
+      value: function loadSuccessful() {
+        var _this2 = this;
+
+        socket.on("load_successful", function (response) {
+          if (response) {
+            var files = _this2.state.files;
+            var filename = response.filename,
+                idx = response.idx;
+
+            files[idx] = filename;
+            _this2.setState({ files: files }, function () {
+              var _state = _this2.state,
+                  fieldName = _state.fieldName,
+                  files = _state.files;
+
+              _this2.props.handlerChange(fieldName, files);
+            });
+          }
+        });
+      }
+    }, {
+      key: "socketConnect",
+      value: function socketConnect() {
+        socket.on("connect", function () {
+          console.log("client");
+        });
+      }
+    }, {
+      key: "deleteFile",
+      value: function deleteFile(idx) {
+        var _this3 = this;
+
+        var files = this.state.files;
+
+        var file = files[idx];
+        files.splice(idx, 1);
+        this.setState({ files: files }, function () {
+          socket.emit("delete_file", file);
+          _this3.props.handlerChange(_this3.state.fieldName, _this3.state.files);
+        });
+      }
+    }, {
+      key: "uploadFiles",
+      value: function uploadFiles(e) {
+        var _this4 = this;
+
+        var _e$target = e.target,
+            files = _e$target.files,
+            name = _e$target.name;
+
+        this.setState({ fieldName: name });
+        var load = this.state.load;
+
+        var order = load.length;
+        var allFiles = this.state.files;
+
+        var _loop = function _loop(i) {
+          load[order + i] = 0;
+          allFiles[order + i] = "";
+          _this4.setState({ files: allFiles });
+          var file = files[i];
+          var filename = file.name;
+          var filesize = file.size;
+          var enc = e.target.encoding;
+          var stream = _socket4.default.createStream();
+          (0, _socket4.default)(socket).emit("upload_img", stream, {
+            data: file,
+            size: filesize,
+            name: filename,
+            enc: enc,
+            idx: order + i
+          });
+          var blobStream = _socket4.default.createBlobReadStream(file);
+          var size = 0;
+          blobStream.on("data", function (chunk) {
+            size += chunk.length;
+            var percent = Math.floor(size / file.size * 100);
+            load[order + i] = percent;
+            _this4.setState({ load: load });
+            // console.log(this.state.load);
+          });
+          blobStream.pipe(stream);
+        };
+
+        for (var i = 0; i < files.length; i++) {
+          _loop(i);
+        }
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var _state2 = this.state,
+            load = _state2.load,
+            files = _state2.files;
+
+        return _react2.default.createElement(Component, _extends({
+          uploadFiles: this.uploadFiles
+        }, this.props, {
+          load: load,
+          deleteFile: this.deleteFile,
+          files: files
+        }));
+      }
+    }]);
+
+    return WithLoaderArr;
+  }(_react2.default.Component);
+
+  WithLoaderArr.displayName = "WithLoaderArr(" + (Component.displayName || Component.name || "Component") + ")";
+  return WithLoaderArr;
+};
+
+exports.default = withLoaderArr;
 
 /***/ })
 /******/ ]);
