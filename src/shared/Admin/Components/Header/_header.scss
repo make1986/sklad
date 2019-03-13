@@ -1,0 +1,104 @@
+.header {
+  display: flex;
+  position: fixed;
+  width: 100%;
+  height: $header_height;
+  left: 0;
+  top: 0;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 600;
+  border-bottom: 1px solid $grey;
+  background-color: #fff;
+
+  &__user {
+    margin-right: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .name {
+      margin: 0;
+      color: $green;
+      font-family: $font_ptsans;
+    }
+    .logout {
+      padding: 8px;
+      margin-left: 8px;
+      background-color: $red;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+  }
+
+  &__logo {
+    width: 70px;
+    padding-left: 30px;
+    .img {
+      width: 100%;
+    }
+  }
+  &__menu {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    font-family: $font_ptsans;
+    font-size: 16px;
+
+    .item {
+      height: 100%;
+      position: relative;
+      margin-left: 16px;
+      margin-right: 16px;
+
+      &:hover {
+        .item__drop {
+          color: $green;
+        }
+        .item__down {
+          display: flex;
+        }
+      }
+
+      &__drop,
+      &__link {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $grey;
+        cursor: pointer;
+
+        &:hover {
+          color: $green;
+        }
+      }
+      &__down {
+        position: absolute;
+        display: none;
+        flex-direction: column;
+        background-color: #fff;
+        padding: 8px;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 1px solid $grey;
+        border-top: none;
+
+        .link {
+          color: $grey;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          word-wrap: normal;
+          white-space: nowrap;
+
+          &:hover {
+            color: $green;
+          }
+        }
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@ import { API_PREFIX } from "../../../etc/config";
 import axios from "axios";
 
 export class MultiBootloader {
-  constructor(url, params = "1/0/created_at=1") {
+  constructor(url, params = "") {
     this.url = encodeURI(`${API_PREFIX}/api/${url}/${params}`);
     this.params = params;
     this.response = this.response.bind(this);
@@ -12,8 +12,8 @@ export class MultiBootloader {
     return fetch(this.url)
       .then(res => res.json())
       .catch(err => {
-        console.log(err);
-        return null;
+        console.error(err);
+        return { ok: false };
       });
   }
 }

@@ -1,6 +1,6 @@
 import Home from "./Pages/Home";
-import CDEK from "./Pages/CDEK";
 import Categories from "./Pages/Categories";
+import AddCategory from "./Pages/AddCategory";
 
 import { MultiBootloader } from "./api/load";
 
@@ -20,18 +20,30 @@ const routes = [
     component: Home
   },
   {
-    path: "/admin/cdek",
-    exact: false,
-    component: CDEK
-  },
-  {
-    path: "/admin/categories/:page/:limit/:sort",
+    path: "/admin/categories",
     exact: false,
     component: Categories,
     handlerClass: MultiBootloader,
     params: {
       url: "categories/get_by_params",
       params: path => getParams(path, "/admin/categories/")
+    },
+    title: "Категории"
+  },
+  {
+    path: "/admin/add-category",
+    exact: false,
+    component: AddCategory,
+    title: "Создать категорию"
+  },
+  {
+    path: "/admin/edit-category/:id",
+    exact: false,
+    component: AddCategory,
+    handlerClass: MultiBootloader,
+    params: {
+      url: "categories/get_by_id",
+      params: path => getParams(path, "/admin/edit-category/")
     },
     title: "Категории"
   }

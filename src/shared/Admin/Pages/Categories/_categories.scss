@@ -1,0 +1,49 @@
+.categories-page {
+  &__container {
+    width: $content_width;
+    margin: auto;
+
+    .drag {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: grab;
+      background-color: $grey;
+      border-radius: 24px;
+      padding: 16px;
+      &:active {
+        cursor: grabbing;
+      }
+      &__name {
+        color: #fff;
+        font-weight: 600;
+        font-size: 18px;
+      }
+      &__menu {
+        display: flex;
+        .edit-button,
+        .delete-button {
+          width: 160px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+          color: #fff;
+        }
+        .edit-button {
+          margin-right: 8px;
+          background-color: $green;
+        }
+        .delete-button {
+          background-color: $red;
+        }
+      }
+    }
+
+    .drop {
+      height: 10px;
+      width: 100%;
+    }
+  }
+}

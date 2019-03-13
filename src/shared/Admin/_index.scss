@@ -1,21 +1,112 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|PT+Sans+Narrow:400,700&subset=cyrillic");
 $content_width: 1080px;
 $max_width: 1440px;
+$font_montserrat: "Montserrat", sans-serif;
+$font_ptsans: "PT Sans Narrow", sans-serif;
+$blue: #1a73e8;
+$green: #35ac19;
+$red: #d93025;
+$grey: #777;
+$header_height: 60px;
 
 body,
 html {
   margin: 0;
   padding: 0;
+  font-family: $font_montserrat;
 }
 
 a {
   text-decoration: none;
+  outline: none;
+}
+
+input,
+textarea {
+  outline: none;
+  resize: none;
 }
 
 .page {
   width: 100%;
   max-width: $max_width;
   margin: 0 auto;
+
+  &__container {
+    padding-top: $header_height;
+    min-height: calc(100% - $header_height);
+    .title-page {
+      font-size: 44px;
+      font-family: $font_ptsans;
+      color: $grey;
+      margin-top: 36px;
+      margin-bottom: 44px;
+      text-align: center;
+    }
+    .form {
+      display: flex;
+      flex-direction: column;
+      width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
 }
 
+.clickable {
+  &:hover {
+    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302),
+      0 4px 8px 3px rgba(60, 64, 67, 0.149);
+  }
+  &:active {
+    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302),
+      0 1px 3px 1px rgba(60, 64, 67, 0.149);
+  }
+}
+
+@keyframes empty {
+  from {
+    border: 1px solid $red;
+  }
+  25% {
+    border: 1px solid $red;
+  }
+  26% {
+    border: 1px solid grey;
+  }
+  50% {
+    border: 1px solid grey;
+  }
+  51% {
+    border: 1px solid $red;
+  }
+  75% {
+    border: 1px solid $red;
+  }
+  76% {
+    border: 1px solid grey;
+  }
+  99% {
+    border: 1px solid grey;
+  }
+  to {
+    border: 1px solid $red;
+  }
+}
+
+.empty {
+  animation: empty 1s linear forwards;
+}
+//components
 @import "./Components/Preloader/preloader";
-@import "./Components/Upload/upload";
+@import "./Components/Error/error";
+@import "./Components/AddButton/addButton";
+@import "./Components/TextField/textfield";
+@import "./Components/UploadBlock/uploadBlock";
+@import "./Components/ImageBlock/imageBlock";
+@import "./Components/SaveButton/saveButton";
+@import "./Components/Header/header";
+@import "./Components/Confirm/confirm";
+
+//pages
+@import "./Pages/Categories/categories";

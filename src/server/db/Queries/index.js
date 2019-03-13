@@ -1,8 +1,3 @@
-/*
-  Параметры запроса:
-  params. Состоит из строки, в которой указываются 
-*/
-
 export default class DataBase {
   constructor(Model) {
     this.Model = Model;
@@ -13,20 +8,16 @@ export default class DataBase {
     this.getValueForParams = this.getValueForParams.bind(this);
     this.getValueForSearch = this.getValueForSearch.bind(this);
     this.getMinOrMax = this.getMinOrMax.bind(this);
+    this.getFindParams = this.getFindParams.bind(this);
+    this.arrEditer = this.arrEditer.bind(this);
   }
+  // get several objects by parameters
   getByParams(params) {
     const { limit, page, sort, search } = params;
-    const skip = (page - 1) * limit;
-    console.log("params", this.getParams(params.params));
-    console.log("search", this.getSearch(search));
-    console.log("limit", limit);
-    console.log("sort", this.getSort(sort));
-    console.log("skip", skip);
+    const skip = this.getSkip(limit, page);
     return new Promise((resolve, reject) => {
-      this.Model.find({
-        $and: [this.getParams(params.params), this.getSearch(search)]
-      })
-        .limit(Number(limit))
+      this.Model.find(this.getFindParams(params.params, search))
+        .limit(Number(this.getLimit(limit)))
         .sort(this.getSort(sort))
         .skip(Number(skip))
         .exec((err, docs) => {
@@ -36,6 +27,98 @@ export default class DataBase {
           resolve({ ok: true, data: docs });
         });
     });
+  }
+  // Add object
+  add(data) {
+    const newObject = new this.Model(data);
+    return new Promise((resolve, reject) => {
+      newObject.save({}, (err, doc) => {
+        if (err) {
+          reject({ ok: false, err });
+        }
+        resolve({ ok: true, data: doc });
+      });
+    });
+  }
+
+  // get by ID
+  getById(id) {
+    return new Promise((resolve, reject) => {
+      this.Model.findById(id, (err, doc) => {
+        if (err) {
+          reject({ ok: false, err });
+        }
+        resolve({ ok: true, data: doc });
+      });
+    });
+  }
+
+  // Delete
+  delete(id) {
+    return new Promise((resolve, reject) => {
+      this.Model.findByIdAndRemove(id, (err, doc) => {
+        if (err) {
+          reject({ ok: false, err });
+        }
+        resolve({ ok: true, data: doc });
+      });
+    });
+  }
+
+  // editer
+  edit(id, data) {
+    return new Promise((resolve, reject) => {
+      this.Model.findByIdAndUpdate(id, { $set: data }, (err, doc) => {
+        if (err) {
+          reject({ ok: false, err });
+        }
+        resolve({ ok: true, data: doc });
+      });
+    });
+  }
+
+  //Arr editer
+  arrEditer(arr, idx) {
+    return new Promise((resolve, reject) => {
+      const { id, data } = arr[idx];
+      this.Model.findByIdAndUpdate(id, { $set: data }, (err, doc) => {
+        if (err) {
+          reject({ ok: false, err });
+        }
+        if (idx < arr.length - 1) {
+          this.arrEditer(arr, ++idx);
+        }
+        resolve({ ok: true });
+      });
+    });
+  }
+
+  getSkip(limit, page) {
+    if (limit && page) {
+      return (page - 1) * limit;
+    } else {
+      return 0;
+    }
+  }
+  getLimit(limit) {
+    if (limit) {
+      return limit;
+    } else {
+      return 0;
+    }
+  }
+  getFindParams(params, search) {
+    if (params && search) {
+      return {
+        $and: [this.getParams(params), this.getSearch(search)]
+      };
+    } else if (params && !search) {
+      return this.getParams(params);
+    } else if (!params && search) {
+      return this.getSearch(search);
+    } else {
+      return {};
+    }
   }
   getMinOrMax(param) {
     let max = param.indexOf("+lte");
@@ -120,6 +203,8 @@ export default class DataBase {
       if (arr.length === 2) {
         result[arr[0]] = arr[1];
       }
+    } else {
+      result = { created_at: -1 };
     }
     return result;
   }

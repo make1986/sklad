@@ -13,11 +13,9 @@ const CategorySchema = new Schema(
     description: {
       type: String
     },
-    test: {
-      type: Array
-    },
-    obj: {
-      type: Map
+    position: {
+      type: Number,
+      default: 0
     }
   },
   { timestamps: { createdAt: "created_at" } }

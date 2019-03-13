@@ -1,0 +1,71 @@
+.upload-block {
+  margin: 4px 0;
+  input {
+    display: none;
+  }
+  &__img {
+    position: relative;
+    .close {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      background-color: $red;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .image {
+      width: 100%;
+    }
+  }
+  label {
+    cursor: pointer;
+    background-color: $green;
+    border-radius: 4px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 54px;
+    font-size: 16px;
+  }
+
+  .progress-block {
+    display: flex;
+    background-color: $green;
+    border-radius: 4px;
+    overflow: hidden;
+    height: 54px;
+    position: relative;
+
+    span {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    &__line {
+      position: relative;
+
+      height: 100%;
+      width: 100%;
+
+      .progress {
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-color: $blue;
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+}
