@@ -15,6 +15,6 @@ const catalogPage = ({ data, confirmToggle, deleteField }) => (
 
 export default withMany(
   catalogPage,
-  "products/get_by_params",
+  { get: "products/get_by_params", delete: "products/delete" },
   "Каталог товаров"
 );

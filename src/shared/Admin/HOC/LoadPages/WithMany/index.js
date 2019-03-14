@@ -30,7 +30,7 @@ const withMany = (Component, API_URL, title) => {
       }
     }
     deleteField(id) {
-      const handlerDelete = new MultiBootloader("categories/delete", id);
+      const handlerDelete = new MultiBootloader(API_URL.delete, id);
       handlerDelete.response().then(data => {
         if (data && data.ok) {
           this.getData();
@@ -41,7 +41,7 @@ const withMany = (Component, API_URL, title) => {
       });
     }
     getData() {
-      const loader = new MultiBootloader(API_URL);
+      const loader = new MultiBootloader(API_URL.get);
       loader
         .response()
         .then(data => {

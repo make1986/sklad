@@ -25,6 +25,19 @@ const withLoaderArr = (Component, API_URLS, title) => {
       this.socketConnect();
       this.loadSuccessful();
     }
+    componentWillUnmount() {
+      socket.off("load_successful", response => {
+        if (response) {
+          let { files } = this.state;
+          const { filename, idx } = response;
+          files[idx] = filename;
+          this.setState({ files }, () => {
+            const { fieldName, files } = this.state;
+            this.props.handlerChange(fieldName, files);
+          });
+        }
+      });
+    }
 
     loadSuccessful() {
       socket.on("load_successful", response => {

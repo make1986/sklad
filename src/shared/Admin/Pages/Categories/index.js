@@ -85,6 +85,6 @@ const categoriesPage = ({
 
 export default withMany(
   withDrag(categoriesPage),
-  "categories/get_by_params",
+  { get: "categories/get_by_params", delete: "categories/delete" },
   "Категории товаров"
 );

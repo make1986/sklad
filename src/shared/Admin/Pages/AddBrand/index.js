@@ -5,9 +5,9 @@ import TextField from "../../Components/TextField";
 import UploadBlock from "../../Components/UploadBlock";
 import SaveButton from "../../Components/SaveButton";
 
-const categoriesPage = ({ handlerChange, data, onSave, isEmpty }) => (
-  <div className="page__container add-categories-page">
-    <h2 className="title-page">Категория товаров</h2>
+const addBrandPage = ({ handlerChange, data, onSave, isEmpty }) => (
+  <div className="page__container add-brand-page">
+    <h2 className="title-page">Бренд</h2>
     <div className="form">
       <TextField
         type="input"
@@ -28,7 +28,7 @@ const categoriesPage = ({ handlerChange, data, onSave, isEmpty }) => (
       <UploadBlock
         handlerChange={handlerChange}
         name="image"
-        placeholder="Загрузить изображение"
+        placeholder="Загрузить логотип"
         isEmpty={isEmpty.image ? true : false}
         value={data.image || ""}
       />
@@ -38,13 +38,13 @@ const categoriesPage = ({ handlerChange, data, onSave, isEmpty }) => (
 );
 
 export default withForm(
-  categoriesPage,
+  addBrandPage,
   {
-    set: "categories/add",
-    edit: "categories/edit",
-    redirect: "/admin/categories",
-    get: "categories/get_by_id"
+    set: "brands/add",
+    edit: "brands/edit",
+    redirect: "/admin/brands",
+    get: "brands/get_by_id"
   },
-  "Категория",
-  { name: true, description: true, image: false }
+  "Бренд",
+  { name: true, description: false, image: true }
 );

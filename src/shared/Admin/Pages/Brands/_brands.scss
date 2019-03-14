@@ -1,0 +1,56 @@
+.brands-page {
+  &__list {
+    margin-left: auto;
+    margin-right: auto;
+    width: $content_width;
+
+    .item {
+      width: 100%;
+      display: flex;
+      border-bottom: 1px solid $grey;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+
+      &:first-child {
+        border-top: 1px solid $grey;
+      }
+
+      &__image {
+        height: 80px;
+        width: 200px;
+
+        img {
+          width: auto;
+          height: 100%;
+        }
+      }
+      &__name {
+        margin: 0;
+        color: $grey;
+        font-family: $font_ptsans;
+        font-size: 24px;
+      }
+      &__menu {
+        display: flex;
+
+        .delete,
+        .edit {
+          height: 40px;
+          width: 120px;
+          border-radius: 8px;
+          cursor: pointer;
+          color: #fff;
+          background-color: $green;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .delete {
+          background-color: $red;
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+}

@@ -43,12 +43,28 @@ textarea {
       margin-bottom: 44px;
       text-align: center;
     }
+    .sub-title {
+      font-size: 28px;
+      font-family: $font_ptsans;
+      color: $grey;
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
     .form {
       display: flex;
       flex-direction: column;
       width: 600px;
       margin-left: auto;
       margin-right: auto;
+
+      .colums-2 {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        .text-field {
+          width: calc(50% - 4px);
+        }
+      }
     }
   }
 }
@@ -108,6 +124,8 @@ textarea {
 @import "./Components/Header/header";
 @import "./Components/Confirm/confirm";
 @import "./Components/Gallery/gallery";
+@import "./Components/Select/select";
 
 //pages
 @import "./Pages/Categories/categories";
+@import "./Pages/Brands/brands";

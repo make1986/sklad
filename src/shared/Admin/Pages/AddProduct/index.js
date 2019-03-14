@@ -5,24 +5,39 @@ import TextField from "../../Components/TextField";
 import UploadBlock from "../../Components/UploadBlock";
 import Gallery from "../../Components/Gallery";
 import SaveButton from "../../Components/SaveButton";
+import Select from "../../Components/Select";
 
-const productPage = ({ handlerChange, data, onSave, isEmpty }) => (
+const productPage = ({ handlerChange, data, onSave, isEmpty, addError }) => (
   <div className="page__container add-categories-page">
     <h2 className="title-page">Товар</h2>
     <div className="form">
-      <Gallery
-        handlerChange={handlerChange}
-        value={data.gallery}
-        name="gallery"
-        placeholder="Галерея"
-      />
       <TextField
         type="input"
-        placeholder="Имя"
+        placeholder="Название"
         name="name"
         handlerChange={handlerChange}
         value={data.name}
         isEmpty={isEmpty.name ? true : false}
+      />
+      <Select
+        value={data.category}
+        name="category"
+        handlerChange={handlerChange}
+        isEmpty={isEmpty.category ? true : false}
+        chooseField="name"
+        apiUrl="categories/get_by_params"
+        placeholder="Выбрать категорию"
+        addError={addError}
+      />
+      <Select
+        value={data.brand}
+        name="brand"
+        handlerChange={handlerChange}
+        isEmpty={isEmpty.brand ? true : false}
+        chooseField="name"
+        apiUrl="brands/get_by_params"
+        placeholder="Выбрать бренд"
+        addError={addError}
       />
       <TextField
         type="textarea"
@@ -48,6 +63,35 @@ const productPage = ({ handlerChange, data, onSave, isEmpty }) => (
         value={data.barcode}
         isEmpty={isEmpty.barcode ? true : false}
       />
+
+      <TextField
+        type="input"
+        placeholder="Вес товара в упаковке"
+        name="weight"
+        handlerChange={handlerChange}
+        value={data.weight}
+        isEmpty={isEmpty.weight ? true : false}
+      />
+      <h3 className="sub-title ">Возраст</h3>
+      <div className="colums-2">
+        <TextField
+          type="input"
+          placeholder="От"
+          name="minAge"
+          handlerChange={handlerChange}
+          value={data.minAge}
+          isEmpty={isEmpty.minAge ? true : false}
+        />
+        <TextField
+          type="input"
+          placeholder="До"
+          name="maxAge"
+          handlerChange={handlerChange}
+          value={data.maxAge}
+          isEmpty={isEmpty.maxAge ? true : false}
+        />
+      </div>
+
       <UploadBlock
         handlerChange={handlerChange}
         name="image"
@@ -55,7 +99,20 @@ const productPage = ({ handlerChange, data, onSave, isEmpty }) => (
         isEmpty={isEmpty.image ? true : false}
         value={data.image || ""}
       />
-
+      <Gallery
+        handlerChange={handlerChange}
+        value={data.gallery}
+        name="gallery"
+        placeholder="Галерея"
+      />
+      <TextField
+        type="input"
+        placeholder="ID youtube"
+        name="youtube"
+        handlerChange={handlerChange}
+        value={data.youtube}
+        isEmpty={isEmpty.youtube ? true : false}
+      />
       <SaveButton name="Сохранить" submit={onSave} />
     </div>
   </div>
@@ -76,6 +133,12 @@ export default withForm(
     image: true,
     article: true,
     barcode: true,
-    gallery: false
+    gallery: false,
+    category: true,
+    brand: true,
+    minAge: true,
+    maxAge: true,
+    weight: true,
+    youtube: false
   }
 );
