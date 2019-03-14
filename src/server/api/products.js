@@ -24,4 +24,16 @@ router.get("/get_by_params", (req, res) => {
     });
 });
 
+router.post("/add", (req, res) => {
+  const products = new DataBase(Product);
+  products
+    .add(req.body)
+    .then(data => {
+      return res.json(data);
+    })
+    .catch(err => {
+      return res.status(400).json(err);
+    });
+});
+
 module.exports = router;

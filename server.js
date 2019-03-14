@@ -710,6 +710,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(0);
@@ -805,6 +807,30 @@ var withForm = function withForm(Component, API_URLS, title, required) {
           if (required[key] && !data[key]) {
             err.push(key);
           }
+        }
+
+        var _loop = function _loop(_key) {
+          if (_typeof(data[_key]) === "object") {
+            data[_key].map(function (item) {
+              if ((typeof item === "undefined" ? "undefined" : _typeof(item)) === "object") {
+                for (var i in item) {
+                  if (!item[i]) {
+                    _this3.props.addError("Видимо у вас имеются пустые динамичные поля. Удалите их или заполните.");
+                    err.push(_key);
+                  }
+                }
+              } else {
+                if (!item) {
+                  _this3.props.addError("Видимо у вас имеются пустые динамичные поля. Удалите их или заполните.");
+                  err.push(_key);
+                }
+              }
+            });
+          }
+        };
+
+        for (var _key in data) {
+          _loop(_key);
         }
         if (err.length > 0) {
           err.map(function (key) {
@@ -2921,6 +2947,10 @@ var _Select = __webpack_require__(80);
 
 var _Select2 = _interopRequireDefault(_Select);
 
+var _ListCreator = __webpack_require__(82);
+
+var _ListCreator2 = _interopRequireDefault(_ListCreator);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var productPage = function productPage(_ref) {
@@ -3045,6 +3075,20 @@ var productPage = function productPage(_ref) {
         handlerChange: handlerChange,
         value: data.youtube,
         isEmpty: isEmpty.youtube ? true : false
+      }),
+      _react2.default.createElement(_ListCreator2.default, {
+        name: "tags",
+        placeholder: "\u0422\u0435\u0433\u0438",
+        type: "string",
+        handlerChange: handlerChange,
+        value: data.tags
+      }),
+      _react2.default.createElement(_ListCreator2.default, {
+        name: "features",
+        placeholder: "\u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u043E",
+        type: "pair",
+        handlerChange: handlerChange,
+        value: data.features
       }),
       _react2.default.createElement(_SaveButton2.default, { name: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C", submit: onSave })
     )
@@ -4056,6 +4100,15 @@ router.get("/get_by_params", function (req, res) {
   });
 });
 
+router.post("/add", function (req, res) {
+  var products = new _Queries2.default(Product);
+  products.add(req.body).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
 module.exports = router;
 
 /***/ }),
@@ -4887,6 +4940,234 @@ var withSelect = function withSelect(Component) {
 };
 
 exports.default = withSelect;
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _ListCreator = __webpack_require__(83);
+
+var _ListCreator2 = _interopRequireDefault(_ListCreator);
+
+var _TextField = __webpack_require__(21);
+
+var _TextField2 = _interopRequireDefault(_TextField);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ListCreator = function ListCreator(_ref) {
+  var type = _ref.type,
+      name = _ref.name,
+      data = _ref.data,
+      placeholder = _ref.placeholder,
+      add = _ref.add,
+      deleteItem = _ref.deleteItem,
+      change = _ref.change;
+  return _react2.default.createElement(
+    "div",
+    { className: "list-creator" },
+    _react2.default.createElement(
+      "h3",
+      { className: "sub-title" },
+      placeholder,
+      ":"
+    ),
+    data && data.length > 0 ? _react2.default.createElement(
+      "div",
+      { className: "list-creator__list" },
+      data.map(function (item, idx) {
+        return _react2.default.createElement(
+          _react2.default.Fragment,
+          { key: idx },
+          type === "string" ? _react2.default.createElement(
+            "div",
+            { className: "string" },
+            _react2.default.createElement(_TextField2.default, {
+              type: "input",
+              placeholder: "" + (idx + 1),
+              name: idx,
+              handlerChange: change,
+              value: data[idx],
+              isEmpty: false
+            }),
+            _react2.default.createElement(
+              "span",
+              {
+                onClick: function onClick() {
+                  return deleteItem(idx);
+                },
+                className: "delete clickable"
+              },
+              "\xD7"
+            )
+          ) : _react2.default.createElement(
+            "div",
+            { className: "pair" },
+            _react2.default.createElement(_TextField2.default, {
+              type: "input",
+              placeholder: "\u041A\u043B\u044E\u0447",
+              name: idx + "=key",
+              handlerChange: change,
+              value: data[idx].key,
+              isEmpty: false
+            }),
+            _react2.default.createElement(_TextField2.default, {
+              type: "input",
+              placeholder: "\u0417\u043D\u0430\u0447\u0435\u043D\u0438\u0435",
+              name: idx + "=value",
+              handlerChange: change,
+              value: data[idx].value,
+              isEmpty: false
+            }),
+            _react2.default.createElement(
+              "span",
+              {
+                onClick: function onClick() {
+                  return deleteItem(idx);
+                },
+                className: "delete clickable"
+              },
+              "\xD7"
+            )
+          )
+        );
+      })
+    ) : "",
+    _react2.default.createElement(
+      "span",
+      { onClick: add, className: "list-creator__add clickable" },
+      "+"
+    )
+  );
+};
+
+exports.default = (0, _ListCreator2.default)(ListCreator);
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var withListCreator = function withListCreator(Component, API_URLS, title) {
+  var WithListCreator = function (_React$Component) {
+    _inherits(WithListCreator, _React$Component);
+
+    function WithListCreator(props) {
+      _classCallCheck(this, WithListCreator);
+
+      var _this = _possibleConstructorReturn(this, (WithListCreator.__proto__ || Object.getPrototypeOf(WithListCreator)).call(this, props));
+
+      _this.state = {
+        data: []
+      };
+      _this.add = _this.add.bind(_this);
+      _this.deleteItem = _this.deleteItem.bind(_this);
+      _this.change = _this.change.bind(_this);
+      return _this;
+    }
+
+    _createClass(WithListCreator, [{
+      key: "add",
+      value: function add() {
+        var _this2 = this;
+
+        var data = this.state.data;
+
+        if (this.props.type === "string") {
+          data.push("");
+        } else {
+          data.push({ key: "", value: "" });
+        }
+        this.setState({ data: data }, function () {
+          _this2.props.handlerChange(_this2.props.name, _this2.state.data);
+        });
+      }
+    }, {
+      key: "deleteItem",
+      value: function deleteItem(idx) {
+        var _this3 = this;
+
+        var data = this.state.data;
+
+        data.splice(idx, 1);
+        this.setState({ data: data }, function () {
+          _this3.props.handlerChange(_this3.props.name, _this3.state.data);
+        });
+      }
+    }, {
+      key: "change",
+      value: function change(name, value) {
+        var _this4 = this;
+
+        var data = this.state.data;
+
+        if (this.props.type === "string") {
+          data[name] = value;
+        } else {
+          var res = name.split("=");
+          var idx = res[0];
+          var key = res[1];
+          data[idx][key] = value;
+        }
+        this.setState({ data: data }, function () {
+          _this4.props.handlerChange(_this4.props.name, _this4.state.data);
+        });
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var data = this.state.data;
+
+        return _react2.default.createElement(Component, _extends({}, this.props, {
+          data: data,
+          deleteItem: this.deleteItem,
+          add: this.add,
+          change: this.change
+        }));
+      }
+    }]);
+
+    return WithListCreator;
+  }(_react2.default.Component);
+
+  WithListCreator.displayName = "WithListCreator(" + (Component.displayName || Component.name || "Component") + ")";
+  return WithListCreator;
+};
+
+exports.default = withListCreator;
 
 /***/ })
 /******/ ]);

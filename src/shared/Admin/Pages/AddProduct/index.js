@@ -6,6 +6,7 @@ import UploadBlock from "../../Components/UploadBlock";
 import Gallery from "../../Components/Gallery";
 import SaveButton from "../../Components/SaveButton";
 import Select from "../../Components/Select";
+import ListCreator from "../../Components/ListCreator";
 
 const productPage = ({ handlerChange, data, onSave, isEmpty, addError }) => (
   <div className="page__container add-categories-page">
@@ -112,6 +113,20 @@ const productPage = ({ handlerChange, data, onSave, isEmpty, addError }) => (
         handlerChange={handlerChange}
         value={data.youtube}
         isEmpty={isEmpty.youtube ? true : false}
+      />
+      <ListCreator
+        name="tags"
+        placeholder="Теги"
+        type="string"
+        handlerChange={handlerChange}
+        value={data.tags}
+      />
+      <ListCreator
+        name="features"
+        placeholder="Дополнительно"
+        type="pair"
+        handlerChange={handlerChange}
+        value={data.features}
       />
       <SaveButton name="Сохранить" submit={onSave} />
     </div>

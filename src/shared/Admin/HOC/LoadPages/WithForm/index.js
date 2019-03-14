@@ -66,6 +66,29 @@ const withForm = (Component, API_URLS, title, required) => {
           err.push(key);
         }
       }
+      for (const key in data) {
+        if (typeof data[key] === "object") {
+          data[key].map(item => {
+            if (typeof item === "object") {
+              for (const i in item) {
+                if (!item[i]) {
+                  this.props.addError(
+                    "Видимо у вас имеются пустые динамичные поля. Удалите их или заполните."
+                  );
+                  err.push(key);
+                }
+              }
+            } else {
+              if (!item) {
+                this.props.addError(
+                  "Видимо у вас имеются пустые динамичные поля. Удалите их или заполните."
+                );
+                err.push(key);
+              }
+            }
+          });
+        }
+      }
       if (err.length > 0) {
         err.map(key => {
           isEmpty[key] = true;

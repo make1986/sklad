@@ -1,0 +1,47 @@
+.list-creator {
+  width: 100%;
+  margin: 8px 0;
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+
+    .string {
+      margin-right: 7px;
+      width: 193px;
+      position: relative;
+    }
+    .delete {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      background-color: $red;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+      border-radius: 50%;
+    }
+    .pair {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      .text-field {
+        width: calc(50% - 4px);
+      }
+    }
+  }
+  &__add {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid $grey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+}

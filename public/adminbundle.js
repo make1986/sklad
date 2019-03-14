@@ -9429,6 +9429,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(0);
@@ -9524,6 +9526,30 @@ var withForm = function withForm(Component, API_URLS, title, required) {
           if (required[key] && !data[key]) {
             err.push(key);
           }
+        }
+
+        var _loop = function _loop(_key) {
+          if (_typeof(data[_key]) === "object") {
+            data[_key].map(function (item) {
+              if ((typeof item === "undefined" ? "undefined" : _typeof(item)) === "object") {
+                for (var i in item) {
+                  if (!item[i]) {
+                    _this3.props.addError("Видимо у вас имеются пустые динамичные поля. Удалите их или заполните.");
+                    err.push(_key);
+                  }
+                }
+              } else {
+                if (!item) {
+                  _this3.props.addError("Видимо у вас имеются пустые динамичные поля. Удалите их или заполните.");
+                  err.push(_key);
+                }
+              }
+            });
+          }
+        };
+
+        for (var _key in data) {
+          _loop(_key);
         }
         if (err.length > 0) {
           err.map(function (key) {
@@ -34184,6 +34210,10 @@ var _Select = __webpack_require__(220);
 
 var _Select2 = _interopRequireDefault(_Select);
 
+var _ListCreator = __webpack_require__(222);
+
+var _ListCreator2 = _interopRequireDefault(_ListCreator);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var productPage = function productPage(_ref) {
@@ -34308,6 +34338,20 @@ var productPage = function productPage(_ref) {
         handlerChange: handlerChange,
         value: data.youtube,
         isEmpty: isEmpty.youtube ? true : false
+      }),
+      _react2.default.createElement(_ListCreator2.default, {
+        name: "tags",
+        placeholder: "\u0422\u0435\u0433\u0438",
+        type: "string",
+        handlerChange: handlerChange,
+        value: data.tags
+      }),
+      _react2.default.createElement(_ListCreator2.default, {
+        name: "features",
+        placeholder: "\u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u043E",
+        type: "pair",
+        handlerChange: handlerChange,
+        value: data.features
       }),
       _react2.default.createElement(_SaveButton2.default, { name: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C", submit: onSave })
     )
@@ -35180,7 +35224,7 @@ exports = module.exports = __webpack_require__(215)(false);
 exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|PT+Sans+Narrow:400,700&subset=cyrillic);", ""]);
 
 // module
-exports.push([module.i, "body,\nhtml {\n  margin: 0;\n  padding: 0;\n  font-family: \"Montserrat\", sans-serif; }\n\na {\n  text-decoration: none;\n  outline: none; }\n\ninput,\ntextarea {\n  outline: none;\n  resize: none; }\n\n.page {\n  width: 100%;\n  max-width: 1440px;\n  margin: 0 auto; }\n  .page__container {\n    padding-top: 60px;\n    min-height: calc(100% - $header_height); }\n    .page__container .title-page {\n      font-size: 44px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      margin-top: 36px;\n      margin-bottom: 44px;\n      text-align: center; }\n    .page__container .sub-title {\n      font-size: 28px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      margin-top: 16px;\n      margin-bottom: 8px; }\n    .page__container .form {\n      display: flex;\n      flex-direction: column;\n      width: 600px;\n      margin-left: auto;\n      margin-right: auto; }\n      .page__container .form .colums-2 {\n        width: 100%;\n        display: flex;\n        justify-content: space-between; }\n        .page__container .form .colums-2 .text-field {\n          width: calc(50% - 4px); }\n\n.clickable:hover {\n  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149); }\n\n.clickable:active {\n  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149); }\n\n@keyframes empty {\n  from {\n    border: 1px solid #d93025; }\n  25% {\n    border: 1px solid #d93025; }\n  26% {\n    border: 1px solid grey; }\n  50% {\n    border: 1px solid grey; }\n  51% {\n    border: 1px solid #d93025; }\n  75% {\n    border: 1px solid #d93025; }\n  76% {\n    border: 1px solid grey; }\n  99% {\n    border: 1px solid grey; }\n  to {\n    border: 1px solid #d93025; } }\n\n.empty {\n  animation: empty 1s linear forwards; }\n\n.preloader {\n  width: 100%;\n  height: 100%;\n  background-color: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  left: 0;\n  top: 0; }\n  .preloader img {\n    width: 50%; }\n\n.error {\n  position: fixed;\n  width: 100%;\n  height: 100vh;\n  left: 0;\n  top: 0;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000; }\n  .error div {\n    padding: 30px;\n    background-color: #fff;\n    border-radius: 24px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center; }\n    .error div p {\n      color: #17181a;\n      font-size: 16px; }\n    .error div .button {\n      padding: 0;\n      border-radius: 100px;\n      background-color: #ec5d61;\n      color: #fff;\n      height: 40px;\n      width: 100px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      cursor: pointer; }\n      .error div .button:hover {\n        -webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);\n        -moz-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);\n        box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75); }\n\n.add-button {\n  position: fixed;\n  right: 30px;\n  bottom: 30px;\n  background-color: #fff;\n  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: #222;\n  font-weight: 600;\n  font-size: 32px;\n  width: 60px;\n  height: 60px;\n  border-radius: 50%;\n  transition: box-shadow 0.08s linear, min-width 0.15s cubic-bezier(0.4, 0, 0.2, 1); }\n  .add-button:hover {\n    background-color: #fafafb;\n    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149); }\n  .add-button:active {\n    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149); }\n\n.text-field {\n  position: relative;\n  width: 100%;\n  margin: 4px 0; }\n  .text-field input,\n  .text-field textarea {\n    background-color: #fff;\n    border: 1px solid #dfe1e5;\n    width: calc(100% - 32px);\n    resize: none;\n    padding: 0 16px;\n    border-radius: 24px;\n    font-size: 16px;\n    font-family: \"Montserrat\", sans-serif;\n    font-weight: 600;\n    color: #222; }\n    .text-field input:hover, .text-field input:focus,\n    .text-field textarea:hover,\n    .text-field textarea:focus {\n      border-color: rgba(223, 225, 229, 0);\n      box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28); }\n  .text-field input {\n    height: 52px;\n    padding-top: 4px; }\n  .text-field textarea {\n    height: 160px;\n    padding: 16px 16px; }\n  .text-field__count {\n    position: absolute;\n    bottom: 8px;\n    right: 16px;\n    color: #ff5252;\n    font-size: 12px; }\n  .text-field__label {\n    position: absolute;\n    left: 16px;\n    top: 16px;\n    font-size: 16px;\n    color: #777;\n    transition: all 0.2s linear; }\n    .text-field__label.active {\n      transform: translateY(-10px);\n      font-size: 12px; }\n\n.upload-block {\n  margin: 4px 0; }\n  .upload-block input {\n    display: none; }\n  .upload-block__img {\n    position: relative; }\n    .upload-block__img .close {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 24px;\n      height: 24px;\n      cursor: pointer;\n      background-color: #d93025;\n      color: #fff;\n      display: flex;\n      align-items: center;\n      justify-content: center; }\n    .upload-block__img .image {\n      width: 100%; }\n  .upload-block label {\n    cursor: pointer;\n    background-color: #35ac19;\n    border-radius: 4px;\n    color: #fff;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    height: 54px;\n    font-size: 16px; }\n  .upload-block .progress-block {\n    display: flex;\n    background-color: #35ac19;\n    border-radius: 4px;\n    overflow: hidden;\n    height: 54px;\n    position: relative; }\n    .upload-block .progress-block span {\n      position: absolute;\n      left: 50%;\n      top: 50%;\n      transform: translate(-50%, -50%);\n      color: #fff;\n      font-weight: 600;\n      font-size: 16px; }\n    .upload-block .progress-block__line {\n      position: relative;\n      height: 100%;\n      width: 100%; }\n      .upload-block .progress-block__line .progress {\n        position: absolute;\n        left: 0;\n        top: 0;\n        background-color: #1a73e8;\n        height: 100%;\n        width: 100%; }\n\n.image-block {\n  position: relative; }\n  .image-block img {\n    width: 100%; }\n\n.save-button {\n  cursor: pointer;\n  background-color: #1a73e8;\n  border-radius: 4px;\n  color: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 54px;\n  font-size: 16px;\n  border: none;\n  outline: none;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin: 4px 0; }\n\n.header {\n  display: flex;\n  position: fixed;\n  width: 100%;\n  height: 60px;\n  left: 0;\n  top: 0;\n  justify-content: space-between;\n  align-items: center;\n  z-index: 600;\n  border-bottom: 1px solid #777;\n  background-color: #fff; }\n  .header__user {\n    margin-right: 30px;\n    display: flex;\n    align-items: center;\n    justify-content: center; }\n    .header__user .name {\n      margin: 0;\n      color: #35ac19;\n      font-family: \"PT Sans Narrow\", sans-serif; }\n    .header__user .logout {\n      padding: 8px;\n      margin-left: 8px;\n      background-color: #d93025;\n      color: #fff;\n      cursor: pointer;\n      border-radius: 8px; }\n  .header__logo {\n    width: 70px;\n    padding-left: 30px; }\n    .header__logo .img {\n      width: 100%; }\n  .header__menu {\n    display: flex;\n    height: 100%;\n    align-items: center;\n    font-family: \"PT Sans Narrow\", sans-serif;\n    font-size: 16px; }\n    .header__menu .item {\n      height: 100%;\n      position: relative;\n      margin-left: 16px;\n      margin-right: 16px; }\n      .header__menu .item:hover .item__drop {\n        color: #35ac19; }\n      .header__menu .item:hover .item__down {\n        display: flex; }\n      .header__menu .item__drop, .header__menu .item__link {\n        height: 100%;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        color: #777;\n        cursor: pointer; }\n        .header__menu .item__drop:hover, .header__menu .item__link:hover {\n          color: #35ac19; }\n      .header__menu .item__down {\n        position: absolute;\n        display: none;\n        flex-direction: column;\n        background-color: #fff;\n        padding: 8px;\n        top: 100%;\n        left: 50%;\n        transform: translateX(-50%);\n        border: 1px solid #777;\n        border-top: none; }\n        .header__menu .item__down .link {\n          color: #777;\n          display: flex;\n          justify-content: center;\n          align-items: center;\n          word-wrap: normal;\n          white-space: nowrap; }\n          .header__menu .item__down .link:hover {\n            color: #35ac19; }\n\n.confirm {\n  position: fixed;\n  width: 100%;\n  height: 100vh;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  left: 0;\n  top: 0;\n  z-index: 800; }\n  .confirm__container {\n    padding: 30px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    background-color: #fff;\n    border-radius: 24px; }\n    .confirm__container .text {\n      font-size: 24px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      font-weight: bold;\n      margin-top: 0;\n      margin-bottom: 24px; }\n    .confirm__container .menu {\n      display: flex; }\n      .confirm__container .menu span {\n        width: 120px;\n        height: 40px;\n        border-radius: 8px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        margin: 0 8px;\n        cursor: pointer;\n        color: #fff; }\n      .confirm__container .menu__true {\n        background-color: #35ac19; }\n      .confirm__container .menu__false {\n        background-color: #d93025; }\n\n.gallery {\n  width: 100%;\n  display: flex;\n  flex-wrap: wrap;\n  margin-bottom: 8px; }\n  .gallery__item {\n    width: calc(20% - 32px / 5);\n    margin-right: 6px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    position: relative;\n    background-color: #777;\n    min-height: 40px;\n    margin-bottom: 8px; }\n    .gallery__item .image {\n      display: flex;\n      align-items: center;\n      justify-content: center; }\n    .gallery__item .loading {\n      position: absolute;\n      left: 0;\n      top: 0;\n      height: 100%;\n      background-color: #35ac19; }\n    .gallery__item .close {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 20px;\n      height: 20px;\n      background-color: #d93025;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      color: #fff;\n      cursor: pointer; }\n  .gallery input {\n    display: none; }\n  .gallery label {\n    min-height: 40px;\n    width: calc(20% - 32px / 5 - 2px);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    border: 1px dashed #777;\n    cursor: pointer;\n    border-radius: 8px;\n    font-size: 24px;\n    color: #777; }\n\n.select {\n  width: 100%;\n  position: relative;\n  border-radius: 24px;\n  font-size: 16px;\n  font-family: \"Montserrat\", sans-serif;\n  font-weight: 600;\n  color: #777;\n  background-color: #fff;\n  border: 1px solid #dfe1e5;\n  display: flex;\n  justify-content: center;\n  flex-direction: column;\n  cursor: pointer;\n  margin: 4px 0; }\n  .select.active {\n    border: none;\n    border-radius: 0; }\n    .select.active:hover {\n      border: none;\n      box-shadow: none; }\n  .select__selected {\n    width: 100%;\n    height: 60px;\n    display: flex;\n    align-items: center;\n    justify-content: center; }\n  .select__options {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    display: flex;\n    flex-direction: column;\n    z-index: 2;\n    padding-top: 60px;\n    border: 1px solid #dfe1e5;\n    border-radius: 24px;\n    border-color: rgba(223, 225, 229, 0);\n    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);\n    overflow: hidden; }\n    .select__options .item {\n      background-color: #fff;\n      width: 100%;\n      height: 60px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      border-top: 1px solid #dfe1e5; }\n      .select__options .item:hover {\n        background-color: #35ac19;\n        color: #fff; }\n  .select:hover {\n    border-color: rgba(223, 225, 229, 0);\n    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28); }\n\n.categories-page__container {\n  width: 1080px;\n  margin: auto; }\n  .categories-page__container .drag {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    cursor: grab;\n    background-color: #777;\n    border-radius: 24px;\n    padding: 16px; }\n    .categories-page__container .drag:active {\n      cursor: grabbing; }\n    .categories-page__container .drag__name {\n      color: #fff;\n      font-weight: 600;\n      font-size: 18px; }\n    .categories-page__container .drag__menu {\n      display: flex; }\n      .categories-page__container .drag__menu .edit-button,\n      .categories-page__container .drag__menu .delete-button {\n        width: 160px;\n        height: 48px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        border-radius: 8px;\n        color: #fff; }\n      .categories-page__container .drag__menu .edit-button {\n        margin-right: 8px;\n        background-color: #35ac19; }\n      .categories-page__container .drag__menu .delete-button {\n        background-color: #d93025; }\n  .categories-page__container .drop {\n    height: 10px;\n    width: 100%; }\n\n.brands-page__list {\n  margin-left: auto;\n  margin-right: auto;\n  width: 1080px; }\n  .brands-page__list .item {\n    width: 100%;\n    display: flex;\n    border-bottom: 1px solid #777;\n    align-items: center;\n    justify-content: space-between;\n    padding: 8px 0; }\n    .brands-page__list .item:first-child {\n      border-top: 1px solid #777; }\n    .brands-page__list .item__image {\n      height: 80px;\n      width: 200px; }\n      .brands-page__list .item__image img {\n        width: auto;\n        height: 100%; }\n    .brands-page__list .item__name {\n      margin: 0;\n      color: #777;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      font-size: 24px; }\n    .brands-page__list .item__menu {\n      display: flex; }\n      .brands-page__list .item__menu .delete,\n      .brands-page__list .item__menu .edit {\n        height: 40px;\n        width: 120px;\n        border-radius: 8px;\n        cursor: pointer;\n        color: #fff;\n        background-color: #35ac19;\n        display: flex;\n        align-items: center;\n        justify-content: center; }\n      .brands-page__list .item__menu .delete {\n        background-color: #d93025;\n        margin-left: 8px; }\n", ""]);
+exports.push([module.i, "body,\nhtml {\n  margin: 0;\n  padding: 0;\n  font-family: \"Montserrat\", sans-serif; }\n\na {\n  text-decoration: none;\n  outline: none; }\n\ninput,\ntextarea {\n  outline: none;\n  resize: none; }\n\n.page {\n  width: 100%;\n  max-width: 1440px;\n  margin: 0 auto; }\n  .page__container {\n    padding-top: 60px;\n    min-height: calc(100% - $header_height); }\n    .page__container .title-page {\n      font-size: 44px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      margin-top: 36px;\n      margin-bottom: 44px;\n      text-align: center; }\n    .page__container .sub-title {\n      font-size: 28px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      margin-top: 16px;\n      margin-bottom: 8px; }\n    .page__container .form {\n      display: flex;\n      flex-direction: column;\n      width: 600px;\n      margin-left: auto;\n      margin-right: auto; }\n      .page__container .form .colums-2 {\n        width: 100%;\n        display: flex;\n        justify-content: space-between; }\n        .page__container .form .colums-2 .text-field {\n          width: calc(50% - 4px); }\n\n.clickable:hover {\n  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149); }\n\n.clickable:active {\n  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149); }\n\n@keyframes empty {\n  from {\n    border: 1px solid #d93025; }\n  25% {\n    border: 1px solid #d93025; }\n  26% {\n    border: 1px solid grey; }\n  50% {\n    border: 1px solid grey; }\n  51% {\n    border: 1px solid #d93025; }\n  75% {\n    border: 1px solid #d93025; }\n  76% {\n    border: 1px solid grey; }\n  99% {\n    border: 1px solid grey; }\n  to {\n    border: 1px solid #d93025; } }\n\n.empty {\n  animation: empty 1s linear forwards; }\n\n.preloader {\n  width: 100%;\n  height: 100%;\n  background-color: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  left: 0;\n  top: 0; }\n  .preloader img {\n    width: 50%; }\n\n.error {\n  position: fixed;\n  width: 100%;\n  height: 100vh;\n  left: 0;\n  top: 0;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000; }\n  .error div {\n    padding: 30px;\n    background-color: #fff;\n    border-radius: 24px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center; }\n    .error div p {\n      color: #17181a;\n      font-size: 16px; }\n    .error div .button {\n      padding: 0;\n      border-radius: 100px;\n      background-color: #ec5d61;\n      color: #fff;\n      height: 40px;\n      width: 100px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      cursor: pointer; }\n      .error div .button:hover {\n        -webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);\n        -moz-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);\n        box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75); }\n\n.add-button {\n  position: fixed;\n  right: 30px;\n  bottom: 30px;\n  background-color: #fff;\n  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: #222;\n  font-weight: 600;\n  font-size: 32px;\n  width: 60px;\n  height: 60px;\n  border-radius: 50%;\n  transition: box-shadow 0.08s linear, min-width 0.15s cubic-bezier(0.4, 0, 0.2, 1); }\n  .add-button:hover {\n    background-color: #fafafb;\n    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149); }\n  .add-button:active {\n    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149); }\n\n.text-field {\n  position: relative;\n  width: 100%;\n  margin: 8px 0; }\n  .text-field input,\n  .text-field textarea {\n    background-color: #fff;\n    border: 1px solid #dfe1e5;\n    width: calc(100% - 32px);\n    resize: none;\n    padding: 0 16px;\n    border-radius: 24px;\n    font-size: 16px;\n    font-family: \"Montserrat\", sans-serif;\n    font-weight: 600;\n    color: #222; }\n    .text-field input:hover, .text-field input:focus,\n    .text-field textarea:hover,\n    .text-field textarea:focus {\n      border-color: rgba(223, 225, 229, 0);\n      box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28); }\n  .text-field input {\n    height: 52px;\n    padding-top: 4px; }\n  .text-field textarea {\n    height: 160px;\n    padding: 16px 16px; }\n  .text-field__count {\n    position: absolute;\n    bottom: 8px;\n    right: 16px;\n    color: #ff5252;\n    font-size: 12px; }\n  .text-field__label {\n    position: absolute;\n    left: 16px;\n    top: 16px;\n    font-size: 16px;\n    color: #777;\n    transition: all 0.2s linear; }\n    .text-field__label.active {\n      transform: translateY(-10px);\n      font-size: 12px; }\n\n.upload-block {\n  margin: 8px 0; }\n  .upload-block input {\n    display: none; }\n  .upload-block__img {\n    position: relative; }\n    .upload-block__img .close {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 24px;\n      height: 24px;\n      cursor: pointer;\n      background-color: #d93025;\n      color: #fff;\n      display: flex;\n      align-items: center;\n      justify-content: center; }\n    .upload-block__img .image {\n      width: 100%; }\n  .upload-block label {\n    cursor: pointer;\n    background-color: #35ac19;\n    border-radius: 4px;\n    color: #fff;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    height: 54px;\n    font-size: 16px; }\n  .upload-block .progress-block {\n    display: flex;\n    background-color: #35ac19;\n    border-radius: 4px;\n    overflow: hidden;\n    height: 54px;\n    position: relative; }\n    .upload-block .progress-block span {\n      position: absolute;\n      left: 50%;\n      top: 50%;\n      transform: translate(-50%, -50%);\n      color: #fff;\n      font-weight: 600;\n      font-size: 16px; }\n    .upload-block .progress-block__line {\n      position: relative;\n      height: 100%;\n      width: 100%; }\n      .upload-block .progress-block__line .progress {\n        position: absolute;\n        left: 0;\n        top: 0;\n        background-color: #1a73e8;\n        height: 100%;\n        width: 100%; }\n\n.image-block {\n  position: relative; }\n  .image-block img {\n    width: 100%; }\n\n.save-button {\n  cursor: pointer;\n  background-color: #1a73e8;\n  border-radius: 4px;\n  color: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 54px;\n  font-size: 16px;\n  border: none;\n  outline: none;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin: 8px 0; }\n\n.header {\n  display: flex;\n  position: fixed;\n  width: 100%;\n  height: 60px;\n  left: 0;\n  top: 0;\n  justify-content: space-between;\n  align-items: center;\n  z-index: 600;\n  border-bottom: 1px solid #777;\n  background-color: #fff; }\n  .header__user {\n    margin-right: 30px;\n    display: flex;\n    align-items: center;\n    justify-content: center; }\n    .header__user .name {\n      margin: 0;\n      color: #35ac19;\n      font-family: \"PT Sans Narrow\", sans-serif; }\n    .header__user .logout {\n      padding: 8px;\n      margin-left: 8px;\n      background-color: #d93025;\n      color: #fff;\n      cursor: pointer;\n      border-radius: 8px; }\n  .header__logo {\n    width: 70px;\n    padding-left: 30px; }\n    .header__logo .img {\n      width: 100%; }\n  .header__menu {\n    display: flex;\n    height: 100%;\n    align-items: center;\n    font-family: \"PT Sans Narrow\", sans-serif;\n    font-size: 16px; }\n    .header__menu .item {\n      height: 100%;\n      position: relative;\n      margin-left: 16px;\n      margin-right: 16px; }\n      .header__menu .item:hover .item__drop {\n        color: #35ac19; }\n      .header__menu .item:hover .item__down {\n        display: flex; }\n      .header__menu .item__drop, .header__menu .item__link {\n        height: 100%;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        color: #777;\n        cursor: pointer; }\n        .header__menu .item__drop:hover, .header__menu .item__link:hover {\n          color: #35ac19; }\n      .header__menu .item__down {\n        position: absolute;\n        display: none;\n        flex-direction: column;\n        background-color: #fff;\n        padding: 8px;\n        top: 100%;\n        left: 50%;\n        transform: translateX(-50%);\n        border: 1px solid #777;\n        border-top: none; }\n        .header__menu .item__down .link {\n          color: #777;\n          display: flex;\n          justify-content: center;\n          align-items: center;\n          word-wrap: normal;\n          white-space: nowrap; }\n          .header__menu .item__down .link:hover {\n            color: #35ac19; }\n\n.confirm {\n  position: fixed;\n  width: 100%;\n  height: 100vh;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  left: 0;\n  top: 0;\n  z-index: 800; }\n  .confirm__container {\n    padding: 30px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    background-color: #fff;\n    border-radius: 24px; }\n    .confirm__container .text {\n      font-size: 24px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      font-weight: bold;\n      margin-top: 0;\n      margin-bottom: 24px; }\n    .confirm__container .menu {\n      display: flex; }\n      .confirm__container .menu span {\n        width: 120px;\n        height: 40px;\n        border-radius: 8px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        margin: 0 8px;\n        cursor: pointer;\n        color: #fff; }\n      .confirm__container .menu__true {\n        background-color: #35ac19; }\n      .confirm__container .menu__false {\n        background-color: #d93025; }\n\n.gallery {\n  width: 100%;\n  display: flex;\n  flex-wrap: wrap;\n  margin-bottom: 8px; }\n  .gallery__item {\n    width: calc(20% - 32px / 5);\n    margin-right: 6px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    position: relative;\n    background-color: #777;\n    min-height: 40px;\n    margin-bottom: 8px; }\n    .gallery__item .image {\n      display: flex;\n      align-items: center;\n      justify-content: center; }\n    .gallery__item .loading {\n      position: absolute;\n      left: 0;\n      top: 0;\n      height: 100%;\n      background-color: #35ac19; }\n    .gallery__item .close {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 20px;\n      height: 20px;\n      background-color: #d93025;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      color: #fff;\n      cursor: pointer; }\n  .gallery input {\n    display: none; }\n  .gallery label {\n    min-height: 40px;\n    width: calc(20% - 32px / 5 - 2px);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    border: 1px dashed #777;\n    cursor: pointer;\n    border-radius: 8px;\n    font-size: 24px;\n    color: #777; }\n\n.select {\n  width: 100%;\n  position: relative;\n  border-radius: 24px;\n  font-size: 16px;\n  font-family: \"Montserrat\", sans-serif;\n  font-weight: 600;\n  color: #777;\n  background-color: #fff;\n  border: 1px solid #dfe1e5;\n  display: flex;\n  justify-content: center;\n  flex-direction: column;\n  cursor: pointer;\n  margin: 8px 0; }\n  .select.active {\n    border: none;\n    border-radius: 0; }\n    .select.active:hover {\n      border: none;\n      box-shadow: none; }\n  .select__selected {\n    width: 100%;\n    height: 60px;\n    display: flex;\n    align-items: center;\n    justify-content: center; }\n  .select__options {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    display: flex;\n    flex-direction: column;\n    z-index: 2;\n    padding-top: 60px;\n    border: 1px solid #dfe1e5;\n    border-radius: 24px;\n    border-color: rgba(223, 225, 229, 0);\n    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);\n    overflow: hidden; }\n    .select__options .item {\n      background-color: #fff;\n      width: 100%;\n      height: 60px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      border-top: 1px solid #dfe1e5; }\n      .select__options .item:hover {\n        background-color: #35ac19;\n        color: #fff; }\n  .select:hover {\n    border-color: rgba(223, 225, 229, 0);\n    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28); }\n\n.list-creator {\n  width: 100%;\n  margin: 8px 0; }\n  .list-creator__list {\n    display: flex;\n    flex-wrap: wrap; }\n    .list-creator__list .string {\n      margin-right: 7px;\n      width: 193px;\n      position: relative; }\n    .list-creator__list .delete {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 20px;\n      height: 20px;\n      background-color: #d93025;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      cursor: pointer;\n      color: #fff;\n      border-radius: 50%; }\n    .list-creator__list .pair {\n      width: 100%;\n      display: flex;\n      justify-content: space-between;\n      position: relative; }\n      .list-creator__list .pair .text-field {\n        width: calc(50% - 4px); }\n  .list-creator__add {\n    width: 30px;\n    height: 30px;\n    border-radius: 50%;\n    border: 1px solid #777;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    cursor: pointer; }\n\n.categories-page__container {\n  width: 1080px;\n  margin: auto; }\n  .categories-page__container .drag {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    cursor: grab;\n    background-color: #777;\n    border-radius: 24px;\n    padding: 16px; }\n    .categories-page__container .drag:active {\n      cursor: grabbing; }\n    .categories-page__container .drag__name {\n      color: #fff;\n      font-weight: 600;\n      font-size: 18px; }\n    .categories-page__container .drag__menu {\n      display: flex; }\n      .categories-page__container .drag__menu .edit-button,\n      .categories-page__container .drag__menu .delete-button {\n        width: 160px;\n        height: 48px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        border-radius: 8px;\n        color: #fff; }\n      .categories-page__container .drag__menu .edit-button {\n        margin-right: 8px;\n        background-color: #35ac19; }\n      .categories-page__container .drag__menu .delete-button {\n        background-color: #d93025; }\n  .categories-page__container .drop {\n    height: 10px;\n    width: 100%; }\n\n.brands-page__list {\n  margin-left: auto;\n  margin-right: auto;\n  width: 1080px; }\n  .brands-page__list .item {\n    width: 100%;\n    display: flex;\n    border-bottom: 1px solid #777;\n    align-items: center;\n    justify-content: space-between;\n    padding: 8px 0; }\n    .brands-page__list .item:first-child {\n      border-top: 1px solid #777; }\n    .brands-page__list .item__image {\n      height: 80px;\n      width: 200px; }\n      .brands-page__list .item__image img {\n        width: auto;\n        height: 100%; }\n    .brands-page__list .item__name {\n      margin: 0;\n      color: #777;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      font-size: 24px; }\n    .brands-page__list .item__menu {\n      display: flex; }\n      .brands-page__list .item__menu .delete,\n      .brands-page__list .item__menu .edit {\n        height: 40px;\n        width: 120px;\n        border-radius: 8px;\n        cursor: pointer;\n        color: #fff;\n        background-color: #35ac19;\n        display: flex;\n        align-items: center;\n        justify-content: center; }\n      .brands-page__list .item__menu .delete {\n        background-color: #d93025;\n        margin-left: 8px; }\n", ""]);
 
 // exports
 
@@ -36156,6 +36200,234 @@ var withSelect = function withSelect(Component) {
 };
 
 exports.default = withSelect;
+
+/***/ }),
+/* 222 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _ListCreator = __webpack_require__(223);
+
+var _ListCreator2 = _interopRequireDefault(_ListCreator);
+
+var _TextField = __webpack_require__(65);
+
+var _TextField2 = _interopRequireDefault(_TextField);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ListCreator = function ListCreator(_ref) {
+  var type = _ref.type,
+      name = _ref.name,
+      data = _ref.data,
+      placeholder = _ref.placeholder,
+      add = _ref.add,
+      deleteItem = _ref.deleteItem,
+      change = _ref.change;
+  return _react2.default.createElement(
+    "div",
+    { className: "list-creator" },
+    _react2.default.createElement(
+      "h3",
+      { className: "sub-title" },
+      placeholder,
+      ":"
+    ),
+    data && data.length > 0 ? _react2.default.createElement(
+      "div",
+      { className: "list-creator__list" },
+      data.map(function (item, idx) {
+        return _react2.default.createElement(
+          _react2.default.Fragment,
+          { key: idx },
+          type === "string" ? _react2.default.createElement(
+            "div",
+            { className: "string" },
+            _react2.default.createElement(_TextField2.default, {
+              type: "input",
+              placeholder: "" + (idx + 1),
+              name: idx,
+              handlerChange: change,
+              value: data[idx],
+              isEmpty: false
+            }),
+            _react2.default.createElement(
+              "span",
+              {
+                onClick: function onClick() {
+                  return deleteItem(idx);
+                },
+                className: "delete clickable"
+              },
+              "\xD7"
+            )
+          ) : _react2.default.createElement(
+            "div",
+            { className: "pair" },
+            _react2.default.createElement(_TextField2.default, {
+              type: "input",
+              placeholder: "\u041A\u043B\u044E\u0447",
+              name: idx + "=key",
+              handlerChange: change,
+              value: data[idx].key,
+              isEmpty: false
+            }),
+            _react2.default.createElement(_TextField2.default, {
+              type: "input",
+              placeholder: "\u0417\u043D\u0430\u0447\u0435\u043D\u0438\u0435",
+              name: idx + "=value",
+              handlerChange: change,
+              value: data[idx].value,
+              isEmpty: false
+            }),
+            _react2.default.createElement(
+              "span",
+              {
+                onClick: function onClick() {
+                  return deleteItem(idx);
+                },
+                className: "delete clickable"
+              },
+              "\xD7"
+            )
+          )
+        );
+      })
+    ) : "",
+    _react2.default.createElement(
+      "span",
+      { onClick: add, className: "list-creator__add clickable" },
+      "+"
+    )
+  );
+};
+
+exports.default = (0, _ListCreator2.default)(ListCreator);
+
+/***/ }),
+/* 223 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var withListCreator = function withListCreator(Component, API_URLS, title) {
+  var WithListCreator = function (_React$Component) {
+    _inherits(WithListCreator, _React$Component);
+
+    function WithListCreator(props) {
+      _classCallCheck(this, WithListCreator);
+
+      var _this = _possibleConstructorReturn(this, (WithListCreator.__proto__ || Object.getPrototypeOf(WithListCreator)).call(this, props));
+
+      _this.state = {
+        data: []
+      };
+      _this.add = _this.add.bind(_this);
+      _this.deleteItem = _this.deleteItem.bind(_this);
+      _this.change = _this.change.bind(_this);
+      return _this;
+    }
+
+    _createClass(WithListCreator, [{
+      key: "add",
+      value: function add() {
+        var _this2 = this;
+
+        var data = this.state.data;
+
+        if (this.props.type === "string") {
+          data.push("");
+        } else {
+          data.push({ key: "", value: "" });
+        }
+        this.setState({ data: data }, function () {
+          _this2.props.handlerChange(_this2.props.name, _this2.state.data);
+        });
+      }
+    }, {
+      key: "deleteItem",
+      value: function deleteItem(idx) {
+        var _this3 = this;
+
+        var data = this.state.data;
+
+        data.splice(idx, 1);
+        this.setState({ data: data }, function () {
+          _this3.props.handlerChange(_this3.props.name, _this3.state.data);
+        });
+      }
+    }, {
+      key: "change",
+      value: function change(name, value) {
+        var _this4 = this;
+
+        var data = this.state.data;
+
+        if (this.props.type === "string") {
+          data[name] = value;
+        } else {
+          var res = name.split("=");
+          var idx = res[0];
+          var key = res[1];
+          data[idx][key] = value;
+        }
+        this.setState({ data: data }, function () {
+          _this4.props.handlerChange(_this4.props.name, _this4.state.data);
+        });
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var data = this.state.data;
+
+        return _react2.default.createElement(Component, _extends({}, this.props, {
+          data: data,
+          deleteItem: this.deleteItem,
+          add: this.add,
+          change: this.change
+        }));
+      }
+    }]);
+
+    return WithListCreator;
+  }(_react2.default.Component);
+
+  WithListCreator.displayName = "WithListCreator(" + (Component.displayName || Component.name || "Component") + ")";
+  return WithListCreator;
+};
+
+exports.default = withListCreator;
 
 /***/ })
 /******/ ]);
