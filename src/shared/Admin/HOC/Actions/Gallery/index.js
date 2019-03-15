@@ -24,6 +24,13 @@ const withLoaderArr = (Component, API_URLS, title) => {
     componentDidMount() {
       this.socketConnect();
       this.loadSuccessful();
+      if (this.props.value && this.props.value.length > 0) {
+        let load = [];
+        this.props.value.map(item => {
+          load.push(100);
+        });
+        this.setState({ load });
+      }
     }
     componentWillUnmount() {
       socket.off("load_successful", response => {

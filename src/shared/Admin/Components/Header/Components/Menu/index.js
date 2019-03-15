@@ -7,6 +7,7 @@ const Menu = () => (
     <Item
       src={[
         { name: "Категории", src: "/admin/categories" },
+        { name: "Навыки", src: "/admin/skills" },
         { name: "Товары", src: "/admin/catalog" },
         { name: "Бренды", src: "/admin/brands" },
         { name: "Склад", src: "/admin/stock" }

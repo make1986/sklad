@@ -6325,6 +6325,8 @@ var _Preloader2 = _interopRequireDefault(_Preloader);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -6351,12 +6353,16 @@ var withMany = function withMany(Component, API_URL, title) {
         data: data && data.data ? data.data : [],
         withData: data && data.data ? true : false,
         search: { key: "", value: "" },
-        params: []
+        params: [],
+        count: data && data.count ? data.count : 0,
+        moreLoading: false,
+        page: 1
       };
       _this.getData = _this.getData.bind(_this);
       _this.deleteField = _this.deleteField.bind(_this);
       _this.changeSearch = _this.changeSearch.bind(_this);
       _this.changeParams = _this.changeParams.bind(_this);
+      _this.loadMore = _this.loadMore.bind(_this);
       return _this;
     }
 
@@ -6390,11 +6396,11 @@ var withMany = function withMany(Component, API_URL, title) {
         var _this3 = this;
 
         if (value) {
-          this.setState({ search: { key: key, value: value } }, function () {
+          this.setState({ search: { key: key, value: value }, page: 1 }, function () {
             _this3.getData();
           });
         } else {
-          this.setState({ search: { key: "", value: "" } }, function () {
+          this.setState({ search: { key: "", value: "" }, page: 1 }, function () {
             _this3.getData();
           });
         }
@@ -6420,7 +6426,7 @@ var withMany = function withMany(Component, API_URL, title) {
             params.splice(idx, 1);
           }
         }
-        this.setState({ params: params }, function () {
+        this.setState({ params: params, page: 1 }, function () {
           _this4.getData();
         });
       }
@@ -6461,36 +6467,64 @@ var withMany = function withMany(Component, API_URL, title) {
         return search;
       }
     }, {
-      key: "getData",
-      value: function getData() {
+      key: "loadMore",
+      value: function loadMore() {
         var _this5 = this;
 
+        this.setState({ moreLoading: true });
         var _state = this.state,
             search = _state.search,
-            params = _state.params;
+            params = _state.params,
+            page = _state.page;
 
-        var getParam = "";
-        if (search || params.length > 0) {
-          getParam = (this.paramsInLine(params) ? this.paramsInLine(params) : undefined) + "/" + (search.key ? this.searchInLine(search) : undefined);
-        }
+        page++;
+        var getParam = (this.paramsInLine(params) ? this.paramsInLine(params) : undefined) + "/" + (search.key ? this.searchInLine(search) : undefined) + "/" + page;
         var loader = new _load.MultiBootloader(API_URL.get, getParam);
         loader.response().then(function (data) {
           _this5.setState({
-            data: data && data.data ? data.data : [],
-            withData: data && data.data ? true : false
+            data: data && data.data ? [].concat(_toConsumableArray(_this5.state.data), _toConsumableArray(data.data)) : _this5.state.data,
+            moreLoading: false,
+            page: page
           });
         }).catch(function (err) {
           _this5.props.addError("Произошла ошибка на сервере. Попробуйте позже.");
         });
       }
     }, {
+      key: "getData",
+      value: function getData() {
+        var _this6 = this;
+
+        var _state2 = this.state,
+            search = _state2.search,
+            params = _state2.params,
+            page = _state2.page;
+
+        var getParam = "";
+        if (search.key || params.length > 0) {
+          getParam = (this.paramsInLine(params) ? this.paramsInLine(params) : undefined) + "/" + (search.key ? this.searchInLine(search) : undefined) + "/" + page;
+        }
+        var loader = new _load.MultiBootloader(API_URL.get, getParam);
+        loader.response().then(function (data) {
+          _this6.setState({
+            data: data && data.data ? data.data : [],
+            withData: data && data.data ? true : false,
+            count: data && data.count ? data.count : 0
+          });
+        }).catch(function (err) {
+          _this6.props.addError("Произошла ошибка на сервере. Попробуйте позже.");
+        });
+      }
+    }, {
       key: "render",
       value: function render() {
-        var _state2 = this.state,
-            data = _state2.data,
-            withData = _state2.withData,
-            search = _state2.search,
-            params = _state2.params;
+        var _state3 = this.state,
+            data = _state3.data,
+            withData = _state3.withData,
+            search = _state3.search,
+            params = _state3.params,
+            count = _state3.count,
+            moreLoading = _state3.moreLoading;
 
         return _react2.default.createElement(
           _react2.default.Fragment,
@@ -6502,7 +6536,10 @@ var withMany = function withMany(Component, API_URL, title) {
             changeSearch: this.changeSearch,
             changeParams: this.changeParams,
             search: search,
-            params: params
+            params: params,
+            count: count,
+            moreLoading: moreLoading,
+            loadMore: this.loadMore
           })) : _react2.default.createElement(_Preloader2.default, null)
         );
       }
@@ -26371,6 +26408,14 @@ var _AddBrand = __webpack_require__(208);
 
 var _AddBrand2 = _interopRequireDefault(_AddBrand);
 
+var _Skills = __webpack_require__(225);
+
+var _Skills2 = _interopRequireDefault(_Skills);
+
+var _AddSkills = __webpack_require__(226);
+
+var _AddSkills2 = _interopRequireDefault(_AddSkills);
+
 var _load = __webpack_require__(22);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -26435,6 +26480,18 @@ var routes = [{
   component: _AddProduct2.default,
   title: "Товар"
 }, {
+  path: "/admin/edit-product/:id",
+  exact: false,
+  component: _AddProduct2.default,
+  handlerClass: _load.MultiBootloader,
+  params: {
+    url: "products/get_by_id",
+    params: function params(path) {
+      return getParams(path, "/admin/edit-product/");
+    }
+  },
+  title: "Товар"
+}, {
   path: "/admin/brands",
   exact: false,
   component: _Brands2.default,
@@ -26463,6 +26520,35 @@ var routes = [{
     }
   },
   title: "Бренд"
+}, {
+  path: "/admin/skills",
+  exact: false,
+  component: _Skills2.default,
+  handlerClass: _load.MultiBootloader,
+  params: {
+    url: "skills/get_by_params",
+    params: function params(path) {
+      return getParams(path, "/admin/skills/");
+    }
+  },
+  title: "Навыки"
+}, {
+  path: "/admin/add-skills",
+  exact: false,
+  component: _AddSkills2.default,
+  title: "Навык"
+}, {
+  path: "/admin/edit-skills/:id",
+  exact: false,
+  component: _AddSkills2.default,
+  handlerClass: _load.MultiBootloader,
+  params: {
+    url: "skills/get_by_id",
+    params: function params(path) {
+      return getParams(path, "/admin/edit-skills/");
+    }
+  },
+  title: "Навык"
 }];
 
 exports.default = routes;
@@ -26651,7 +26737,7 @@ var categoriesPage = function categoriesPage(_ref) {
   );
 };
 
-exports.default = (0, _WithMany2.default)((0, _Draggable2.default)(categoriesPage), { get: "categories/get_by_params", delete: "categories/delete" }, "Категории товаров");
+exports.default = (0, _WithMany2.default)((0, _Draggable2.default)(categoriesPage, "categories/position"), { get: "categories/get_by_params", delete: "categories/delete" }, "Категории товаров");
 
 /***/ }),
 /* 129 */
@@ -28024,7 +28110,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var withDrag = function withDrag(Component) {
+var withDrag = function withDrag(Component, api_edit) {
   var WithDrag = function (_React$Component) {
     _inherits(WithDrag, _React$Component);
 
@@ -28099,7 +28185,7 @@ var withDrag = function withDrag(Component) {
           data.map(function (item, idx) {
             editable.push({ id: item._id, data: { position: idx } });
           });
-          var editer = new _add.FieldCreator("categories/position", editable);
+          var editer = new _add.FieldCreator(api_edit, editable);
           editer.response().then(function (res) {
             if (res && res.ok) {
               _this2.props.getData();
@@ -34244,6 +34330,10 @@ var _Filter = __webpack_require__(224);
 
 var _Filter2 = _interopRequireDefault(_Filter);
 
+var _Preloader = __webpack_require__(39);
+
+var _Preloader2 = _interopRequireDefault(_Preloader);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var catalogPage = function catalogPage(_ref) {
@@ -34254,7 +34344,10 @@ var catalogPage = function catalogPage(_ref) {
       changeSearch = _ref.changeSearch,
       changeParams = _ref.changeParams,
       search = _ref.search,
-      params = _ref.params;
+      params = _ref.params,
+      count = _ref.count,
+      loadMore = _ref.loadMore,
+      moreLoading = _ref.moreLoading;
   return _react2.default.createElement(
     "div",
     { className: "page__container catalog-page" },
@@ -34269,7 +34362,30 @@ var catalogPage = function catalogPage(_ref) {
         placeholder: "Введите название или штрихкод",
         name: "name&&barcode",
         handlerChange: changeSearch,
-        value: search.value
+        value: search.value,
+        columns: 2
+      }, {
+        type: "text",
+        placeholder: "Минимальный возраст",
+        name: "minAge+gte",
+        handlerChange: changeParams,
+        value: params.findIndex(function (x) {
+          return x.key === "minAge+gte";
+        }) >= 0 ? params[params.findIndex(function (x) {
+          return x.key === "minAge+gte";
+        })].value : "",
+        columns: 4
+      }, {
+        type: "text",
+        placeholder: "Максимальный возраст",
+        name: "maxAge+lte",
+        handlerChange: changeParams,
+        value: params.findIndex(function (x) {
+          return x.key === "maxAge+lte";
+        }) >= 0 ? params[params.findIndex(function (x) {
+          return x.key === "maxAge+lte";
+        })].value : "",
+        columns: 4
       }, {
         type: "select",
         placeholder: "Все категории",
@@ -34282,27 +34398,36 @@ var catalogPage = function catalogPage(_ref) {
         })].value : "",
         chooseField: "name",
         apiUrl: "categories/get_by_params",
-        addError: addError
+        addError: addError,
+        columns: 3
       }, {
-        type: "text",
-        placeholder: "Минимальный возраст",
-        name: "minAge+gte",
+        type: "select",
+        placeholder: "Все навыки",
+        name: "skills",
         handlerChange: changeParams,
         value: params.findIndex(function (x) {
-          return x.key === "minAge+gte";
+          return x.key === "skills";
         }) >= 0 ? params[params.findIndex(function (x) {
-          return x.key === "minAge+gte";
-        })].value : ""
+          return x.key === "skills";
+        })].value : "",
+        chooseField: "name",
+        apiUrl: "skills/get_by_params",
+        addError: addError,
+        columns: 3
       }, {
-        type: "text",
-        placeholder: "Максимальный возраст",
-        name: "maxAge+lte",
+        type: "select",
+        placeholder: "Все бренды",
+        name: "brand",
         handlerChange: changeParams,
         value: params.findIndex(function (x) {
-          return x.key === "maxAge+lte";
+          return x.key === "brand";
         }) >= 0 ? params[params.findIndex(function (x) {
-          return x.key === "maxAge+lte";
-        })].value : ""
+          return x.key === "brand";
+        })].value : "",
+        chooseField: "name",
+        apiUrl: "brands/get_by_params",
+        addError: addError,
+        columns: 3
       }]
     }),
     _react2.default.createElement(
@@ -34355,6 +34480,11 @@ var catalogPage = function catalogPage(_ref) {
         "\u041D\u0435 \u0442\u043E\u0432\u0430\u0440\u043E\u0432"
       )
     ),
+    data && data.length < count ? _react2.default.createElement(
+      "div",
+      { onClick: loadMore, className: "clickable load-more" },
+      moreLoading ? _react2.default.createElement(_Preloader2.default, null) : "Загрузить еще"
+    ) : "",
     _react2.default.createElement(_AddButton2.default, { src: "/admin/add-product" })
   );
 };
@@ -34439,6 +34569,16 @@ var productPage = function productPage(_ref) {
         chooseField: "name",
         apiUrl: "categories/get_by_params",
         placeholder: "\u0412\u044B\u0431\u0440\u0430\u0442\u044C \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044E",
+        addError: addError
+      }),
+      _react2.default.createElement(_Select2.default, {
+        value: data.skills,
+        name: "skills",
+        handlerChange: handlerChange,
+        isEmpty: isEmpty.skills ? true : false,
+        chooseField: "name",
+        apiUrl: "skills/get_by_params",
+        placeholder: "\u0412\u044B\u0431\u0440\u0430\u0442\u044C \u043D\u0430\u0432\u044B\u043A",
         addError: addError
       }),
       _react2.default.createElement(_Select2.default, {
@@ -34638,7 +34778,7 @@ var Gallery = function Gallery(_ref) {
         );
       }),
       _react2.default.createElement("input", {
-        multiple: "multiple",
+        multiple: true,
         onChange: uploadFiles,
         type: "file",
         name: name,
@@ -34722,6 +34862,13 @@ var withLoaderArr = function withLoaderArr(Component, API_URLS, title) {
       value: function componentDidMount() {
         this.socketConnect();
         this.loadSuccessful();
+        if (this.props.value && this.props.value.length > 0) {
+          var load = [];
+          this.props.value.map(function (item) {
+            load.push(100);
+          });
+          this.setState({ load: load });
+        }
       }
     }, {
       key: "componentWillUnmount",
@@ -34983,7 +35130,8 @@ var withSelect = function withSelect(Component) {
 
       _this.state = {
         options: [],
-        opened: false
+        opened: false,
+        isData: false
       };
       _this.getData = _this.getData.bind(_this);
       _this.listToggle = _this.listToggle.bind(_this);
@@ -35014,7 +35162,7 @@ var withSelect = function withSelect(Component) {
               data.data.map(function (item) {
                 options.push({ value: item._id, name: item[chooseField] });
               });
-              _this2.setState({ options: options });
+              _this2.setState({ options: options, isData: true });
             }
           } else {
             _this2.props.addError("Произошла ошибка на сервере. Попробуйте позже.");
@@ -35048,15 +35196,20 @@ var withSelect = function withSelect(Component) {
       value: function render() {
         var _state = this.state,
             options = _state.options,
-            opened = _state.opened;
+            opened = _state.opened,
+            isData = _state.isData;
 
-        return _react2.default.createElement(Component, _extends({}, this.props, {
-          options: options,
-          listToggle: this.listToggle,
-          opened: opened,
-          getNameByValue: this.getNameByValue,
-          onSelect: this.onSelect
-        }));
+        return _react2.default.createElement(
+          _react2.default.Fragment,
+          null,
+          isData ? _react2.default.createElement(Component, _extends({}, this.props, {
+            options: options,
+            listToggle: this.listToggle,
+            opened: opened,
+            getNameByValue: this.getNameByValue,
+            onSelect: this.onSelect
+          })) : ""
+        );
       }
     }]);
 
@@ -35219,7 +35372,7 @@ var withListCreator = function withListCreator(Component, API_URLS, title) {
       var _this = _possibleConstructorReturn(this, (WithListCreator.__proto__ || Object.getPrototypeOf(WithListCreator)).call(this, props));
 
       _this.state = {
-        data: []
+        data: _this.props.value || []
       };
       _this.add = _this.add.bind(_this);
       _this.deleteItem = _this.deleteItem.bind(_this);
@@ -35580,7 +35733,7 @@ var Menu = function Menu() {
     "div",
     { className: "header__menu" },
     _react2.default.createElement(_Item2.default, {
-      src: [{ name: "Категории", src: "/admin/categories" }, { name: "Товары", src: "/admin/catalog" }, { name: "Бренды", src: "/admin/brands" }, { name: "Склад", src: "/admin/stock" }],
+      src: [{ name: "Категории", src: "/admin/categories" }, { name: "Навыки", src: "/admin/skills" }, { name: "Товары", src: "/admin/catalog" }, { name: "Бренды", src: "/admin/brands" }, { name: "Склад", src: "/admin/stock" }],
       name: "\u0422\u043E\u0432\u0430\u0440\u044B",
       isDropDown: "yes"
     }),
@@ -36031,7 +36184,7 @@ exports = module.exports = __webpack_require__(221)(false);
 exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|PT+Sans+Narrow:400,700&subset=cyrillic);", ""]);
 
 // module
-exports.push([module.i, "body,\nhtml {\n  margin: 0;\n  padding: 0;\n  font-family: \"Montserrat\", sans-serif; }\n\na {\n  text-decoration: none;\n  outline: none; }\n\ninput,\ntextarea {\n  outline: none;\n  resize: none; }\n\n.page {\n  width: 100%;\n  max-width: 1440px;\n  margin: 0 auto; }\n  .page__container {\n    padding-top: 60px;\n    min-height: calc(100% - $header_height); }\n    .page__container .title-page {\n      font-size: 44px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      margin-top: 36px;\n      margin-bottom: 44px;\n      text-align: center; }\n    .page__container .sub-title {\n      font-size: 28px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      margin-top: 16px;\n      margin-bottom: 8px; }\n    .page__container .form {\n      display: flex;\n      flex-direction: column;\n      width: 600px;\n      margin-left: auto;\n      margin-right: auto; }\n      .page__container .form .colums-2 {\n        width: 100%;\n        display: flex;\n        justify-content: space-between; }\n        .page__container .form .colums-2 .text-field {\n          width: calc(50% - 4px); }\n\n.clickable:hover {\n  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149); }\n\n.clickable:active {\n  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149); }\n\n@keyframes empty {\n  from {\n    border: 1px solid #d93025; }\n  25% {\n    border: 1px solid #d93025; }\n  26% {\n    border: 1px solid grey; }\n  50% {\n    border: 1px solid grey; }\n  51% {\n    border: 1px solid #d93025; }\n  75% {\n    border: 1px solid #d93025; }\n  76% {\n    border: 1px solid grey; }\n  99% {\n    border: 1px solid grey; }\n  to {\n    border: 1px solid #d93025; } }\n\n.empty {\n  animation: empty 1s linear forwards; }\n\n.preloader {\n  width: 100%;\n  height: 100%;\n  background-color: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  left: 0;\n  top: 0; }\n  .preloader img {\n    width: 50%; }\n\n.error {\n  position: fixed;\n  width: 100%;\n  height: 100vh;\n  left: 0;\n  top: 0;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000; }\n  .error div {\n    padding: 30px;\n    background-color: #fff;\n    border-radius: 24px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center; }\n    .error div p {\n      color: #17181a;\n      font-size: 16px; }\n    .error div .button {\n      padding: 0;\n      border-radius: 100px;\n      background-color: #ec5d61;\n      color: #fff;\n      height: 40px;\n      width: 100px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      cursor: pointer; }\n      .error div .button:hover {\n        -webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);\n        -moz-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);\n        box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75); }\n\n.add-button {\n  position: fixed;\n  right: 30px;\n  bottom: 30px;\n  background-color: #fff;\n  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: #222;\n  font-weight: 600;\n  font-size: 32px;\n  width: 60px;\n  height: 60px;\n  border-radius: 50%;\n  transition: box-shadow 0.08s linear, min-width 0.15s cubic-bezier(0.4, 0, 0.2, 1); }\n  .add-button:hover {\n    background-color: #fafafb;\n    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149); }\n  .add-button:active {\n    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149); }\n\n.text-field {\n  position: relative;\n  width: 100%;\n  margin: 8px 0; }\n  .text-field input,\n  .text-field textarea {\n    background-color: #fff;\n    border: 1px solid #dfe1e5;\n    width: calc(100% - 32px);\n    resize: none;\n    padding: 0 16px;\n    border-radius: 24px;\n    font-size: 16px;\n    font-family: \"Montserrat\", sans-serif;\n    font-weight: 600;\n    color: #222; }\n    .text-field input:hover, .text-field input:focus,\n    .text-field textarea:hover,\n    .text-field textarea:focus {\n      border-color: rgba(223, 225, 229, 0);\n      box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28); }\n  .text-field input {\n    height: 52px;\n    padding-top: 4px; }\n  .text-field textarea {\n    height: 160px;\n    padding: 16px 16px; }\n  .text-field__count {\n    position: absolute;\n    bottom: 8px;\n    right: 16px;\n    color: #ff5252;\n    font-size: 12px; }\n  .text-field__label {\n    position: absolute;\n    left: 16px;\n    top: 16px;\n    font-size: 16px;\n    color: #777;\n    transition: all 0.2s linear; }\n    .text-field__label.active {\n      transform: translateY(-10px);\n      font-size: 12px; }\n\n.upload-block {\n  margin: 8px 0; }\n  .upload-block input {\n    display: none; }\n  .upload-block__img {\n    position: relative; }\n    .upload-block__img .close {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 24px;\n      height: 24px;\n      cursor: pointer;\n      background-color: #d93025;\n      color: #fff;\n      display: flex;\n      align-items: center;\n      justify-content: center; }\n    .upload-block__img .image {\n      width: 100%; }\n  .upload-block label {\n    cursor: pointer;\n    background-color: #35ac19;\n    border-radius: 4px;\n    color: #fff;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    height: 54px;\n    font-size: 16px; }\n  .upload-block .progress-block {\n    display: flex;\n    background-color: #35ac19;\n    border-radius: 4px;\n    overflow: hidden;\n    height: 54px;\n    position: relative; }\n    .upload-block .progress-block span {\n      position: absolute;\n      left: 50%;\n      top: 50%;\n      transform: translate(-50%, -50%);\n      color: #fff;\n      font-weight: 600;\n      font-size: 16px; }\n    .upload-block .progress-block__line {\n      position: relative;\n      height: 100%;\n      width: 100%; }\n      .upload-block .progress-block__line .progress {\n        position: absolute;\n        left: 0;\n        top: 0;\n        background-color: #1a73e8;\n        height: 100%;\n        width: 100%; }\n\n.image-block {\n  position: relative; }\n  .image-block img {\n    width: 100%; }\n\n.save-button {\n  cursor: pointer;\n  background-color: #1a73e8;\n  border-radius: 4px;\n  color: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 54px;\n  font-size: 16px;\n  border: none;\n  outline: none;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin: 8px 0; }\n\n.header {\n  display: flex;\n  position: fixed;\n  width: 100%;\n  height: 60px;\n  left: 0;\n  top: 0;\n  justify-content: space-between;\n  align-items: center;\n  z-index: 600;\n  border-bottom: 1px solid #777;\n  background-color: #fff; }\n  .header__user {\n    margin-right: 30px;\n    display: flex;\n    align-items: center;\n    justify-content: center; }\n    .header__user .name {\n      margin: 0;\n      color: #35ac19;\n      font-family: \"PT Sans Narrow\", sans-serif; }\n    .header__user .logout {\n      padding: 8px;\n      margin-left: 8px;\n      background-color: #d93025;\n      color: #fff;\n      cursor: pointer;\n      border-radius: 8px; }\n  .header__logo {\n    width: 70px;\n    padding-left: 30px; }\n    .header__logo .img {\n      width: 100%; }\n  .header__menu {\n    display: flex;\n    height: 100%;\n    align-items: center;\n    font-family: \"PT Sans Narrow\", sans-serif;\n    font-size: 16px; }\n    .header__menu .item {\n      height: 100%;\n      position: relative;\n      margin-left: 16px;\n      margin-right: 16px; }\n      .header__menu .item:hover .item__drop {\n        color: #35ac19; }\n      .header__menu .item:hover .item__down {\n        display: flex; }\n      .header__menu .item__drop, .header__menu .item__link {\n        height: 100%;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        color: #777;\n        cursor: pointer; }\n        .header__menu .item__drop:hover, .header__menu .item__link:hover {\n          color: #35ac19; }\n      .header__menu .item__down {\n        position: absolute;\n        display: none;\n        flex-direction: column;\n        background-color: #fff;\n        padding: 8px;\n        top: 100%;\n        left: 50%;\n        transform: translateX(-50%);\n        border: 1px solid #777;\n        border-top: none; }\n        .header__menu .item__down .link {\n          color: #777;\n          display: flex;\n          justify-content: center;\n          align-items: center;\n          word-wrap: normal;\n          white-space: nowrap; }\n          .header__menu .item__down .link:hover {\n            color: #35ac19; }\n\n.confirm {\n  position: fixed;\n  width: 100%;\n  height: 100vh;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  left: 0;\n  top: 0;\n  z-index: 800; }\n  .confirm__container {\n    padding: 30px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    background-color: #fff;\n    border-radius: 24px; }\n    .confirm__container .text {\n      font-size: 24px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      font-weight: bold;\n      margin-top: 0;\n      margin-bottom: 24px; }\n    .confirm__container .menu {\n      display: flex; }\n      .confirm__container .menu span {\n        width: 120px;\n        height: 40px;\n        border-radius: 8px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        margin: 0 8px;\n        cursor: pointer;\n        color: #fff; }\n      .confirm__container .menu__true {\n        background-color: #35ac19; }\n      .confirm__container .menu__false {\n        background-color: #d93025; }\n\n.gallery {\n  width: 100%;\n  display: flex;\n  flex-wrap: wrap;\n  margin-bottom: 8px; }\n  .gallery__item {\n    width: calc(20% - 32px / 5);\n    margin-right: 6px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    position: relative;\n    background-color: #777;\n    min-height: 40px;\n    margin-bottom: 8px; }\n    .gallery__item .image {\n      display: flex;\n      align-items: center;\n      justify-content: center; }\n    .gallery__item .loading {\n      position: absolute;\n      left: 0;\n      top: 0;\n      height: 100%;\n      background-color: #35ac19; }\n    .gallery__item .close {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 20px;\n      height: 20px;\n      background-color: #d93025;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      color: #fff;\n      cursor: pointer; }\n  .gallery input {\n    display: none; }\n  .gallery label {\n    min-height: 40px;\n    width: calc(20% - 32px / 5 - 2px);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    border: 1px dashed #777;\n    cursor: pointer;\n    border-radius: 8px;\n    font-size: 24px;\n    color: #777; }\n\n.select {\n  width: 100%;\n  position: relative;\n  border-radius: 24px;\n  font-size: 16px;\n  font-family: \"Montserrat\", sans-serif;\n  font-weight: 600;\n  color: #777;\n  background-color: #fff;\n  border: 1px solid #dfe1e5;\n  display: flex;\n  justify-content: center;\n  flex-direction: column;\n  cursor: pointer;\n  margin: 8px 0; }\n  .select.active {\n    border: none;\n    border-radius: 0; }\n    .select.active:hover {\n      border: none;\n      box-shadow: none; }\n  .select__selected {\n    width: 100%;\n    height: 60px;\n    display: flex;\n    align-items: center;\n    justify-content: center; }\n  .select__options {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    display: flex;\n    flex-direction: column;\n    z-index: 2;\n    padding-top: 60px;\n    border: 1px solid #dfe1e5;\n    border-radius: 24px;\n    border-color: rgba(223, 225, 229, 0);\n    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);\n    overflow: hidden; }\n    .select__options .item {\n      background-color: #fff;\n      width: 100%;\n      height: 60px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      border-top: 1px solid #dfe1e5; }\n      .select__options .item:hover {\n        background-color: #35ac19;\n        color: #fff; }\n  .select:hover {\n    border-color: rgba(223, 225, 229, 0);\n    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28); }\n\n.list-creator {\n  width: 100%;\n  margin: 8px 0; }\n  .list-creator__list {\n    display: flex;\n    flex-wrap: wrap; }\n    .list-creator__list .string {\n      margin-right: 7px;\n      width: 193px;\n      position: relative; }\n    .list-creator__list .delete {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 20px;\n      height: 20px;\n      background-color: #d93025;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      cursor: pointer;\n      color: #fff;\n      border-radius: 50%; }\n    .list-creator__list .pair {\n      width: 100%;\n      display: flex;\n      justify-content: space-between;\n      position: relative; }\n      .list-creator__list .pair .text-field {\n        width: calc(50% - 4px); }\n  .list-creator__add {\n    width: 30px;\n    height: 30px;\n    border-radius: 50%;\n    border: 1px solid #777;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    cursor: pointer; }\n\n.categories-page__container {\n  width: 1080px;\n  margin: auto; }\n  .categories-page__container .drag {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    cursor: grab;\n    background-color: #777;\n    border-radius: 24px;\n    padding: 16px; }\n    .categories-page__container .drag:active {\n      cursor: grabbing; }\n    .categories-page__container .drag__name {\n      color: #fff;\n      font-weight: 600;\n      font-size: 18px; }\n    .categories-page__container .drag__menu {\n      display: flex; }\n      .categories-page__container .drag__menu .edit-button,\n      .categories-page__container .drag__menu .delete-button {\n        width: 160px;\n        height: 48px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        border-radius: 8px;\n        color: #fff; }\n      .categories-page__container .drag__menu .edit-button {\n        margin-right: 8px;\n        background-color: #35ac19; }\n      .categories-page__container .drag__menu .delete-button {\n        background-color: #d93025; }\n  .categories-page__container .drop {\n    height: 10px;\n    width: 100%; }\n\n.brands-page__list {\n  margin-left: auto;\n  margin-right: auto;\n  width: 1080px; }\n  .brands-page__list .item {\n    width: 100%;\n    display: flex;\n    border-bottom: 1px solid #777;\n    align-items: center;\n    justify-content: space-between;\n    padding: 8px 0; }\n    .brands-page__list .item:first-child {\n      border-top: 1px solid #777; }\n    .brands-page__list .item__image {\n      height: 80px;\n      width: 200px; }\n      .brands-page__list .item__image img {\n        width: auto;\n        height: 100%; }\n    .brands-page__list .item__name {\n      margin: 0;\n      color: #777;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      font-size: 24px; }\n    .brands-page__list .item__menu {\n      display: flex; }\n      .brands-page__list .item__menu .delete,\n      .brands-page__list .item__menu .edit {\n        height: 40px;\n        width: 120px;\n        border-radius: 8px;\n        cursor: pointer;\n        color: #fff;\n        background-color: #35ac19;\n        display: flex;\n        align-items: center;\n        justify-content: center; }\n      .brands-page__list .item__menu .delete {\n        background-color: #d93025;\n        margin-left: 8px; }\n\n.catalog-page__list {\n  width: 1080px;\n  margin: auto; }\n  .catalog-page__list .item {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    background-color: #777;\n    border-radius: 24px;\n    padding: 16px;\n    margin-bottom: 16px; }\n    .catalog-page__list .item .name {\n      color: #fff;\n      font-weight: 600;\n      font-size: 18px; }\n    .catalog-page__list .item .menu {\n      display: flex; }\n      .catalog-page__list .item .menu .edit,\n      .catalog-page__list .item .menu .delete {\n        width: 160px;\n        height: 48px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        border-radius: 8px;\n        color: #fff;\n        cursor: pointer; }\n      .catalog-page__list .item .menu .edit {\n        margin-right: 8px;\n        background-color: #35ac19; }\n      .catalog-page__list .item .menu .delete {\n        background-color: #d93025; }\n", ""]);
+exports.push([module.i, "body,\nhtml {\n  margin: 0;\n  padding: 0;\n  font-family: \"Montserrat\", sans-serif; }\n\na {\n  text-decoration: none;\n  outline: none; }\n\ninput,\ntextarea {\n  outline: none;\n  resize: none; }\n\n.page {\n  width: 100%;\n  max-width: 1440px;\n  margin: 0 auto; }\n  .page__container {\n    padding-top: 60px;\n    min-height: calc(100% - $header_height); }\n    .page__container .title-page {\n      font-size: 44px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      margin-top: 36px;\n      margin-bottom: 44px;\n      text-align: center; }\n    .page__container .sub-title {\n      font-size: 28px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      margin-top: 16px;\n      margin-bottom: 8px; }\n    .page__container .form {\n      display: flex;\n      flex-direction: column;\n      width: 600px;\n      margin-left: auto;\n      margin-right: auto; }\n      .page__container .form .colums-2 {\n        width: 100%;\n        display: flex;\n        justify-content: space-between; }\n        .page__container .form .colums-2 .text-field {\n          width: calc(50% - 4px); }\n\n.clickable:hover {\n  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149); }\n\n.clickable:active {\n  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149); }\n\n@keyframes empty {\n  from {\n    border: 1px solid #d93025; }\n  25% {\n    border: 1px solid #d93025; }\n  26% {\n    border: 1px solid grey; }\n  50% {\n    border: 1px solid grey; }\n  51% {\n    border: 1px solid #d93025; }\n  75% {\n    border: 1px solid #d93025; }\n  76% {\n    border: 1px solid grey; }\n  99% {\n    border: 1px solid grey; }\n  to {\n    border: 1px solid #d93025; } }\n\n.empty {\n  animation: empty 1s linear forwards; }\n\n.preloader {\n  width: 100%;\n  height: 100%;\n  background-color: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  left: 0;\n  top: 0; }\n  .preloader img {\n    width: 50%; }\n\n.error {\n  position: fixed;\n  width: 100%;\n  height: 100vh;\n  left: 0;\n  top: 0;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000; }\n  .error div {\n    padding: 30px;\n    background-color: #fff;\n    border-radius: 24px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center; }\n    .error div p {\n      color: #17181a;\n      font-size: 16px; }\n    .error div .button {\n      padding: 0;\n      border-radius: 100px;\n      background-color: #ec5d61;\n      color: #fff;\n      height: 40px;\n      width: 100px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      cursor: pointer; }\n      .error div .button:hover {\n        -webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);\n        -moz-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);\n        box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75); }\n\n.add-button {\n  position: fixed;\n  right: 30px;\n  bottom: 30px;\n  background-color: #fff;\n  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: #222;\n  font-weight: 600;\n  font-size: 32px;\n  width: 60px;\n  height: 60px;\n  border-radius: 50%;\n  transition: box-shadow 0.08s linear, min-width 0.15s cubic-bezier(0.4, 0, 0.2, 1); }\n  .add-button:hover {\n    background-color: #fafafb;\n    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149); }\n  .add-button:active {\n    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149); }\n\n.text-field {\n  position: relative;\n  width: 100%;\n  margin: 8px 0; }\n  .text-field input,\n  .text-field textarea {\n    background-color: #fff;\n    border: 1px solid #dfe1e5;\n    width: calc(100% - 32px);\n    resize: none;\n    padding: 0 16px;\n    border-radius: 24px;\n    font-size: 16px;\n    font-family: \"Montserrat\", sans-serif;\n    font-weight: 600;\n    color: #222; }\n    .text-field input:hover, .text-field input:focus,\n    .text-field textarea:hover,\n    .text-field textarea:focus {\n      border-color: rgba(223, 225, 229, 0);\n      box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28); }\n  .text-field input {\n    height: 52px;\n    padding-top: 4px; }\n  .text-field textarea {\n    height: 160px;\n    padding: 16px 16px; }\n  .text-field__count {\n    position: absolute;\n    bottom: 8px;\n    right: 16px;\n    color: #ff5252;\n    font-size: 12px; }\n  .text-field__label {\n    position: absolute;\n    left: 16px;\n    top: 16px;\n    font-size: 16px;\n    color: #777;\n    transition: all 0.2s linear; }\n    .text-field__label.active {\n      transform: translateY(-10px);\n      font-size: 12px; }\n\n.upload-block {\n  margin: 8px 0; }\n  .upload-block input {\n    display: none; }\n  .upload-block__img {\n    position: relative; }\n    .upload-block__img .close {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 24px;\n      height: 24px;\n      cursor: pointer;\n      background-color: #d93025;\n      color: #fff;\n      display: flex;\n      align-items: center;\n      justify-content: center; }\n    .upload-block__img .image {\n      width: 100%; }\n  .upload-block label {\n    cursor: pointer;\n    background-color: #35ac19;\n    border-radius: 4px;\n    color: #fff;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    height: 54px;\n    font-size: 16px; }\n  .upload-block .progress-block {\n    display: flex;\n    background-color: #35ac19;\n    border-radius: 4px;\n    overflow: hidden;\n    height: 54px;\n    position: relative; }\n    .upload-block .progress-block span {\n      position: absolute;\n      left: 50%;\n      top: 50%;\n      transform: translate(-50%, -50%);\n      color: #fff;\n      font-weight: 600;\n      font-size: 16px; }\n    .upload-block .progress-block__line {\n      position: relative;\n      height: 100%;\n      width: 100%; }\n      .upload-block .progress-block__line .progress {\n        position: absolute;\n        left: 0;\n        top: 0;\n        background-color: #1a73e8;\n        height: 100%;\n        width: 100%; }\n\n.image-block {\n  position: relative; }\n  .image-block img {\n    width: 100%; }\n\n.save-button {\n  cursor: pointer;\n  background-color: #1a73e8;\n  border-radius: 4px;\n  color: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 54px;\n  font-size: 16px;\n  border: none;\n  outline: none;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin: 8px 0; }\n\n.header {\n  display: flex;\n  position: fixed;\n  width: 100%;\n  height: 60px;\n  left: 0;\n  top: 0;\n  justify-content: space-between;\n  align-items: center;\n  z-index: 600;\n  border-bottom: 1px solid #777;\n  background-color: #fff; }\n  .header__user {\n    margin-right: 30px;\n    display: flex;\n    align-items: center;\n    justify-content: center; }\n    .header__user .name {\n      margin: 0;\n      color: #35ac19;\n      font-family: \"PT Sans Narrow\", sans-serif; }\n    .header__user .logout {\n      padding: 8px;\n      margin-left: 8px;\n      background-color: #d93025;\n      color: #fff;\n      cursor: pointer;\n      border-radius: 8px; }\n  .header__logo {\n    width: 70px;\n    padding-left: 30px; }\n    .header__logo .img {\n      width: 100%; }\n  .header__menu {\n    display: flex;\n    height: 100%;\n    align-items: center;\n    font-family: \"PT Sans Narrow\", sans-serif;\n    font-size: 16px; }\n    .header__menu .item {\n      height: 100%;\n      position: relative;\n      margin-left: 16px;\n      margin-right: 16px; }\n      .header__menu .item:hover .item__drop {\n        color: #35ac19; }\n      .header__menu .item:hover .item__down {\n        display: flex; }\n      .header__menu .item__drop, .header__menu .item__link {\n        height: 100%;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        color: #777;\n        cursor: pointer; }\n        .header__menu .item__drop:hover, .header__menu .item__link:hover {\n          color: #35ac19; }\n      .header__menu .item__down {\n        position: absolute;\n        display: none;\n        flex-direction: column;\n        background-color: #fff;\n        padding: 8px;\n        top: 100%;\n        left: 50%;\n        transform: translateX(-50%);\n        border: 1px solid #777;\n        border-top: none; }\n        .header__menu .item__down .link {\n          color: #777;\n          display: flex;\n          justify-content: center;\n          align-items: center;\n          word-wrap: normal;\n          white-space: nowrap; }\n          .header__menu .item__down .link:hover {\n            color: #35ac19; }\n\n.confirm {\n  position: fixed;\n  width: 100%;\n  height: 100vh;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  left: 0;\n  top: 0;\n  z-index: 800; }\n  .confirm__container {\n    padding: 30px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    background-color: #fff;\n    border-radius: 24px; }\n    .confirm__container .text {\n      font-size: 24px;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      color: #777;\n      font-weight: bold;\n      margin-top: 0;\n      margin-bottom: 24px; }\n    .confirm__container .menu {\n      display: flex; }\n      .confirm__container .menu span {\n        width: 120px;\n        height: 40px;\n        border-radius: 8px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        margin: 0 8px;\n        cursor: pointer;\n        color: #fff; }\n      .confirm__container .menu__true {\n        background-color: #35ac19; }\n      .confirm__container .menu__false {\n        background-color: #d93025; }\n\n.gallery {\n  width: 100%;\n  display: flex;\n  flex-wrap: wrap;\n  margin-bottom: 8px; }\n  .gallery__item {\n    width: calc(20% - 32px / 5);\n    margin-right: 6px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    position: relative;\n    background-color: #777;\n    min-height: 40px;\n    margin-bottom: 8px; }\n    .gallery__item .image {\n      display: flex;\n      align-items: center;\n      justify-content: center; }\n    .gallery__item .loading {\n      position: absolute;\n      left: 0;\n      top: 0;\n      height: 100%;\n      background-color: #35ac19; }\n    .gallery__item .close {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 20px;\n      height: 20px;\n      background-color: #d93025;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      color: #fff;\n      cursor: pointer; }\n  .gallery input {\n    display: none; }\n  .gallery label {\n    min-height: 40px;\n    width: calc(20% - 32px / 5 - 2px);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    border: 1px dashed #777;\n    cursor: pointer;\n    border-radius: 8px;\n    font-size: 24px;\n    color: #777; }\n\n.select {\n  width: 100%;\n  position: relative;\n  border-radius: 24px;\n  font-size: 16px;\n  font-family: \"Montserrat\", sans-serif;\n  font-weight: 600;\n  color: #777;\n  background-color: #fff;\n  border: 1px solid #dfe1e5;\n  display: flex;\n  justify-content: center;\n  flex-direction: column;\n  cursor: pointer;\n  margin: 8px 0; }\n  .select.active {\n    border: none;\n    border-radius: 0; }\n    .select.active:hover {\n      border: none;\n      box-shadow: none; }\n  .select__selected {\n    width: 100%;\n    height: 60px;\n    display: flex;\n    align-items: center;\n    justify-content: center; }\n  .select__options {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    display: flex;\n    flex-direction: column;\n    z-index: 2;\n    padding-top: 60px;\n    border: 1px solid #dfe1e5;\n    border-radius: 24px;\n    border-color: rgba(223, 225, 229, 0);\n    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);\n    overflow: hidden; }\n    .select__options .item {\n      background-color: #fff;\n      width: 100%;\n      height: 60px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      border-top: 1px solid #dfe1e5; }\n      .select__options .item:hover {\n        background-color: #35ac19;\n        color: #fff; }\n  .select:hover {\n    border-color: rgba(223, 225, 229, 0);\n    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28); }\n\n.list-creator {\n  width: 100%;\n  margin: 8px 0; }\n  .list-creator__list {\n    display: flex;\n    flex-wrap: wrap; }\n    .list-creator__list .string {\n      margin-right: 7px;\n      width: 193px;\n      position: relative; }\n    .list-creator__list .delete {\n      position: absolute;\n      right: 0;\n      top: 0;\n      width: 20px;\n      height: 20px;\n      background-color: #d93025;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      cursor: pointer;\n      color: #fff;\n      border-radius: 50%; }\n    .list-creator__list .pair {\n      width: 100%;\n      display: flex;\n      justify-content: space-between;\n      position: relative; }\n      .list-creator__list .pair .text-field {\n        width: calc(50% - 4px); }\n  .list-creator__add {\n    width: 30px;\n    height: 30px;\n    border-radius: 50%;\n    border: 1px solid #777;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    cursor: pointer; }\n\n.filter {\n  width: 100%;\n  padding: 18px 0;\n  background-color: #fff;\n  margin-bottom: 40px;\n  border-top: 1px solid #777;\n  border-bottom: 1px solid #777; }\n  .filter__container {\n    width: 1080px;\n    margin: auto;\n    display: flex;\n    flex-wrap: wrap;\n    justify-content: space-between; }\n    .filter__container .col-1 {\n      width: 100%; }\n    .filter__container .col-2 {\n      width: 45%; }\n    .filter__container .col-3 {\n      width: 30%; }\n    .filter__container .col-4 {\n      width: 23%; }\n\n.categories-page__container {\n  width: 1080px;\n  margin: auto; }\n  .categories-page__container .drag {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    cursor: grab;\n    background-color: #777;\n    border-radius: 24px;\n    padding: 16px; }\n    .categories-page__container .drag:active {\n      cursor: grabbing; }\n    .categories-page__container .drag__name {\n      color: #fff;\n      font-weight: 600;\n      font-size: 18px; }\n    .categories-page__container .drag__menu {\n      display: flex; }\n      .categories-page__container .drag__menu .edit-button,\n      .categories-page__container .drag__menu .delete-button {\n        width: 160px;\n        height: 48px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        border-radius: 8px;\n        color: #fff; }\n      .categories-page__container .drag__menu .edit-button {\n        margin-right: 8px;\n        background-color: #35ac19; }\n      .categories-page__container .drag__menu .delete-button {\n        background-color: #d93025; }\n  .categories-page__container .drop {\n    height: 10px;\n    width: 100%; }\n\n.brands-page__list {\n  margin-left: auto;\n  margin-right: auto;\n  width: 1080px; }\n  .brands-page__list .item {\n    width: 100%;\n    display: flex;\n    border-bottom: 1px solid #777;\n    align-items: center;\n    justify-content: space-between;\n    padding: 8px 0; }\n    .brands-page__list .item:first-child {\n      border-top: 1px solid #777; }\n    .brands-page__list .item__image {\n      height: 80px;\n      width: 200px; }\n      .brands-page__list .item__image img {\n        width: auto;\n        height: 100%; }\n    .brands-page__list .item__name {\n      margin: 0;\n      color: #777;\n      font-family: \"PT Sans Narrow\", sans-serif;\n      font-size: 24px; }\n    .brands-page__list .item__menu {\n      display: flex; }\n      .brands-page__list .item__menu .delete,\n      .brands-page__list .item__menu .edit {\n        height: 40px;\n        width: 120px;\n        border-radius: 8px;\n        cursor: pointer;\n        color: #fff;\n        background-color: #35ac19;\n        display: flex;\n        align-items: center;\n        justify-content: center; }\n      .brands-page__list .item__menu .delete {\n        background-color: #d93025;\n        margin-left: 8px; }\n\n.catalog-page__list {\n  width: 1080px;\n  margin: auto; }\n  .catalog-page__list .item {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    background-color: #777;\n    border-radius: 24px;\n    padding: 16px;\n    margin-bottom: 16px; }\n    .catalog-page__list .item .name {\n      color: #fff;\n      font-weight: 600;\n      font-size: 18px; }\n    .catalog-page__list .item .menu {\n      display: flex; }\n      .catalog-page__list .item .menu .edit,\n      .catalog-page__list .item .menu .delete {\n        width: 160px;\n        height: 48px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        border-radius: 8px;\n        color: #fff;\n        cursor: pointer; }\n      .catalog-page__list .item .menu .edit {\n        margin-right: 8px;\n        background-color: #35ac19; }\n      .catalog-page__list .item .menu .delete {\n        background-color: #d93025; }\n\n.catalog-page .load-more {\n  width: 300px;\n  height: 60px;\n  background-color: #35ac19;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border-radius: 8px;\n  color: #fff;\n  cursor: pointer;\n  margin: 30px auto; }\n", ""]);
 
 // exports
 
@@ -36657,23 +36810,27 @@ var Filter = function Filter(_ref) {
         return _react2.default.createElement(
           _react2.default.Fragment,
           { key: idx },
-          ctrl.type === "text" ? _react2.default.createElement(_TextField2.default, {
-            type: "input",
-            placeholder: ctrl.placeholder,
-            name: ctrl.name,
-            handlerChange: ctrl.handlerChange,
-            value: ctrl.value,
-            isEmpty: false
-          }) : _react2.default.createElement(_Select2.default, {
-            value: ctrl.value,
-            name: ctrl.name,
-            handlerChange: ctrl.handlerChange,
-            isEmpty: false,
-            chooseField: ctrl.chooseField,
-            apiUrl: ctrl.apiUrl,
-            placeholder: ctrl.placeholder,
-            addError: addError
-          })
+          _react2.default.createElement(
+            "div",
+            { className: "col-" + ctrl.columns },
+            ctrl.type === "text" ? _react2.default.createElement(_TextField2.default, {
+              type: "input",
+              placeholder: ctrl.placeholder,
+              name: ctrl.name,
+              handlerChange: ctrl.handlerChange,
+              value: ctrl.value,
+              isEmpty: false
+            }) : _react2.default.createElement(_Select2.default, {
+              value: ctrl.value,
+              name: ctrl.name,
+              handlerChange: ctrl.handlerChange,
+              isEmpty: false,
+              chooseField: ctrl.chooseField,
+              apiUrl: ctrl.apiUrl,
+              placeholder: ctrl.placeholder,
+              addError: addError
+            })
+          )
         );
       })
     )
@@ -36681,6 +36838,219 @@ var Filter = function Filter(_ref) {
 };
 
 exports.default = Filter;
+
+/***/ }),
+/* 225 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(8);
+
+var _WithMany = __webpack_require__(37);
+
+var _WithMany2 = _interopRequireDefault(_WithMany);
+
+var _Draggable = __webpack_require__(148);
+
+var _Draggable2 = _interopRequireDefault(_Draggable);
+
+var _AddButton = __webpack_require__(40);
+
+var _AddButton2 = _interopRequireDefault(_AddButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var skillsPage = function skillsPage(_ref) {
+  var data = _ref.data,
+      dragEnd = _ref.dragEnd,
+      dragStart = _ref.dragStart,
+      drop = _ref.drop,
+      dropEnter = _ref.dropEnter,
+      dropLeave = _ref.dropLeave,
+      confirmToggle = _ref.confirmToggle,
+      deleteField = _ref.deleteField;
+  return _react2.default.createElement(
+    "div",
+    { className: "page__container categories-page" },
+    _react2.default.createElement(
+      "h2",
+      { className: "title-page" },
+      "\u0412\u0441\u0435 \u043D\u0430\u0432\u044B\u043A\u0438"
+    ),
+    _react2.default.createElement(
+      "div",
+      { className: "categories-page__container" },
+      data.map(function (item, idx) {
+        return _react2.default.createElement(
+          _react2.default.Fragment,
+          { key: item._id },
+          idx === 0 ? _react2.default.createElement("div", {
+            className: "drop",
+            idx: item.position,
+            onDragOver: function onDragOver(event) {
+              return event.preventDefault();
+            },
+            onDrop: drop,
+            onDragEnter: dropEnter,
+            onDragLeave: dropLeave
+          }) : "",
+          _react2.default.createElement(
+            "div",
+            {
+              draggable: "true",
+              onDragStart: function onDragStart(e) {
+                return dragStart(e, data);
+              },
+              onDragEnd: dragEnd,
+              className: "drag",
+              idx: item.position,
+              id: "id" + item._id
+            },
+            _react2.default.createElement(
+              "h3",
+              { draggable: "false", className: "drag__name" },
+              item.name
+            ),
+            _react2.default.createElement(
+              "div",
+              { draggable: "false", className: "drag__menu" },
+              _react2.default.createElement(
+                _reactRouterDom.Link,
+                {
+                  to: "/admin/edit-skills/" + item._id,
+                  className: "clickable edit-button"
+                },
+                "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C"
+              ),
+              _react2.default.createElement(
+                "span",
+                {
+                  onClick: function onClick() {
+                    return confirmToggle({
+                      open: true,
+                      text: "Вы действительно хотите удалить навык?",
+                      handler: deleteField,
+                      data: item._id
+                    });
+                  },
+                  className: "clickable delete-button"
+                },
+                "\u0423\u0434\u0430\u043B\u0438\u0442\u044C"
+              )
+            )
+          ),
+          _react2.default.createElement("div", {
+            className: "drop",
+            idx: idx < data.length - 1 ? data[idx + 1].position : item.position + 1,
+            onDragOver: function onDragOver(event) {
+              return event.preventDefault();
+            },
+            onDrop: drop,
+            onDragEnter: dropEnter,
+            onDragLeave: dropLeave
+          })
+        );
+      })
+    ),
+    _react2.default.createElement(_AddButton2.default, { src: "/admin/add-skills" })
+  );
+};
+
+exports.default = (0, _WithMany2.default)((0, _Draggable2.default)(skillsPage), { get: "skills/get_by_params", delete: "skills/delete" }, "Навыки");
+
+/***/ }),
+/* 226 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _WithForm = __webpack_require__(41);
+
+var _WithForm2 = _interopRequireDefault(_WithForm);
+
+var _TextField = __webpack_require__(23);
+
+var _TextField2 = _interopRequireDefault(_TextField);
+
+var _UploadBlock = __webpack_require__(42);
+
+var _UploadBlock2 = _interopRequireDefault(_UploadBlock);
+
+var _SaveButton = __webpack_require__(51);
+
+var _SaveButton2 = _interopRequireDefault(_SaveButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var addSkillsPage = function addSkillsPage(_ref) {
+  var handlerChange = _ref.handlerChange,
+      data = _ref.data,
+      onSave = _ref.onSave,
+      isEmpty = _ref.isEmpty;
+  return _react2.default.createElement(
+    "div",
+    { className: "page__container add-categories-page" },
+    _react2.default.createElement(
+      "h2",
+      { className: "title-page" },
+      "\u041D\u0430\u0432\u044B\u043A"
+    ),
+    _react2.default.createElement(
+      "div",
+      { className: "form" },
+      _react2.default.createElement(_TextField2.default, {
+        type: "input",
+        placeholder: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435",
+        name: "name",
+        handlerChange: handlerChange,
+        value: data.name,
+        isEmpty: isEmpty.name ? true : false
+      }),
+      _react2.default.createElement(_TextField2.default, {
+        type: "textarea",
+        placeholder: "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435",
+        name: "description",
+        handlerChange: handlerChange,
+        value: data.description,
+        isEmpty: isEmpty.description ? true : false
+      }),
+      _react2.default.createElement(_UploadBlock2.default, {
+        handlerChange: handlerChange,
+        name: "image",
+        placeholder: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435",
+        isEmpty: isEmpty.image ? true : false,
+        value: data.image || ""
+      }),
+      _react2.default.createElement(_SaveButton2.default, { name: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C", submit: onSave })
+    )
+  );
+};
+
+exports.default = (0, _WithForm2.default)(addSkillsPage, {
+  set: "skills/add",
+  edit: "skills/edit",
+  redirect: "/admin/skills",
+  get: "skills/get_by_id"
+}, "Навык", { name: true, description: false, image: false });
 
 /***/ })
 /******/ ]);

@@ -6,7 +6,7 @@ import withDrag from "../../HOC/Actions/Draggable";
 
 import AddButton from "../../Components/AddButton";
 
-const categoriesPage = ({
+const skillsPage = ({
   data,
   dragEnd,
   dragStart,
@@ -17,7 +17,7 @@ const categoriesPage = ({
   deleteField
 }) => (
   <div className="page__container categories-page">
-    <h2 className="title-page">Все категории товаров</h2>
+    <h2 className="title-page">Все навыки</h2>
     <div className="categories-page__container">
       {data.map((item, idx) => (
         <React.Fragment key={item._id}>
@@ -46,7 +46,7 @@ const categoriesPage = ({
             </h3>
             <div draggable="false" className="drag__menu">
               <Link
-                to={`/admin/edit-category/${item._id}`}
+                to={`/admin/edit-skills/${item._id}`}
                 className="clickable edit-button"
               >
                 Изменить
@@ -55,7 +55,7 @@ const categoriesPage = ({
                 onClick={() =>
                   confirmToggle({
                     open: true,
-                    text: "Вы действительно хотите удалить категорию?",
+                    text: "Вы действительно хотите удалить навык?",
                     handler: deleteField,
                     data: item._id
                   })
@@ -79,12 +79,12 @@ const categoriesPage = ({
         </React.Fragment>
       ))}
     </div>
-    <AddButton src="/admin/add-category" />
+    <AddButton src="/admin/add-skills" />
   </div>
 );
 
 export default withMany(
-  withDrag(categoriesPage, "categories/position"),
-  { get: "categories/get_by_params", delete: "categories/delete" },
-  "Категории товаров"
+  withDrag(skillsPage),
+  { get: "skills/get_by_params", delete: "skills/delete" },
+  "Навыки"
 );

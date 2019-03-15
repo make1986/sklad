@@ -19,12 +19,16 @@ const withMany = (Component, API_URL, title) => {
         data: data && data.data ? data.data : [],
         withData: data && data.data ? true : false,
         search: { key: "", value: "" },
-        params: []
+        params: [],
+        count: data && data.count ? data.count : 0,
+        moreLoading: false,
+        page: 1
       };
       this.getData = this.getData.bind(this);
       this.deleteField = this.deleteField.bind(this);
       this.changeSearch = this.changeSearch.bind(this);
       this.changeParams = this.changeParams.bind(this);
+      this.loadMore = this.loadMore.bind(this);
     }
     componentDidMount() {
       window.scrollTo(0, 0);
@@ -46,11 +50,11 @@ const withMany = (Component, API_URL, title) => {
     }
     changeSearch(key, value) {
       if (value) {
-        this.setState({ search: { key, value } }, () => {
+        this.setState({ search: { key, value }, page: 1 }, () => {
           this.getData();
         });
       } else {
-        this.setState({ search: { key: "", value: "" } }, () => {
+        this.setState({ search: { key: "", value: "" }, page: 1 }, () => {
           this.getData();
         });
       }
@@ -69,7 +73,7 @@ const withMany = (Component, API_URL, title) => {
           params.splice(idx, 1);
         }
       }
-      this.setState({ params }, () => {
+      this.setState({ params, page: 1 }, () => {
         this.getData();
       });
     }
@@ -105,13 +109,37 @@ const withMany = (Component, API_URL, title) => {
       }
       return search;
     }
+    loadMore() {
+      this.setState({ moreLoading: true });
+      let { search, params, page } = this.state;
+      page++;
+      let getParam = `${
+        this.paramsInLine(params) ? this.paramsInLine(params) : undefined
+      }/${search.key ? this.searchInLine(search) : undefined}/${page}`;
+      const loader = new MultiBootloader(API_URL.get, getParam);
+      loader
+        .response()
+        .then(data => {
+          this.setState({
+            data:
+              data && data.data
+                ? [...this.state.data, ...data.data]
+                : this.state.data,
+            moreLoading: false,
+            page
+          });
+        })
+        .catch(err => {
+          this.props.addError("Произошла ошибка на сервере. Попробуйте позже.");
+        });
+    }
     getData() {
-      const { search, params } = this.state;
+      const { search, params, page } = this.state;
       let getParam = "";
-      if (search || params.length > 0) {
+      if (search.key || params.length > 0) {
         getParam = `${
           this.paramsInLine(params) ? this.paramsInLine(params) : undefined
-        }/${search.key ? this.searchInLine(search) : undefined}`;
+        }/${search.key ? this.searchInLine(search) : undefined}/${page}`;
       }
       const loader = new MultiBootloader(API_URL.get, getParam);
       loader
@@ -119,7 +147,8 @@ const withMany = (Component, API_URL, title) => {
         .then(data => {
           this.setState({
             data: data && data.data ? data.data : [],
-            withData: data && data.data ? true : false
+            withData: data && data.data ? true : false,
+            count: data && data.count ? data.count : 0
           });
         })
         .catch(err => {
@@ -128,7 +157,7 @@ const withMany = (Component, API_URL, title) => {
     }
 
     render() {
-      const { data, withData, search, params } = this.state;
+      const { data, withData, search, params, count, moreLoading } = this.state;
       return (
         <React.Fragment>
           {withData ? (
@@ -141,6 +170,9 @@ const withMany = (Component, API_URL, title) => {
               changeParams={this.changeParams}
               search={search}
               params={params}
+              count={count}
+              moreLoading={moreLoading}
+              loadMore={this.loadMore}
             />
           ) : (
             <Preloader />

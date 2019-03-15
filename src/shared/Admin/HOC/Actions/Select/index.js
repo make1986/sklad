@@ -8,7 +8,8 @@ const withSelect = Component => {
       super(props);
       this.state = {
         options: [],
-        opened: false
+        opened: false,
+        isData: false
       };
       this.getData = this.getData.bind(this);
       this.listToggle = this.listToggle.bind(this);
@@ -30,7 +31,7 @@ const withSelect = Component => {
               data.data.map(item => {
                 options.push({ value: item._id, name: item[chooseField] });
               });
-              this.setState({ options });
+              this.setState({ options, isData: true });
             }
           } else {
             this.props.addError(
@@ -58,16 +59,22 @@ const withSelect = Component => {
     }
 
     render() {
-      const { options, opened } = this.state;
+      const { options, opened, isData } = this.state;
       return (
-        <Component
-          {...this.props}
-          options={options}
-          listToggle={this.listToggle}
-          opened={opened}
-          getNameByValue={this.getNameByValue}
-          onSelect={this.onSelect}
-        />
+        <React.Fragment>
+          {isData ? (
+            <Component
+              {...this.props}
+              options={options}
+              listToggle={this.listToggle}
+              opened={opened}
+              getNameByValue={this.getNameByValue}
+              onSelect={this.onSelect}
+            />
+          ) : (
+            ""
+          )}
+        </React.Fragment>
       );
     }
   }

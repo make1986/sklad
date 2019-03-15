@@ -5,7 +5,7 @@ const withListCreator = (Component, API_URLS, title) => {
     constructor(props) {
       super(props);
       this.state = {
-        data: []
+        data: this.props.value || []
       };
       this.add = this.add.bind(this);
       this.deleteItem = this.deleteItem.bind(this);

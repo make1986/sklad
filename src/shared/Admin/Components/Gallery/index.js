@@ -36,7 +36,7 @@ const Gallery = ({
         </div>
       ))}
       <input
-        multiple="multiple"
+        multiple={true}
         onChange={uploadFiles}
         type="file"
         name={name}

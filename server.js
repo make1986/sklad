@@ -374,6 +374,8 @@ var _Preloader2 = _interopRequireDefault(_Preloader);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -400,12 +402,16 @@ var withMany = function withMany(Component, API_URL, title) {
         data: data && data.data ? data.data : [],
         withData: data && data.data ? true : false,
         search: { key: "", value: "" },
-        params: []
+        params: [],
+        count: data && data.count ? data.count : 0,
+        moreLoading: false,
+        page: 1
       };
       _this.getData = _this.getData.bind(_this);
       _this.deleteField = _this.deleteField.bind(_this);
       _this.changeSearch = _this.changeSearch.bind(_this);
       _this.changeParams = _this.changeParams.bind(_this);
+      _this.loadMore = _this.loadMore.bind(_this);
       return _this;
     }
 
@@ -439,11 +445,11 @@ var withMany = function withMany(Component, API_URL, title) {
         var _this3 = this;
 
         if (value) {
-          this.setState({ search: { key: key, value: value } }, function () {
+          this.setState({ search: { key: key, value: value }, page: 1 }, function () {
             _this3.getData();
           });
         } else {
-          this.setState({ search: { key: "", value: "" } }, function () {
+          this.setState({ search: { key: "", value: "" }, page: 1 }, function () {
             _this3.getData();
           });
         }
@@ -469,7 +475,7 @@ var withMany = function withMany(Component, API_URL, title) {
             params.splice(idx, 1);
           }
         }
-        this.setState({ params: params }, function () {
+        this.setState({ params: params, page: 1 }, function () {
           _this4.getData();
         });
       }
@@ -510,36 +516,64 @@ var withMany = function withMany(Component, API_URL, title) {
         return search;
       }
     }, {
-      key: "getData",
-      value: function getData() {
+      key: "loadMore",
+      value: function loadMore() {
         var _this5 = this;
 
+        this.setState({ moreLoading: true });
         var _state = this.state,
             search = _state.search,
-            params = _state.params;
+            params = _state.params,
+            page = _state.page;
 
-        var getParam = "";
-        if (search || params.length > 0) {
-          getParam = (this.paramsInLine(params) ? this.paramsInLine(params) : undefined) + "/" + (search.key ? this.searchInLine(search) : undefined);
-        }
+        page++;
+        var getParam = (this.paramsInLine(params) ? this.paramsInLine(params) : undefined) + "/" + (search.key ? this.searchInLine(search) : undefined) + "/" + page;
         var loader = new _load.MultiBootloader(API_URL.get, getParam);
         loader.response().then(function (data) {
           _this5.setState({
-            data: data && data.data ? data.data : [],
-            withData: data && data.data ? true : false
+            data: data && data.data ? [].concat(_toConsumableArray(_this5.state.data), _toConsumableArray(data.data)) : _this5.state.data,
+            moreLoading: false,
+            page: page
           });
         }).catch(function (err) {
           _this5.props.addError("Произошла ошибка на сервере. Попробуйте позже.");
         });
       }
     }, {
+      key: "getData",
+      value: function getData() {
+        var _this6 = this;
+
+        var _state2 = this.state,
+            search = _state2.search,
+            params = _state2.params,
+            page = _state2.page;
+
+        var getParam = "";
+        if (search.key || params.length > 0) {
+          getParam = (this.paramsInLine(params) ? this.paramsInLine(params) : undefined) + "/" + (search.key ? this.searchInLine(search) : undefined) + "/" + page;
+        }
+        var loader = new _load.MultiBootloader(API_URL.get, getParam);
+        loader.response().then(function (data) {
+          _this6.setState({
+            data: data && data.data ? data.data : [],
+            withData: data && data.data ? true : false,
+            count: data && data.count ? data.count : 0
+          });
+        }).catch(function (err) {
+          _this6.props.addError("Произошла ошибка на сервере. Попробуйте позже.");
+        });
+      }
+    }, {
       key: "render",
       value: function render() {
-        var _state2 = this.state,
-            data = _state2.data,
-            withData = _state2.withData,
-            search = _state2.search,
-            params = _state2.params;
+        var _state3 = this.state,
+            data = _state3.data,
+            withData = _state3.withData,
+            search = _state3.search,
+            params = _state3.params,
+            count = _state3.count,
+            moreLoading = _state3.moreLoading;
 
         return _react2.default.createElement(
           _react2.default.Fragment,
@@ -551,7 +585,10 @@ var withMany = function withMany(Component, API_URL, title) {
             changeSearch: this.changeSearch,
             changeParams: this.changeParams,
             search: search,
-            params: params
+            params: params,
+            count: count,
+            moreLoading: moreLoading,
+            loadMore: this.loadMore
           })) : _react2.default.createElement(_Preloader2.default, null)
         );
       }
@@ -956,6 +993,9 @@ var ProductSchema = new Schema({
   category: {
     type: String
   },
+  skills: {
+    type: String
+  },
   brand: {
     type: String
   },
@@ -966,7 +1006,8 @@ var ProductSchema = new Schema({
     type: Number
   },
   weight: {
-    type: Number
+    type: Number,
+    default: 0
   },
   tags: {
     type: Array
@@ -981,7 +1022,8 @@ var ProductSchema = new Schema({
     type: String
   },
   price: {
-    type: Number
+    type: Number,
+    default: 0
   },
   qt: {
     type: Number,
@@ -1026,6 +1068,7 @@ var DataBase = function () {
     this.getMinOrMax = this.getMinOrMax.bind(this);
     this.getFindParams = this.getFindParams.bind(this);
     this.arrEditer = this.arrEditer.bind(this);
+    this.getCount = this.getCount.bind(this);
   }
   // get several objects by parameters
 
@@ -1051,6 +1094,25 @@ var DataBase = function () {
         });
       });
     }
+    // get count
+
+  }, {
+    key: "getCount",
+    value: function getCount(params, data) {
+      var _this2 = this;
+
+      var search = params.search;
+
+      return new Promise(function (resolve, reject) {
+        _this2.Model.countDocuments(_this2.getFindParams(params.params, search)).count(function (err, count) {
+          if (err) {
+            reject({ ok: false, err: err });
+          }
+          data.count = count;
+          resolve(data);
+        });
+      });
+    }
     // Add object
 
   }, {
@@ -1072,10 +1134,10 @@ var DataBase = function () {
   }, {
     key: "getById",
     value: function getById(id) {
-      var _this2 = this;
+      var _this3 = this;
 
       return new Promise(function (resolve, reject) {
-        _this2.Model.findById(id, function (err, doc) {
+        _this3.Model.findById(id, function (err, doc) {
           if (err) {
             reject({ ok: false, err: err });
           }
@@ -1089,10 +1151,10 @@ var DataBase = function () {
   }, {
     key: "delete",
     value: function _delete(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       return new Promise(function (resolve, reject) {
-        _this3.Model.findByIdAndRemove(id, function (err, doc) {
+        _this4.Model.findByIdAndRemove(id, function (err, doc) {
           if (err) {
             reject({ ok: false, err: err });
           }
@@ -1106,10 +1168,10 @@ var DataBase = function () {
   }, {
     key: "edit",
     value: function edit(id, data) {
-      var _this4 = this;
+      var _this5 = this;
 
       return new Promise(function (resolve, reject) {
-        _this4.Model.findByIdAndUpdate(id, { $set: data }, function (err, doc) {
+        _this5.Model.findByIdAndUpdate(id, { $set: data }, function (err, doc) {
           if (err) {
             reject({ ok: false, err: err });
           }
@@ -1123,19 +1185,19 @@ var DataBase = function () {
   }, {
     key: "arrEditer",
     value: function arrEditer(arr, idx) {
-      var _this5 = this;
+      var _this6 = this;
 
       return new Promise(function (resolve, reject) {
         var _arr$idx = arr[idx],
             id = _arr$idx.id,
             data = _arr$idx.data;
 
-        _this5.Model.findByIdAndUpdate(id, { $set: data }, function (err, doc) {
+        _this6.Model.findByIdAndUpdate(id, { $set: data }, function (err, doc) {
           if (err) {
             reject({ ok: false, err: err });
           }
           if (idx < arr.length - 1) {
-            _this5.arrEditer(arr, ++idx);
+            _this6.arrEditer(arr, ++idx);
           }
           resolve({ ok: true });
         });
@@ -1190,7 +1252,7 @@ var DataBase = function () {
   }, {
     key: "getParams",
     value: function getParams(params) {
-      var _this6 = this;
+      var _this7 = this;
 
       var result = {};
       params = decodeURIComponent(params);
@@ -1203,7 +1265,7 @@ var DataBase = function () {
           or.map(function (elem) {
             var param = elem.split("=");
             if (param.length === 2) {
-              result.$and[idx].$or.push(_defineProperty({}, param[0], _this6.getValueForParams(param[1])));
+              result.$and[idx].$or.push(_defineProperty({}, param[0], _this7.getValueForParams(param[1])));
             }
           });
         });
@@ -1263,7 +1325,7 @@ var DataBase = function () {
   }, {
     key: "getSearch",
     value: function getSearch(search) {
-      var _this7 = this;
+      var _this8 = this;
 
       var result = {};
       search = decodeURIComponent(search);
@@ -1273,7 +1335,7 @@ var DataBase = function () {
         arr.map(function (el) {
           var sub = el.split("=");
           if (sub.length === 2) {
-            result.$or.push(_defineProperty({}, sub[0], _this7.getValueForSearch(sub[1])));
+            result.$or.push(_defineProperty({}, sub[0], _this8.getValueForSearch(sub[1])));
           }
         });
       }
@@ -1365,6 +1427,14 @@ var _AddBrand = __webpack_require__(61);
 
 var _AddBrand2 = _interopRequireDefault(_AddBrand);
 
+var _Skills = __webpack_require__(87);
+
+var _Skills2 = _interopRequireDefault(_Skills);
+
+var _AddSkills = __webpack_require__(88);
+
+var _AddSkills2 = _interopRequireDefault(_AddSkills);
+
 var _load = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1429,6 +1499,18 @@ var routes = [{
   component: _AddProduct2.default,
   title: "Товар"
 }, {
+  path: "/admin/edit-product/:id",
+  exact: false,
+  component: _AddProduct2.default,
+  handlerClass: _load.MultiBootloader,
+  params: {
+    url: "products/get_by_id",
+    params: function params(path) {
+      return getParams(path, "/admin/edit-product/");
+    }
+  },
+  title: "Товар"
+}, {
   path: "/admin/brands",
   exact: false,
   component: _Brands2.default,
@@ -1457,6 +1539,35 @@ var routes = [{
     }
   },
   title: "Бренд"
+}, {
+  path: "/admin/skills",
+  exact: false,
+  component: _Skills2.default,
+  handlerClass: _load.MultiBootloader,
+  params: {
+    url: "skills/get_by_params",
+    params: function params(path) {
+      return getParams(path, "/admin/skills/");
+    }
+  },
+  title: "Навыки"
+}, {
+  path: "/admin/add-skills",
+  exact: false,
+  component: _AddSkills2.default,
+  title: "Навык"
+}, {
+  path: "/admin/edit-skills/:id",
+  exact: false,
+  component: _AddSkills2.default,
+  handlerClass: _load.MultiBootloader,
+  params: {
+    url: "skills/get_by_id",
+    params: function params(path) {
+      return getParams(path, "/admin/edit-skills/");
+    }
+  },
+  title: "Навык"
 }];
 
 exports.default = routes;
@@ -1653,6 +1764,7 @@ app.use("/api/upload", _api.file);
 app.use("/api/categories", _api.categories);
 app.use("/api/products", _api.products);
 app.use("/api/brands", _api.brands);
+app.use("/api/skills", _api.skills);
 
 app.use(_express2.default.static("public"));
 app.use(_router2.default);
@@ -2397,7 +2509,7 @@ var categoriesPage = function categoriesPage(_ref) {
   );
 };
 
-exports.default = (0, _WithMany2.default)((0, _Draggable2.default)(categoriesPage), { get: "categories/get_by_params", delete: "categories/delete" }, "Категории товаров");
+exports.default = (0, _WithMany2.default)((0, _Draggable2.default)(categoriesPage, "categories/position"), { get: "categories/get_by_params", delete: "categories/delete" }, "Категории товаров");
 
 /***/ }),
 /* 47 */
@@ -2428,7 +2540,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var withDrag = function withDrag(Component) {
+var withDrag = function withDrag(Component, api_edit) {
   var WithDrag = function (_React$Component) {
     _inherits(WithDrag, _React$Component);
 
@@ -2503,7 +2615,7 @@ var withDrag = function withDrag(Component) {
           data.map(function (item, idx) {
             editable.push({ id: item._id, data: { position: idx } });
           });
-          var editer = new _add.FieldCreator("categories/position", editable);
+          var editer = new _add.FieldCreator(api_edit, editable);
           editer.response().then(function (res) {
             if (res && res.ok) {
               _this2.props.getData();
@@ -2983,6 +3095,10 @@ var _Filter = __webpack_require__(84);
 
 var _Filter2 = _interopRequireDefault(_Filter);
 
+var _Preloader = __webpack_require__(13);
+
+var _Preloader2 = _interopRequireDefault(_Preloader);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var catalogPage = function catalogPage(_ref) {
@@ -2993,7 +3109,10 @@ var catalogPage = function catalogPage(_ref) {
       changeSearch = _ref.changeSearch,
       changeParams = _ref.changeParams,
       search = _ref.search,
-      params = _ref.params;
+      params = _ref.params,
+      count = _ref.count,
+      loadMore = _ref.loadMore,
+      moreLoading = _ref.moreLoading;
   return _react2.default.createElement(
     "div",
     { className: "page__container catalog-page" },
@@ -3008,7 +3127,30 @@ var catalogPage = function catalogPage(_ref) {
         placeholder: "Введите название или штрихкод",
         name: "name&&barcode",
         handlerChange: changeSearch,
-        value: search.value
+        value: search.value,
+        columns: 2
+      }, {
+        type: "text",
+        placeholder: "Минимальный возраст",
+        name: "minAge+gte",
+        handlerChange: changeParams,
+        value: params.findIndex(function (x) {
+          return x.key === "minAge+gte";
+        }) >= 0 ? params[params.findIndex(function (x) {
+          return x.key === "minAge+gte";
+        })].value : "",
+        columns: 4
+      }, {
+        type: "text",
+        placeholder: "Максимальный возраст",
+        name: "maxAge+lte",
+        handlerChange: changeParams,
+        value: params.findIndex(function (x) {
+          return x.key === "maxAge+lte";
+        }) >= 0 ? params[params.findIndex(function (x) {
+          return x.key === "maxAge+lte";
+        })].value : "",
+        columns: 4
       }, {
         type: "select",
         placeholder: "Все категории",
@@ -3021,27 +3163,36 @@ var catalogPage = function catalogPage(_ref) {
         })].value : "",
         chooseField: "name",
         apiUrl: "categories/get_by_params",
-        addError: addError
+        addError: addError,
+        columns: 3
       }, {
-        type: "text",
-        placeholder: "Минимальный возраст",
-        name: "minAge+gte",
+        type: "select",
+        placeholder: "Все навыки",
+        name: "skills",
         handlerChange: changeParams,
         value: params.findIndex(function (x) {
-          return x.key === "minAge+gte";
+          return x.key === "skills";
         }) >= 0 ? params[params.findIndex(function (x) {
-          return x.key === "minAge+gte";
-        })].value : ""
+          return x.key === "skills";
+        })].value : "",
+        chooseField: "name",
+        apiUrl: "skills/get_by_params",
+        addError: addError,
+        columns: 3
       }, {
-        type: "text",
-        placeholder: "Максимальный возраст",
-        name: "maxAge+lte",
+        type: "select",
+        placeholder: "Все бренды",
+        name: "brand",
         handlerChange: changeParams,
         value: params.findIndex(function (x) {
-          return x.key === "maxAge+lte";
+          return x.key === "brand";
         }) >= 0 ? params[params.findIndex(function (x) {
-          return x.key === "maxAge+lte";
-        })].value : ""
+          return x.key === "brand";
+        })].value : "",
+        chooseField: "name",
+        apiUrl: "brands/get_by_params",
+        addError: addError,
+        columns: 3
       }]
     }),
     _react2.default.createElement(
@@ -3094,6 +3245,11 @@ var catalogPage = function catalogPage(_ref) {
         "\u041D\u0435 \u0442\u043E\u0432\u0430\u0440\u043E\u0432"
       )
     ),
+    data && data.length < count ? _react2.default.createElement(
+      "div",
+      { onClick: loadMore, className: "clickable load-more" },
+      moreLoading ? _react2.default.createElement(_Preloader2.default, null) : "Загрузить еще"
+    ) : "",
     _react2.default.createElement(_AddButton2.default, { src: "/admin/add-product" })
   );
 };
@@ -3178,6 +3334,16 @@ var productPage = function productPage(_ref) {
         chooseField: "name",
         apiUrl: "categories/get_by_params",
         placeholder: "\u0412\u044B\u0431\u0440\u0430\u0442\u044C \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044E",
+        addError: addError
+      }),
+      _react2.default.createElement(_Select2.default, {
+        value: data.skills,
+        name: "skills",
+        handlerChange: handlerChange,
+        isEmpty: isEmpty.skills ? true : false,
+        chooseField: "name",
+        apiUrl: "skills/get_by_params",
+        placeholder: "\u0412\u044B\u0431\u0440\u0430\u0442\u044C \u043D\u0430\u0432\u044B\u043A",
         addError: addError
       }),
       _react2.default.createElement(_Select2.default, {
@@ -3377,7 +3543,7 @@ var Gallery = function Gallery(_ref) {
         );
       }),
       _react2.default.createElement("input", {
-        multiple: "multiple",
+        multiple: true,
         onChange: uploadFiles,
         type: "file",
         name: name,
@@ -3461,6 +3627,13 @@ var withLoaderArr = function withLoaderArr(Component, API_URLS, title) {
       value: function componentDidMount() {
         this.socketConnect();
         this.loadSuccessful();
+        if (this.props.value && this.props.value.length > 0) {
+          var load = [];
+          this.props.value.map(function (item) {
+            load.push(100);
+          });
+          this.setState({ load: load });
+        }
       }
     }, {
       key: "componentWillUnmount",
@@ -3722,7 +3895,8 @@ var withSelect = function withSelect(Component) {
 
       _this.state = {
         options: [],
-        opened: false
+        opened: false,
+        isData: false
       };
       _this.getData = _this.getData.bind(_this);
       _this.listToggle = _this.listToggle.bind(_this);
@@ -3753,7 +3927,7 @@ var withSelect = function withSelect(Component) {
               data.data.map(function (item) {
                 options.push({ value: item._id, name: item[chooseField] });
               });
-              _this2.setState({ options: options });
+              _this2.setState({ options: options, isData: true });
             }
           } else {
             _this2.props.addError("Произошла ошибка на сервере. Попробуйте позже.");
@@ -3787,15 +3961,20 @@ var withSelect = function withSelect(Component) {
       value: function render() {
         var _state = this.state,
             options = _state.options,
-            opened = _state.opened;
+            opened = _state.opened,
+            isData = _state.isData;
 
-        return _react2.default.createElement(Component, _extends({}, this.props, {
-          options: options,
-          listToggle: this.listToggle,
-          opened: opened,
-          getNameByValue: this.getNameByValue,
-          onSelect: this.onSelect
-        }));
+        return _react2.default.createElement(
+          _react2.default.Fragment,
+          null,
+          isData ? _react2.default.createElement(Component, _extends({}, this.props, {
+            options: options,
+            listToggle: this.listToggle,
+            opened: opened,
+            getNameByValue: this.getNameByValue,
+            onSelect: this.onSelect
+          })) : ""
+        );
       }
     }]);
 
@@ -3958,7 +4137,7 @@ var withListCreator = function withListCreator(Component, API_URLS, title) {
       var _this = _possibleConstructorReturn(this, (WithListCreator.__proto__ || Object.getPrototypeOf(WithListCreator)).call(this, props));
 
       _this.state = {
-        data: []
+        data: _this.props.value || []
       };
       _this.add = _this.add.bind(_this);
       _this.deleteItem = _this.deleteItem.bind(_this);
@@ -4319,7 +4498,7 @@ var Menu = function Menu() {
     "div",
     { className: "header__menu" },
     _react2.default.createElement(_Item2.default, {
-      src: [{ name: "Категории", src: "/admin/categories" }, { name: "Товары", src: "/admin/catalog" }, { name: "Бренды", src: "/admin/brands" }, { name: "Склад", src: "/admin/stock" }],
+      src: [{ name: "Категории", src: "/admin/categories" }, { name: "Навыки", src: "/admin/skills" }, { name: "Товары", src: "/admin/catalog" }, { name: "Бренды", src: "/admin/brands" }, { name: "Склад", src: "/admin/stock" }],
       name: "\u0422\u043E\u0432\u0430\u0440\u044B",
       isDropDown: "yes"
     }),
@@ -4730,6 +4909,10 @@ var _brands = __webpack_require__(75);
 
 var _brands2 = _interopRequireDefault(_brands);
 
+var _skills = __webpack_require__(85);
+
+var _skills2 = _interopRequireDefault(_skills);
+
 var _file = __webpack_require__(77);
 
 var _file2 = _interopRequireDefault(_file);
@@ -4740,7 +4923,8 @@ module.exports = {
   file: _file2.default,
   categories: _categories2.default,
   products: _products2.default,
-  brands: _brands2.default
+  brands: _brands2.default,
+  skills: _skills2.default
 };
 
 /***/ }),
@@ -4900,12 +5084,14 @@ var Category = _mongoose2.default.model("Category");
 
 var Product = _mongoose2.default.model("Product");
 
-router.get("/get_by_params(/:params/:search)?", function (req, res) {
+router.get("/get_by_params(/:params/:search/:page)?", function (req, res) {
   var products = new _Queries2.default(Product);
   var params = req.params;
 
   params.limit = 5;
   products.getByParams(params).then(function (data) {
+    return products.getCount(params, data);
+  }).then(function (data) {
     return res.json(data);
   }).catch(function (err) {
     return res.status(400).json(err);
@@ -4915,6 +5101,15 @@ router.get("/get_by_params(/:params/:search)?", function (req, res) {
 router.post("/add", function (req, res) {
   var products = new _Queries2.default(Product);
   products.add(req.body).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.get("/get_by_id/:id", function (req, res) {
+  var products = new _Queries2.default(Product);
+  products.getById(req.params.id).then(function (data) {
     return res.json(data);
   }).catch(function (err) {
     return res.status(400).json(err);
@@ -4937,6 +5132,23 @@ router.get("/delete/:id", function (req, res) {
     return res.json(data);
   }).catch(function (err) {
     return res.status(400).json({ ok: false, message: "Ошибка сервера, попробуйте позже!" });
+  });
+});
+
+router.post("/edit", function (req, res) {
+  var products = new _Queries2.default(Product);
+  var id = req.body._id;
+  var data = req.body;
+  delete data._id;
+  delete data.created_at;
+  delete data.updatedAt;
+  if (data.__v) {
+    delete data.__v;
+  }
+  products.edit(id, data).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
   });
 });
 
@@ -5421,23 +5633,27 @@ var Filter = function Filter(_ref) {
         return _react2.default.createElement(
           _react2.default.Fragment,
           { key: idx },
-          ctrl.type === "text" ? _react2.default.createElement(_TextField2.default, {
-            type: "input",
-            placeholder: ctrl.placeholder,
-            name: ctrl.name,
-            handlerChange: ctrl.handlerChange,
-            value: ctrl.value,
-            isEmpty: false
-          }) : _react2.default.createElement(_Select2.default, {
-            value: ctrl.value,
-            name: ctrl.name,
-            handlerChange: ctrl.handlerChange,
-            isEmpty: false,
-            chooseField: ctrl.chooseField,
-            apiUrl: ctrl.apiUrl,
-            placeholder: ctrl.placeholder,
-            addError: addError
-          })
+          _react2.default.createElement(
+            "div",
+            { className: "col-" + ctrl.columns },
+            ctrl.type === "text" ? _react2.default.createElement(_TextField2.default, {
+              type: "input",
+              placeholder: ctrl.placeholder,
+              name: ctrl.name,
+              handlerChange: ctrl.handlerChange,
+              value: ctrl.value,
+              isEmpty: false
+            }) : _react2.default.createElement(_Select2.default, {
+              value: ctrl.value,
+              name: ctrl.name,
+              handlerChange: ctrl.handlerChange,
+              isEmpty: false,
+              chooseField: ctrl.chooseField,
+              apiUrl: ctrl.apiUrl,
+              placeholder: ctrl.placeholder,
+              addError: addError
+            })
+          )
         );
       })
     )
@@ -5445,6 +5661,372 @@ var Filter = function Filter(_ref) {
 };
 
 exports.default = Filter;
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _express = __webpack_require__(4);
+
+var _express2 = _interopRequireDefault(_express);
+
+var _mongoose = __webpack_require__(2);
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+var _files = __webpack_require__(9);
+
+__webpack_require__(86);
+
+__webpack_require__(18);
+
+var _Queries = __webpack_require__(19);
+
+var _Queries2 = _interopRequireDefault(_Queries);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var router = _express2.default.Router();
+
+var Skills = _mongoose2.default.model("Skills");
+
+var Product = _mongoose2.default.model("Product");
+
+router.get("/get_by_params", function (req, res) {
+  var skills = new _Queries2.default(Skills);
+  skills.getByParams({ sort: "position=1" }).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.get("/get_by_id/:id", function (req, res) {
+  var skills = new _Queries2.default(Skills);
+  skills.getById(req.params.id).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.post("/add", function (req, res) {
+  var skills = new _Queries2.default(Skills);
+  skills.getByParams({ limit: 1, sort: "position=-1" }).then(function (data) {
+    if (data && data.ok && data.data.length > 0) {
+      var body = req.body;
+
+      body.position = data.data[0].position + 1;
+      return skills.add(body);
+    } else {
+      return skills.add(req.body);
+    }
+  }).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.post("/position", function (req, res) {
+  var skills = new _Queries2.default(Skills);
+  skills.arrEditer(req.body, 0).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.post("/edit", function (req, res) {
+  var skills = new _Queries2.default(Skills);
+  var data = {
+    name: req.body.name,
+    description: req.body.description,
+    image: req.body.image || ""
+  };
+  var id = req.body._id;
+  skills.edit(id, data).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.get("/delete/:id", function (req, res) {
+  var skills = new _Queries2.default(Skills);
+  var products = new _Queries2.default(Product);
+  var id = req.params.id;
+
+  products.getByParams({ params: "skills=" + id }).then(function (data) {
+    if (data.data && data.data.length > 0) {
+      return {
+        ok: false,
+        message: "Не поднимается рука, чтобы удалить данный навык. У вас имеются товары, относящиеся к нему. Измените навык в этих товарах или удалите их."
+      };
+    }
+    return { ok: true };
+  }).then(function (data) {
+    if (data.ok) {
+      return skills.delete(id);
+    } else {
+      return data;
+    }
+  }).then(function (data) {
+    if (data.data && data.data.image) {
+      (0, _files.deleteFile)(data.data.image);
+    }
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json({ ok: false, message: "Ошибка сервера, попробуйте позже!" });
+  });
+});
+
+module.exports = router;
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var mongoose = __webpack_require__(2);
+
+var Schema = mongoose.Schema;
+
+var SkillsSchema = new Schema({
+  name: {
+    type: String
+  },
+  image: {
+    type: String
+  },
+  description: {
+    type: String
+  },
+  position: {
+    type: Number,
+    default: 0
+  }
+}, { timestamps: { createdAt: "created_at" } });
+
+var Skills = mongoose.model("Skills", SkillsSchema);
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(3);
+
+var _WithMany = __webpack_require__(12);
+
+var _WithMany2 = _interopRequireDefault(_WithMany);
+
+var _Draggable = __webpack_require__(47);
+
+var _Draggable2 = _interopRequireDefault(_Draggable);
+
+var _AddButton = __webpack_require__(14);
+
+var _AddButton2 = _interopRequireDefault(_AddButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var skillsPage = function skillsPage(_ref) {
+  var data = _ref.data,
+      dragEnd = _ref.dragEnd,
+      dragStart = _ref.dragStart,
+      drop = _ref.drop,
+      dropEnter = _ref.dropEnter,
+      dropLeave = _ref.dropLeave,
+      confirmToggle = _ref.confirmToggle,
+      deleteField = _ref.deleteField;
+  return _react2.default.createElement(
+    "div",
+    { className: "page__container categories-page" },
+    _react2.default.createElement(
+      "h2",
+      { className: "title-page" },
+      "\u0412\u0441\u0435 \u043D\u0430\u0432\u044B\u043A\u0438"
+    ),
+    _react2.default.createElement(
+      "div",
+      { className: "categories-page__container" },
+      data.map(function (item, idx) {
+        return _react2.default.createElement(
+          _react2.default.Fragment,
+          { key: item._id },
+          idx === 0 ? _react2.default.createElement("div", {
+            className: "drop",
+            idx: item.position,
+            onDragOver: function onDragOver(event) {
+              return event.preventDefault();
+            },
+            onDrop: drop,
+            onDragEnter: dropEnter,
+            onDragLeave: dropLeave
+          }) : "",
+          _react2.default.createElement(
+            "div",
+            {
+              draggable: "true",
+              onDragStart: function onDragStart(e) {
+                return dragStart(e, data);
+              },
+              onDragEnd: dragEnd,
+              className: "drag",
+              idx: item.position,
+              id: "id" + item._id
+            },
+            _react2.default.createElement(
+              "h3",
+              { draggable: "false", className: "drag__name" },
+              item.name
+            ),
+            _react2.default.createElement(
+              "div",
+              { draggable: "false", className: "drag__menu" },
+              _react2.default.createElement(
+                _reactRouterDom.Link,
+                {
+                  to: "/admin/edit-skills/" + item._id,
+                  className: "clickable edit-button"
+                },
+                "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C"
+              ),
+              _react2.default.createElement(
+                "span",
+                {
+                  onClick: function onClick() {
+                    return confirmToggle({
+                      open: true,
+                      text: "Вы действительно хотите удалить навык?",
+                      handler: deleteField,
+                      data: item._id
+                    });
+                  },
+                  className: "clickable delete-button"
+                },
+                "\u0423\u0434\u0430\u043B\u0438\u0442\u044C"
+              )
+            )
+          ),
+          _react2.default.createElement("div", {
+            className: "drop",
+            idx: idx < data.length - 1 ? data[idx + 1].position : item.position + 1,
+            onDragOver: function onDragOver(event) {
+              return event.preventDefault();
+            },
+            onDrop: drop,
+            onDragEnter: dropEnter,
+            onDragLeave: dropLeave
+          })
+        );
+      })
+    ),
+    _react2.default.createElement(_AddButton2.default, { src: "/admin/add-skills" })
+  );
+};
+
+exports.default = (0, _WithMany2.default)((0, _Draggable2.default)(skillsPage), { get: "skills/get_by_params", delete: "skills/delete" }, "Навыки");
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _WithForm = __webpack_require__(15);
+
+var _WithForm2 = _interopRequireDefault(_WithForm);
+
+var _TextField = __webpack_require__(7);
+
+var _TextField2 = _interopRequireDefault(_TextField);
+
+var _UploadBlock = __webpack_require__(16);
+
+var _UploadBlock2 = _interopRequireDefault(_UploadBlock);
+
+var _SaveButton = __webpack_require__(17);
+
+var _SaveButton2 = _interopRequireDefault(_SaveButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var addSkillsPage = function addSkillsPage(_ref) {
+  var handlerChange = _ref.handlerChange,
+      data = _ref.data,
+      onSave = _ref.onSave,
+      isEmpty = _ref.isEmpty;
+  return _react2.default.createElement(
+    "div",
+    { className: "page__container add-categories-page" },
+    _react2.default.createElement(
+      "h2",
+      { className: "title-page" },
+      "\u041D\u0430\u0432\u044B\u043A"
+    ),
+    _react2.default.createElement(
+      "div",
+      { className: "form" },
+      _react2.default.createElement(_TextField2.default, {
+        type: "input",
+        placeholder: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435",
+        name: "name",
+        handlerChange: handlerChange,
+        value: data.name,
+        isEmpty: isEmpty.name ? true : false
+      }),
+      _react2.default.createElement(_TextField2.default, {
+        type: "textarea",
+        placeholder: "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435",
+        name: "description",
+        handlerChange: handlerChange,
+        value: data.description,
+        isEmpty: isEmpty.description ? true : false
+      }),
+      _react2.default.createElement(_UploadBlock2.default, {
+        handlerChange: handlerChange,
+        name: "image",
+        placeholder: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435",
+        isEmpty: isEmpty.image ? true : false,
+        value: data.image || ""
+      }),
+      _react2.default.createElement(_SaveButton2.default, { name: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C", submit: onSave })
+    )
+  );
+};
+
+exports.default = (0, _WithForm2.default)(addSkillsPage, {
+  set: "skills/add",
+  edit: "skills/edit",
+  redirect: "/admin/skills",
+  get: "skills/get_by_id"
+}, "Навык", { name: true, description: false, image: false });
 
 /***/ })
 /******/ ]);

@@ -5,6 +5,8 @@ import Catalog from "./Pages/Catalog";
 import AddProduct from "./Pages/AddProduct";
 import Brands from "./Pages/Brands";
 import AddBrand from "./Pages/AddBrand";
+import Skills from "./Pages/Skills";
+import AddSkills from "./Pages/AddSkills";
 
 import { MultiBootloader } from "./api/load";
 
@@ -69,6 +71,17 @@ const routes = [
     title: "Товар"
   },
   {
+    path: "/admin/edit-product/:id",
+    exact: false,
+    component: AddProduct,
+    handlerClass: MultiBootloader,
+    params: {
+      url: "products/get_by_id",
+      params: path => getParams(path, "/admin/edit-product/")
+    },
+    title: "Товар"
+  },
+  {
     path: "/admin/brands",
     exact: false,
     component: Brands,
@@ -95,6 +108,34 @@ const routes = [
       params: path => getParams(path, "/admin/edit-brand/")
     },
     title: "Бренд"
+  },
+  {
+    path: "/admin/skills",
+    exact: false,
+    component: Skills,
+    handlerClass: MultiBootloader,
+    params: {
+      url: "skills/get_by_params",
+      params: path => getParams(path, "/admin/skills/")
+    },
+    title: "Навыки"
+  },
+  {
+    path: "/admin/add-skills",
+    exact: false,
+    component: AddSkills,
+    title: "Навык"
+  },
+  {
+    path: "/admin/edit-skills/:id",
+    exact: false,
+    component: AddSkills,
+    handlerClass: MultiBootloader,
+    params: {
+      url: "skills/get_by_id",
+      params: path => getParams(path, "/admin/edit-skills/")
+    },
+    title: "Навык"
   }
 ];
 

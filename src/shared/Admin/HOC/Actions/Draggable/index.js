@@ -2,7 +2,7 @@ import React from "react";
 
 import { FieldCreator } from "../../../api/add";
 
-const withDrag = Component => {
+const withDrag = (Component, api_edit) => {
   class WithDrag extends React.Component {
     constructor(props) {
       super(props);
@@ -56,7 +56,7 @@ const withDrag = Component => {
         data.map((item, idx) => {
           editable.push({ id: item._id, data: { position: idx } });
         });
-        const editer = new FieldCreator("categories/position", editable);
+        const editer = new FieldCreator(api_edit, editable);
         editer
           .response()
           .then(res => {

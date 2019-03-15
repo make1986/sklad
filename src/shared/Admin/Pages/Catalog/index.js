@@ -5,6 +5,7 @@ import withMany from "../../HOC/LoadPages/WithMany";
 
 import AddButton from "../../Components/AddButton";
 import Filter from "../../Components/Filter";
+import Preloader from "../../Components/Preloader";
 
 const catalogPage = ({
   data,
@@ -14,7 +15,10 @@ const catalogPage = ({
   changeSearch,
   changeParams,
   search,
-  params
+  params,
+  count,
+  loadMore,
+  moreLoading
 }) => (
   <div className="page__container catalog-page">
     <h2 className="title-page">Все товары</h2>
@@ -25,7 +29,30 @@ const catalogPage = ({
           placeholder: "Введите название или штрихкод",
           name: "name&&barcode",
           handlerChange: changeSearch,
-          value: search.value
+          value: search.value,
+          columns: 2
+        },
+        {
+          type: "text",
+          placeholder: "Минимальный возраст",
+          name: "minAge+gte",
+          handlerChange: changeParams,
+          value:
+            params.findIndex(x => x.key === "minAge+gte") >= 0
+              ? params[params.findIndex(x => x.key === "minAge+gte")].value
+              : "",
+          columns: 4
+        },
+        {
+          type: "text",
+          placeholder: "Максимальный возраст",
+          name: "maxAge+lte",
+          handlerChange: changeParams,
+          value:
+            params.findIndex(x => x.key === "maxAge+lte") >= 0
+              ? params[params.findIndex(x => x.key === "maxAge+lte")].value
+              : "",
+          columns: 4
         },
         {
           type: "select",
@@ -38,27 +65,36 @@ const catalogPage = ({
               : "",
           chooseField: "name",
           apiUrl: "categories/get_by_params",
-          addError: addError
+          addError: addError,
+          columns: 3
         },
         {
-          type: "text",
-          placeholder: "Минимальный возраст",
-          name: "minAge+gte",
+          type: "select",
+          placeholder: "Все навыки",
+          name: "skills",
           handlerChange: changeParams,
           value:
-            params.findIndex(x => x.key === "minAge+gte") >= 0
-              ? params[params.findIndex(x => x.key === "minAge+gte")].value
-              : ""
+            params.findIndex(x => x.key === "skills") >= 0
+              ? params[params.findIndex(x => x.key === "skills")].value
+              : "",
+          chooseField: "name",
+          apiUrl: "skills/get_by_params",
+          addError: addError,
+          columns: 3
         },
         {
-          type: "text",
-          placeholder: "Максимальный возраст",
-          name: "maxAge+lte",
+          type: "select",
+          placeholder: "Все бренды",
+          name: "brand",
           handlerChange: changeParams,
           value:
-            params.findIndex(x => x.key === "maxAge+lte") >= 0
-              ? params[params.findIndex(x => x.key === "maxAge+lte")].value
-              : ""
+            params.findIndex(x => x.key === "brand") >= 0
+              ? params[params.findIndex(x => x.key === "brand")].value
+              : "",
+          chooseField: "name",
+          apiUrl: "brands/get_by_params",
+          addError: addError,
+          columns: 3
         }
       ]}
     />
@@ -96,6 +132,13 @@ const catalogPage = ({
         <p>Не товаров</p>
       )}
     </div>
+    {data && data.length < count ? (
+      <div onClick={loadMore} className="clickable load-more">
+        {moreLoading ? <Preloader /> : "Загрузить еще"}
+      </div>
+    ) : (
+      ""
+    )}
     <AddButton src="/admin/add-product" />
   </div>
 );

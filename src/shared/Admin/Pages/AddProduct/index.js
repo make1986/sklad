@@ -31,6 +31,16 @@ const productPage = ({ handlerChange, data, onSave, isEmpty, addError }) => (
         addError={addError}
       />
       <Select
+        value={data.skills}
+        name="skills"
+        handlerChange={handlerChange}
+        isEmpty={isEmpty.skills ? true : false}
+        chooseField="name"
+        apiUrl="skills/get_by_params"
+        placeholder="Выбрать навык"
+        addError={addError}
+      />
+      <Select
         value={data.brand}
         name="brand"
         handlerChange={handlerChange}

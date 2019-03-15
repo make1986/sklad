@@ -22,6 +22,9 @@ const ProductSchema = new Schema(
     category: {
       type: String
     },
+    skills: {
+      type: String
+    },
     brand: {
       type: String
     },
@@ -32,7 +35,8 @@ const ProductSchema = new Schema(
       type: Number
     },
     weight: {
-      type: Number
+      type: Number,
+      default: 0
     },
     tags: {
       type: Array
@@ -47,7 +51,8 @@ const ProductSchema = new Schema(
       type: String
     },
     price: {
-      type: Number
+      type: Number,
+      default: 0
     },
     qt: {
       type: Number,

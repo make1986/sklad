@@ -10,6 +10,7 @@ export default class DataBase {
     this.getMinOrMax = this.getMinOrMax.bind(this);
     this.getFindParams = this.getFindParams.bind(this);
     this.arrEditer = this.arrEditer.bind(this);
+    this.getCount = this.getCount.bind(this);
   }
   // get several objects by parameters
   getByParams(params) {
@@ -27,6 +28,21 @@ export default class DataBase {
           }
           resolve({ ok: true, data: docs });
         });
+    });
+  }
+  // get count
+  getCount(params, data) {
+    const { search } = params;
+    return new Promise((resolve, reject) => {
+      this.Model.countDocuments(
+        this.getFindParams(params.params, search)
+      ).count((err, count) => {
+        if (err) {
+          reject({ ok: false, err });
+        }
+        data.count = count;
+        resolve(data);
+      });
     });
   }
   // Add object

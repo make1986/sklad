@@ -1,0 +1,29 @@
+.filter {
+  width: 100%;
+  padding: 18px 0;
+  background-color: #fff;
+  margin-bottom: 40px;
+  border-top: 1px solid $grey;
+  border-bottom: 1px solid $grey;
+
+  &__container {
+    width: $content_width;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .col-1 {
+      width: 100%;
+    }
+    .col-2 {
+      width: 45%;
+    }
+    .col-3 {
+      width: 30%;
+    }
+    .col-4 {
+      width: 23%;
+    }
+  }
+}
