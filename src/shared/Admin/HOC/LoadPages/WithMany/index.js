@@ -17,10 +17,14 @@ const withMany = (Component, API_URL, title) => {
       }
       this.state = {
         data: data && data.data ? data.data : [],
-        withData: data && data.data ? true : false
+        withData: data && data.data ? true : false,
+        search: { key: "", value: "" },
+        params: []
       };
       this.getData = this.getData.bind(this);
       this.deleteField = this.deleteField.bind(this);
+      this.changeSearch = this.changeSearch.bind(this);
+      this.changeParams = this.changeParams.bind(this);
     }
     componentDidMount() {
       window.scrollTo(0, 0);
@@ -40,8 +44,76 @@ const withMany = (Component, API_URL, title) => {
         }
       });
     }
+    changeSearch(key, value) {
+      if (value) {
+        this.setState({ search: { key, value } }, () => {
+          this.getData();
+        });
+      } else {
+        this.setState({ search: { key: "", value: "" } }, () => {
+          this.getData();
+        });
+      }
+    }
+    changeParams(key, value) {
+      let { params } = this.state;
+      const idx = params.findIndex(x => x.key === key);
+      if (value) {
+        if (idx >= 0) {
+          params[idx].value = value;
+        } else {
+          params.push({ key, value });
+        }
+      } else {
+        if (idx >= 0) {
+          params.splice(idx, 1);
+        }
+      }
+      this.setState({ params }, () => {
+        this.getData();
+      });
+    }
+    paramsInLine(params) {
+      let str = "";
+      let key;
+      let value;
+      params.map((p, idx) => {
+        if (p.key.indexOf("+gte") >= 0) {
+          key = p.key.substring(0, p.key.indexOf("+gte"));
+          value = `+gte${p.value}`;
+        } else if (p.key.indexOf("+lte") >= 0) {
+          key = p.key.substring(0, p.key.indexOf("+lte"));
+          value = `+lte${p.value}`;
+        } else {
+          key = p.key;
+          value = p.value;
+        }
+        str = `${str}${idx > 0 ? `&&${key}=${value}` : `${key}=${value}`}`;
+      });
+      return str;
+    }
+    searchInLine(param) {
+      let { key, value } = param;
+      const keys = key.split("&&");
+      let search = "";
+      if (value) {
+        keys.map((item, idx) => {
+          search = `${search}${
+            idx > 0 ? `||${item}=${value}` : `${item}=${value}`
+          }`;
+        });
+      }
+      return search;
+    }
     getData() {
-      const loader = new MultiBootloader(API_URL.get);
+      const { search, params } = this.state;
+      let getParam = "";
+      if (search || params.length > 0) {
+        getParam = `${
+          this.paramsInLine(params) ? this.paramsInLine(params) : undefined
+        }/${search.key ? this.searchInLine(search) : undefined}`;
+      }
+      const loader = new MultiBootloader(API_URL.get, getParam);
       loader
         .response()
         .then(data => {
@@ -56,7 +128,7 @@ const withMany = (Component, API_URL, title) => {
     }
 
     render() {
-      const { data, withData } = this.state;
+      const { data, withData, search, params } = this.state;
       return (
         <React.Fragment>
           {withData ? (
@@ -65,6 +137,10 @@ const withMany = (Component, API_URL, title) => {
               data={data}
               getData={this.getData}
               deleteField={this.deleteField}
+              changeSearch={this.changeSearch}
+              changeParams={this.changeParams}
+              search={search}
+              params={params}
             />
           ) : (
             <Preloader />

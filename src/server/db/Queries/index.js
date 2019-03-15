@@ -15,6 +15,7 @@ export default class DataBase {
   getByParams(params) {
     const { limit, page, sort, search } = params;
     const skip = this.getSkip(limit, page);
+    // console.log(this.getFindParams(params.params, search));
     return new Promise((resolve, reject) => {
       this.Model.find(this.getFindParams(params.params, search))
         .limit(Number(this.getLimit(limit)))
@@ -134,7 +135,7 @@ export default class DataBase {
   getParams(params) {
     let result = {};
     params = decodeURIComponent(params);
-    if (params && params !== undefined) {
+    if (params && params !== undefined && params !== "undefined") {
       const and = params.split("&&");
       result.$and = [];
       and.map((el, idx) => {
@@ -209,9 +210,10 @@ export default class DataBase {
     return result;
   }
   getSearch(search) {
-    let result = { $or: [] };
+    let result = {};
     search = decodeURIComponent(search);
-    if (search && search !== undefined) {
+    if (search && search !== undefined && search !== "undefined") {
+      result = { $or: [] };
       const arr = search.split("||");
       arr.map(el => {
         const sub = el.split("=");

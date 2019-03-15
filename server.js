@@ -110,18 +110,6 @@ module.exports = require("socket.io-stream");
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports) {
-
-module.exports = require("path");
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-module.exports = require("fs");
-
-/***/ }),
-/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -134,13 +122,13 @@ exports.upload_city_xls = exports.MultiBootloader = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _isomorphicFetch = __webpack_require__(16);
+var _isomorphicFetch = __webpack_require__(23);
 
 var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 
 var _config = __webpack_require__(1);
 
-var _axios = __webpack_require__(17);
+var _axios = __webpack_require__(24);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -179,7 +167,7 @@ var upload_city_xls = exports.upload_city_xls = function upload_city_xls(data) {
 };
 
 /***/ }),
-/* 9 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -193,22 +181,70 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _config = __webpack_require__(1);
+var _InputText = __webpack_require__(49);
+
+var _InputText2 = _interopRequireDefault(_InputText);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Preloader = function Preloader() {
+var TextField = function TextField(_ref) {
+  var type = _ref.type,
+      placeholder = _ref.placeholder,
+      name = _ref.name,
+      changeMiddleware = _ref.changeMiddleware,
+      value = _ref.value,
+      length = _ref.length,
+      handlerFocus = _ref.handlerFocus,
+      handlerBlur = _ref.handlerBlur,
+      focus = _ref.focus,
+      isEmpty = _ref.isEmpty;
   return _react2.default.createElement(
     "div",
-    { className: "preloader" },
-    _react2.default.createElement("img", { src: _config.API_PREFIX + "/Static/SVG/Ellipsis-1s-200px.svg" })
+    { className: "text-field" },
+    type === "input" ? _react2.default.createElement("input", {
+      className: isEmpty ? "input empty" : "input",
+      id: name,
+      value: value || "",
+      onChange: changeMiddleware,
+      type: "text",
+      name: name,
+      onFocus: handlerFocus,
+      onBlur: handlerBlur,
+      autoComplete: "off"
+    }) : _react2.default.createElement(
+      _react2.default.Fragment,
+      null,
+      _react2.default.createElement("textarea", {
+        className: isEmpty ? "input empty" : "input",
+        id: name,
+        value: value,
+        onChange: changeMiddleware,
+        name: name,
+        onFocus: handlerFocus,
+        onBlur: handlerBlur,
+        autoComplete: "off"
+      }),
+      _react2.default.createElement(
+        "span",
+        { className: "text-field__count" },
+        length
+      )
+    ),
+    _react2.default.createElement(
+      "label",
+      {
+        className: focus ? "text-field__label active" : "text-field__label",
+        htmlFor: name
+      },
+      placeholder
+    )
   );
 };
 
-exports.default = Preloader;
+exports.default = (0, _InputText2.default)(TextField);
 
 /***/ }),
-/* 10 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -226,7 +262,7 @@ var _LoadImage = __webpack_require__(51);
 
 var _LoadImage2 = _interopRequireDefault(_LoadImage);
 
-var _Preloader = __webpack_require__(9);
+var _Preloader = __webpack_require__(13);
 
 var _Preloader2 = _interopRequireDefault(_Preloader);
 
@@ -248,7 +284,7 @@ var ImageBlock = function ImageBlock(_ref) {
 exports.default = (0, _LoadImage2.default)(ImageBlock);
 
 /***/ }),
-/* 11 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -258,11 +294,11 @@ var _socket = __webpack_require__(5);
 
 var _socket2 = _interopRequireDefault(_socket);
 
-var _path = __webpack_require__(6);
+var _path = __webpack_require__(10);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _fs = __webpack_require__(7);
+var _fs = __webpack_require__(11);
 
 var _fs2 = _interopRequireDefault(_fs);
 
@@ -300,182 +336,19 @@ module.exports.deleteFile = function (filename) {
 };
 
 /***/ }),
-/* 12 */
+/* 10 */
 /***/ (function(module, exports) {
 
-module.exports = require("express-session");
+module.exports = require("path");
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 11 */
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Home = __webpack_require__(40);
-
-var _Home2 = _interopRequireDefault(_Home);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function getParams(path, noparams) {
-  var params = path.split(noparams)[1];
-  if (!params || params.lenght === 0) {
-    return [];
-  } else {
-    return params.split("/");
-  }
-}
-
-var routes = [{
-  path: "/",
-  exact: true,
-  component: _Home2.default
-}];
-
-exports.default = routes;
+module.exports = require("fs");
 
 /***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Home = __webpack_require__(45);
-
-var _Home2 = _interopRequireDefault(_Home);
-
-var _Categories = __webpack_require__(46);
-
-var _Categories2 = _interopRequireDefault(_Categories);
-
-var _AddCategory = __webpack_require__(48);
-
-var _AddCategory2 = _interopRequireDefault(_AddCategory);
-
-var _Catalog = __webpack_require__(52);
-
-var _Catalog2 = _interopRequireDefault(_Catalog);
-
-var _AddProduct = __webpack_require__(53);
-
-var _AddProduct2 = _interopRequireDefault(_AddProduct);
-
-var _Brands = __webpack_require__(78);
-
-var _Brands2 = _interopRequireDefault(_Brands);
-
-var _AddBrand = __webpack_require__(79);
-
-var _AddBrand2 = _interopRequireDefault(_AddBrand);
-
-var _load = __webpack_require__(8);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function getParams(path, noparams) {
-  var params = path.split(noparams)[1];
-  if (!params || params.lenght === 0) {
-    return "";
-  } else {
-    return params;
-  }
-}
-
-var routes = [{
-  path: "/admin",
-  exact: true,
-  component: _Home2.default
-}, {
-  path: "/admin/categories",
-  exact: false,
-  component: _Categories2.default,
-  handlerClass: _load.MultiBootloader,
-  params: {
-    url: "categories/get_by_params",
-    params: function params(path) {
-      return getParams(path, "/admin/categories/");
-    }
-  },
-  title: "Категории"
-}, {
-  path: "/admin/add-category",
-  exact: false,
-  component: _AddCategory2.default,
-  title: "Категория товаров"
-}, {
-  path: "/admin/edit-category/:id",
-  exact: false,
-  component: _AddCategory2.default,
-  handlerClass: _load.MultiBootloader,
-  params: {
-    url: "categories/get_by_id",
-    params: function params(path) {
-      return getParams(path, "/admin/edit-category/");
-    }
-  },
-  title: "Категория товаров"
-}, {
-  path: "/admin/catalog",
-  exact: false,
-  component: _Catalog2.default,
-  handlerClass: _load.MultiBootloader,
-  params: {
-    url: "products/get_by_params",
-    params: function params(path) {
-      return getParams(path, "/admin/catalog/");
-    }
-  },
-  title: "Каталог товаров"
-}, {
-  path: "/admin/add-product",
-  exact: false,
-  component: _AddProduct2.default,
-  title: "Товар"
-}, {
-  path: "/admin/brands",
-  exact: false,
-  component: _Brands2.default,
-  handlerClass: _load.MultiBootloader,
-  params: {
-    url: "brands/get_by_params",
-    params: function params(path) {
-      return getParams(path, "/admin/brands/");
-    }
-  },
-  title: "Бренды"
-}, {
-  path: "/admin/add-brand",
-  exact: false,
-  component: _AddBrand2.default,
-  title: "Бренд"
-}, {
-  path: "/admin/edit-brand/:id",
-  exact: false,
-  component: _AddBrand2.default,
-  handlerClass: _load.MultiBootloader,
-  params: {
-    url: "brands/get_by_id",
-    params: function params(path) {
-      return getParams(path, "/admin/edit-brand/");
-    }
-  },
-  title: "Бренд"
-}];
-
-exports.default = routes;
-
-/***/ }),
-/* 15 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -493,9 +366,9 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _load = __webpack_require__(8);
+var _load = __webpack_require__(6);
 
-var _Preloader = __webpack_require__(9);
+var _Preloader = __webpack_require__(13);
 
 var _Preloader2 = _interopRequireDefault(_Preloader);
 
@@ -525,10 +398,14 @@ var withMany = function withMany(Component, API_URL, title) {
       }
       _this.state = {
         data: data && data.data ? data.data : [],
-        withData: data && data.data ? true : false
+        withData: data && data.data ? true : false,
+        search: { key: "", value: "" },
+        params: []
       };
       _this.getData = _this.getData.bind(_this);
       _this.deleteField = _this.deleteField.bind(_this);
+      _this.changeSearch = _this.changeSearch.bind(_this);
+      _this.changeParams = _this.changeParams.bind(_this);
       return _this;
     }
 
@@ -557,26 +434,112 @@ var withMany = function withMany(Component, API_URL, title) {
         });
       }
     }, {
-      key: "getData",
-      value: function getData() {
+      key: "changeSearch",
+      value: function changeSearch(key, value) {
         var _this3 = this;
 
-        var loader = new _load.MultiBootloader(API_URL.get);
+        if (value) {
+          this.setState({ search: { key: key, value: value } }, function () {
+            _this3.getData();
+          });
+        } else {
+          this.setState({ search: { key: "", value: "" } }, function () {
+            _this3.getData();
+          });
+        }
+      }
+    }, {
+      key: "changeParams",
+      value: function changeParams(key, value) {
+        var _this4 = this;
+
+        var params = this.state.params;
+
+        var idx = params.findIndex(function (x) {
+          return x.key === key;
+        });
+        if (value) {
+          if (idx >= 0) {
+            params[idx].value = value;
+          } else {
+            params.push({ key: key, value: value });
+          }
+        } else {
+          if (idx >= 0) {
+            params.splice(idx, 1);
+          }
+        }
+        this.setState({ params: params }, function () {
+          _this4.getData();
+        });
+      }
+    }, {
+      key: "paramsInLine",
+      value: function paramsInLine(params) {
+        var str = "";
+        var key = void 0;
+        var value = void 0;
+        params.map(function (p, idx) {
+          if (p.key.indexOf("+gte") >= 0) {
+            key = p.key.substring(0, p.key.indexOf("+gte"));
+            value = "+gte" + p.value;
+          } else if (p.key.indexOf("+lte") >= 0) {
+            key = p.key.substring(0, p.key.indexOf("+lte"));
+            value = "+lte" + p.value;
+          } else {
+            key = p.key;
+            value = p.value;
+          }
+          str = "" + str + (idx > 0 ? "&&" + key + "=" + value : key + "=" + value);
+        });
+        return str;
+      }
+    }, {
+      key: "searchInLine",
+      value: function searchInLine(param) {
+        var key = param.key,
+            value = param.value;
+
+        var keys = key.split("&&");
+        var search = "";
+        if (value) {
+          keys.map(function (item, idx) {
+            search = "" + search + (idx > 0 ? "||" + item + "=" + value : item + "=" + value);
+          });
+        }
+        return search;
+      }
+    }, {
+      key: "getData",
+      value: function getData() {
+        var _this5 = this;
+
+        var _state = this.state,
+            search = _state.search,
+            params = _state.params;
+
+        var getParam = "";
+        if (search || params.length > 0) {
+          getParam = (this.paramsInLine(params) ? this.paramsInLine(params) : undefined) + "/" + (search.key ? this.searchInLine(search) : undefined);
+        }
+        var loader = new _load.MultiBootloader(API_URL.get, getParam);
         loader.response().then(function (data) {
-          _this3.setState({
+          _this5.setState({
             data: data && data.data ? data.data : [],
             withData: data && data.data ? true : false
           });
         }).catch(function (err) {
-          _this3.props.addError("Произошла ошибка на сервере. Попробуйте позже.");
+          _this5.props.addError("Произошла ошибка на сервере. Попробуйте позже.");
         });
       }
     }, {
       key: "render",
       value: function render() {
-        var _state = this.state,
-            data = _state.data,
-            withData = _state.withData;
+        var _state2 = this.state,
+            data = _state2.data,
+            withData = _state2.withData,
+            search = _state2.search,
+            params = _state2.params;
 
         return _react2.default.createElement(
           _react2.default.Fragment,
@@ -584,7 +547,11 @@ var withMany = function withMany(Component, API_URL, title) {
           withData ? _react2.default.createElement(Component, _extends({}, this.props, {
             data: data,
             getData: this.getData,
-            deleteField: this.deleteField
+            deleteField: this.deleteField,
+            changeSearch: this.changeSearch,
+            changeParams: this.changeParams,
+            search: search,
+            params: params
           })) : _react2.default.createElement(_Preloader2.default, null)
         );
       }
@@ -600,19 +567,7 @@ var withMany = function withMany(Component, API_URL, title) {
 exports.default = withMany;
 
 /***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-module.exports = require("isomorphic-fetch");
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports) {
-
-module.exports = require("axios");
-
-/***/ }),
-/* 18 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -621,54 +576,27 @@ module.exports = require("axios");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.FieldCreator = undefined;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _react = __webpack_require__(0);
 
-var _isomorphicFetch = __webpack_require__(16);
-
-var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+var _react2 = _interopRequireDefault(_react);
 
 var _config = __webpack_require__(1);
 
-var _axios = __webpack_require__(17);
-
-var _axios2 = _interopRequireDefault(_axios);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var Preloader = function Preloader() {
+  return _react2.default.createElement(
+    "div",
+    { className: "preloader" },
+    _react2.default.createElement("img", { src: _config.API_PREFIX + "/Static/SVG/Ellipsis-1s-200px.svg" })
+  );
+};
 
-var FieldCreator = exports.FieldCreator = function () {
-  function FieldCreator(url, data) {
-    _classCallCheck(this, FieldCreator);
-
-    this.url = _config.API_PREFIX + "/api/" + url;
-    this.data = data;
-    this.response = this.response.bind(this);
-  }
-
-  _createClass(FieldCreator, [{
-    key: "response",
-    value: function response() {
-      return _axios2.default.post(this.url, this.data).then(function (res) {
-        if (res.status >= 200 && res.status < 300 && res.data && res.data.ok) {
-          return res.data;
-        } else {
-          return { ok: false };
-        }
-      }).catch(function (err) {
-        console.error(err);
-        return { ok: false };
-      });
-    }
-  }]);
-
-  return FieldCreator;
-}();
+exports.default = Preloader;
 
 /***/ }),
-/* 19 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -698,7 +626,7 @@ var AddButton = function AddButton(_ref) {
 exports.default = AddButton;
 
 /***/ }),
-/* 20 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -718,11 +646,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _add = __webpack_require__(18);
+var _add = __webpack_require__(25);
 
-var _load = __webpack_require__(8);
+var _load = __webpack_require__(6);
 
-var _Preloader = __webpack_require__(9);
+var _Preloader = __webpack_require__(13);
 
 var _Preloader2 = _interopRequireDefault(_Preloader);
 
@@ -886,84 +814,7 @@ var withForm = function withForm(Component, API_URLS, title, required) {
 exports.default = withForm;
 
 /***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _InputText = __webpack_require__(49);
-
-var _InputText2 = _interopRequireDefault(_InputText);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var TextField = function TextField(_ref) {
-  var type = _ref.type,
-      placeholder = _ref.placeholder,
-      name = _ref.name,
-      changeMiddleware = _ref.changeMiddleware,
-      value = _ref.value,
-      length = _ref.length,
-      handlerFocus = _ref.handlerFocus,
-      handlerBlur = _ref.handlerBlur,
-      focus = _ref.focus,
-      isEmpty = _ref.isEmpty;
-  return _react2.default.createElement(
-    "div",
-    { className: "text-field" },
-    type === "input" ? _react2.default.createElement("input", {
-      className: isEmpty ? "input empty" : "input",
-      id: name,
-      value: value || "",
-      onChange: changeMiddleware,
-      type: "text",
-      name: name,
-      onFocus: handlerFocus,
-      onBlur: handlerBlur,
-      autoComplete: "off"
-    }) : _react2.default.createElement(
-      _react2.default.Fragment,
-      null,
-      _react2.default.createElement("textarea", {
-        className: isEmpty ? "input empty" : "input",
-        id: name,
-        value: value,
-        onChange: changeMiddleware,
-        name: name,
-        onFocus: handlerFocus,
-        onBlur: handlerBlur,
-        autoComplete: "off"
-      }),
-      _react2.default.createElement(
-        "span",
-        { className: "text-field__count" },
-        length
-      )
-    ),
-    _react2.default.createElement(
-      "label",
-      {
-        className: focus ? "text-field__label active" : "text-field__label",
-        htmlFor: name
-      },
-      placeholder
-    )
-  );
-};
-
-exports.default = (0, _InputText2.default)(TextField);
-
-/***/ }),
-/* 22 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -983,7 +834,7 @@ var _Upload2 = _interopRequireDefault(_Upload);
 
 var _config = __webpack_require__(1);
 
-var _ImageBlock = __webpack_require__(10);
+var _ImageBlock = __webpack_require__(8);
 
 var _ImageBlock2 = _interopRequireDefault(_ImageBlock);
 
@@ -1047,13 +898,7 @@ var UploadBlock = function UploadBlock(_ref) {
 exports.default = (0, _Upload2.default)(UploadBlock);
 
 /***/ }),
-/* 23 */
-/***/ (function(module, exports) {
-
-module.exports = require("socket.io-client");
-
-/***/ }),
-/* 24 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1082,36 +927,7 @@ var SaveButton = function SaveButton(_ref) {
 exports.default = SaveButton;
 
 /***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var mongoose = __webpack_require__(2);
-
-var Schema = mongoose.Schema;
-
-var CategorySchema = new Schema({
-  name: {
-    type: String
-  },
-  image: {
-    type: String
-  },
-  description: {
-    type: String
-  },
-  position: {
-    type: Number,
-    default: 0
-  }
-}, { timestamps: { createdAt: "created_at" } });
-
-var Category = mongoose.model("Category", CategorySchema);
-
-/***/ }),
-/* 26 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1180,7 +996,7 @@ var ProductSchema = new Schema({
 var Product = mongoose.model("Product", ProductSchema);
 
 /***/ }),
-/* 27 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1225,6 +1041,7 @@ var DataBase = function () {
           search = params.search;
 
       var skip = this.getSkip(limit, page);
+      // console.log(this.getFindParams(params.params, search));
       return new Promise(function (resolve, reject) {
         _this.Model.find(_this.getFindParams(params.params, search)).limit(Number(_this.getLimit(limit))).sort(_this.getSort(sort)).skip(Number(skip)).exec(function (err, docs) {
           if (err) {
@@ -1377,7 +1194,7 @@ var DataBase = function () {
 
       var result = {};
       params = decodeURIComponent(params);
-      if (params && params !== undefined) {
+      if (params && params !== undefined && params !== "undefined") {
         var and = params.split("&&");
         result.$and = [];
         and.map(function (el, idx) {
@@ -1448,9 +1265,10 @@ var DataBase = function () {
     value: function getSearch(search) {
       var _this7 = this;
 
-      var result = { $or: [] };
+      var result = {};
       search = decodeURIComponent(search);
-      if (search && search !== undefined) {
+      if (search && search !== undefined && search !== "undefined") {
+        result = { $or: [] };
         var arr = search.split("||");
         arr.map(function (el) {
           var sub = el.split("=");
@@ -1467,6 +1285,284 @@ var DataBase = function () {
 }();
 
 exports.default = DataBase;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
+
+module.exports = require("express-session");
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Home = __webpack_require__(40);
+
+var _Home2 = _interopRequireDefault(_Home);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getParams(path, noparams) {
+  var params = path.split(noparams)[1];
+  if (!params || params.lenght === 0) {
+    return [];
+  } else {
+    return params.split("/");
+  }
+}
+
+var routes = [{
+  path: "/",
+  exact: true,
+  component: _Home2.default
+}];
+
+exports.default = routes;
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Home = __webpack_require__(45);
+
+var _Home2 = _interopRequireDefault(_Home);
+
+var _Categories = __webpack_require__(46);
+
+var _Categories2 = _interopRequireDefault(_Categories);
+
+var _AddCategory = __webpack_require__(48);
+
+var _AddCategory2 = _interopRequireDefault(_AddCategory);
+
+var _Catalog = __webpack_require__(52);
+
+var _Catalog2 = _interopRequireDefault(_Catalog);
+
+var _AddProduct = __webpack_require__(53);
+
+var _AddProduct2 = _interopRequireDefault(_AddProduct);
+
+var _Brands = __webpack_require__(60);
+
+var _Brands2 = _interopRequireDefault(_Brands);
+
+var _AddBrand = __webpack_require__(61);
+
+var _AddBrand2 = _interopRequireDefault(_AddBrand);
+
+var _load = __webpack_require__(6);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getParams(path, noparams) {
+  var params = path.split(noparams)[1];
+  if (!params || params.lenght === 0) {
+    return "";
+  } else {
+    return params;
+  }
+}
+
+var routes = [{
+  path: "/admin",
+  exact: true,
+  component: _Home2.default
+}, {
+  path: "/admin/categories",
+  exact: false,
+  component: _Categories2.default,
+  handlerClass: _load.MultiBootloader,
+  params: {
+    url: "categories/get_by_params",
+    params: function params(path) {
+      return getParams(path, "/admin/categories/");
+    }
+  },
+  title: "Категории"
+}, {
+  path: "/admin/add-category",
+  exact: false,
+  component: _AddCategory2.default,
+  title: "Категория товаров"
+}, {
+  path: "/admin/edit-category/:id",
+  exact: false,
+  component: _AddCategory2.default,
+  handlerClass: _load.MultiBootloader,
+  params: {
+    url: "categories/get_by_id",
+    params: function params(path) {
+      return getParams(path, "/admin/edit-category/");
+    }
+  },
+  title: "Категория товаров"
+}, {
+  path: "/admin/catalog",
+  exact: false,
+  component: _Catalog2.default,
+  handlerClass: _load.MultiBootloader,
+  params: {
+    url: "products/get_by_params",
+    params: function params(path) {
+      return getParams(path, "/admin/catalog/");
+    }
+  },
+  title: "Каталог товаров"
+}, {
+  path: "/admin/add-product",
+  exact: false,
+  component: _AddProduct2.default,
+  title: "Товар"
+}, {
+  path: "/admin/brands",
+  exact: false,
+  component: _Brands2.default,
+  handlerClass: _load.MultiBootloader,
+  params: {
+    url: "brands/get_by_params",
+    params: function params(path) {
+      return getParams(path, "/admin/brands/");
+    }
+  },
+  title: "Бренды"
+}, {
+  path: "/admin/add-brand",
+  exact: false,
+  component: _AddBrand2.default,
+  title: "Бренд"
+}, {
+  path: "/admin/edit-brand/:id",
+  exact: false,
+  component: _AddBrand2.default,
+  handlerClass: _load.MultiBootloader,
+  params: {
+    url: "brands/get_by_id",
+    params: function params(path) {
+      return getParams(path, "/admin/edit-brand/");
+    }
+  },
+  title: "Бренд"
+}];
+
+exports.default = routes;
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
+module.exports = require("isomorphic-fetch");
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports) {
+
+module.exports = require("axios");
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FieldCreator = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _isomorphicFetch = __webpack_require__(23);
+
+var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+
+var _config = __webpack_require__(1);
+
+var _axios = __webpack_require__(24);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var FieldCreator = exports.FieldCreator = function () {
+  function FieldCreator(url, data) {
+    _classCallCheck(this, FieldCreator);
+
+    this.url = _config.API_PREFIX + "/api/" + url;
+    this.data = data;
+    this.response = this.response.bind(this);
+  }
+
+  _createClass(FieldCreator, [{
+    key: "response",
+    value: function response() {
+      return _axios2.default.post(this.url, this.data).then(function (res) {
+        if (res.status >= 200 && res.status < 300 && res.data && res.data.ok) {
+          return res.data;
+        } else {
+          return { ok: false };
+        }
+      }).catch(function (err) {
+        console.error(err);
+        return { ok: false };
+      });
+    }
+  }]);
+
+  return FieldCreator;
+}();
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = require("socket.io-client");
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var mongoose = __webpack_require__(2);
+
+var Schema = mongoose.Schema;
+
+var CategorySchema = new Schema({
+  name: {
+    type: String
+  },
+  image: {
+    type: String
+  },
+  description: {
+    type: String
+  },
+  position: {
+    type: Number,
+    default: 0
+  }
+}, { timestamps: { createdAt: "created_at" } });
+
+var Category = mongoose.model("Category", CategorySchema);
 
 /***/ }),
 /* 28 */
@@ -1487,11 +1583,11 @@ var _cors = __webpack_require__(29);
 
 var _cors2 = _interopRequireDefault(_cors);
 
-var _path = __webpack_require__(6);
+var _path = __webpack_require__(10);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _fs = __webpack_require__(7);
+var _fs = __webpack_require__(11);
 
 var _fs2 = _interopRequireDefault(_fs);
 
@@ -1507,7 +1603,7 @@ var _helmet = __webpack_require__(32);
 
 var _helmet2 = _interopRequireDefault(_helmet);
 
-var _expressSession = __webpack_require__(12);
+var _expressSession = __webpack_require__(20);
 
 var _expressSession2 = _interopRequireDefault(_expressSession);
 
@@ -1527,15 +1623,15 @@ var _router = __webpack_require__(36);
 
 var _router2 = _interopRequireDefault(_router);
 
-var _api = __webpack_require__(66);
+var _api = __webpack_require__(72);
 
-var _files = __webpack_require__(11);
+var _files = __webpack_require__(9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
-var http = __webpack_require__(74).Server(app);
-var io = __webpack_require__(75)(http);
+var http = __webpack_require__(82).Server(app);
+var io = __webpack_require__(83)(http);
 
 
 _connect2.default.setUpConnect();
@@ -1635,7 +1731,7 @@ module.exports.setUpConnect = function () {
 
 var express = __webpack_require__(4);
 var mongoose = __webpack_require__(2);
-var session = __webpack_require__(12);
+var session = __webpack_require__(20);
 var MongoStore = __webpack_require__(35)(session);
 
 var sessionStore = new MongoStore({
@@ -1685,11 +1781,11 @@ var _App3 = __webpack_require__(44);
 
 var _App4 = _interopRequireDefault(_App3);
 
-var _routes = __webpack_require__(13);
+var _routes = __webpack_require__(21);
 
 var _routes2 = _interopRequireDefault(_routes);
 
-var _routes3 = __webpack_require__(14);
+var _routes3 = __webpack_require__(22);
 
 var _routes4 = _interopRequireDefault(_routes3);
 
@@ -1775,7 +1871,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = __webpack_require__(3);
 
-var _routes = __webpack_require__(13);
+var _routes = __webpack_require__(21);
 
 var _routes2 = _interopRequireDefault(_routes);
 
@@ -1990,23 +2086,23 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = __webpack_require__(3);
 
-var _routes = __webpack_require__(14);
+var _routes = __webpack_require__(22);
 
 var _routes2 = _interopRequireDefault(_routes);
 
-var _ = __webpack_require__(56);
+var _ = __webpack_require__(62);
 
 var _2 = _interopRequireDefault(_);
 
-var _Header = __webpack_require__(57);
+var _Header = __webpack_require__(63);
 
 var _Header2 = _interopRequireDefault(_Header);
 
-var _Confirm = __webpack_require__(64);
+var _Confirm = __webpack_require__(70);
 
 var _Confirm2 = _interopRequireDefault(_Confirm);
 
-var _Error = __webpack_require__(65);
+var _Error = __webpack_require__(71);
 
 var _Error2 = _interopRequireDefault(_Error);
 
@@ -2191,7 +2287,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = __webpack_require__(3);
 
-var _WithMany = __webpack_require__(15);
+var _WithMany = __webpack_require__(12);
 
 var _WithMany2 = _interopRequireDefault(_WithMany);
 
@@ -2199,7 +2295,7 @@ var _Draggable = __webpack_require__(47);
 
 var _Draggable2 = _interopRequireDefault(_Draggable);
 
-var _AddButton = __webpack_require__(19);
+var _AddButton = __webpack_require__(14);
 
 var _AddButton2 = _interopRequireDefault(_AddButton);
 
@@ -2322,7 +2418,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _add = __webpack_require__(18);
+var _add = __webpack_require__(25);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2456,19 +2552,19 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _WithForm = __webpack_require__(20);
+var _WithForm = __webpack_require__(15);
 
 var _WithForm2 = _interopRequireDefault(_WithForm);
 
-var _TextField = __webpack_require__(21);
+var _TextField = __webpack_require__(7);
 
 var _TextField2 = _interopRequireDefault(_TextField);
 
-var _UploadBlock = __webpack_require__(22);
+var _UploadBlock = __webpack_require__(16);
 
 var _UploadBlock2 = _interopRequireDefault(_UploadBlock);
 
-var _SaveButton = __webpack_require__(24);
+var _SaveButton = __webpack_require__(17);
 
 var _SaveButton2 = _interopRequireDefault(_SaveButton);
 
@@ -2636,7 +2732,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _config = __webpack_require__(1);
 
-var _socket = __webpack_require__(23);
+var _socket = __webpack_require__(26);
 
 var _socket2 = _interopRequireDefault(_socket);
 
@@ -2875,20 +2971,29 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = __webpack_require__(3);
 
-var _WithMany = __webpack_require__(15);
+var _WithMany = __webpack_require__(12);
 
 var _WithMany2 = _interopRequireDefault(_WithMany);
 
-var _AddButton = __webpack_require__(19);
+var _AddButton = __webpack_require__(14);
 
 var _AddButton2 = _interopRequireDefault(_AddButton);
+
+var _Filter = __webpack_require__(84);
+
+var _Filter2 = _interopRequireDefault(_Filter);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var catalogPage = function catalogPage(_ref) {
   var data = _ref.data,
       confirmToggle = _ref.confirmToggle,
-      deleteField = _ref.deleteField;
+      deleteField = _ref.deleteField,
+      addError = _ref.addError,
+      changeSearch = _ref.changeSearch,
+      changeParams = _ref.changeParams,
+      search = _ref.search,
+      params = _ref.params;
   return _react2.default.createElement(
     "div",
     { className: "page__container catalog-page" },
@@ -2897,10 +3002,97 @@ var catalogPage = function catalogPage(_ref) {
       { className: "title-page" },
       "\u0412\u0441\u0435 \u0442\u043E\u0432\u0430\u0440\u044B"
     ),
+    _react2.default.createElement(_Filter2.default, {
+      controllers: [{
+        type: "text",
+        placeholder: "Введите название или штрихкод",
+        name: "name&&barcode",
+        handlerChange: changeSearch,
+        value: search.value
+      }, {
+        type: "select",
+        placeholder: "Все категории",
+        name: "category",
+        handlerChange: changeParams,
+        value: params.findIndex(function (x) {
+          return x.key === "category";
+        }) >= 0 ? params[params.findIndex(function (x) {
+          return x.key === "category";
+        })].value : "",
+        chooseField: "name",
+        apiUrl: "categories/get_by_params",
+        addError: addError
+      }, {
+        type: "text",
+        placeholder: "Минимальный возраст",
+        name: "minAge+gte",
+        handlerChange: changeParams,
+        value: params.findIndex(function (x) {
+          return x.key === "minAge+gte";
+        }) >= 0 ? params[params.findIndex(function (x) {
+          return x.key === "minAge+gte";
+        })].value : ""
+      }, {
+        type: "text",
+        placeholder: "Максимальный возраст",
+        name: "maxAge+lte",
+        handlerChange: changeParams,
+        value: params.findIndex(function (x) {
+          return x.key === "maxAge+lte";
+        }) >= 0 ? params[params.findIndex(function (x) {
+          return x.key === "maxAge+lte";
+        })].value : ""
+      }]
+    }),
     _react2.default.createElement(
       "div",
-      { className: "categories-page__container" },
-      "All"
+      { className: "catalog-page__list" },
+      data.length > 0 ? _react2.default.createElement(
+        _react2.default.Fragment,
+        null,
+        data.map(function (item) {
+          return _react2.default.createElement(
+            "div",
+            { key: item._id, className: "item" },
+            _react2.default.createElement(
+              "h4",
+              { className: "name" },
+              item.name
+            ),
+            _react2.default.createElement(
+              "div",
+              { className: "menu" },
+              _react2.default.createElement(
+                _reactRouterDom.Link,
+                {
+                  className: "edit clickable",
+                  to: "/admin/edit-product/" + item._id
+                },
+                "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C"
+              ),
+              _react2.default.createElement(
+                "span",
+                {
+                  onClick: function onClick() {
+                    return confirmToggle({
+                      open: true,
+                      text: "Вы действительно хотите удалить этот товар?",
+                      handler: deleteField,
+                      data: item._id
+                    });
+                  },
+                  className: "delete clickable"
+                },
+                "\u0423\u0434\u0430\u043B\u0438\u0442\u044C"
+              )
+            )
+          );
+        })
+      ) : _react2.default.createElement(
+        "p",
+        null,
+        "\u041D\u0435 \u0442\u043E\u0432\u0430\u0440\u043E\u0432"
+      )
     ),
     _react2.default.createElement(_AddButton2.default, { src: "/admin/add-product" })
   );
@@ -2923,15 +3115,15 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _WithForm = __webpack_require__(20);
+var _WithForm = __webpack_require__(15);
 
 var _WithForm2 = _interopRequireDefault(_WithForm);
 
-var _TextField = __webpack_require__(21);
+var _TextField = __webpack_require__(7);
 
 var _TextField2 = _interopRequireDefault(_TextField);
 
-var _UploadBlock = __webpack_require__(22);
+var _UploadBlock = __webpack_require__(16);
 
 var _UploadBlock2 = _interopRequireDefault(_UploadBlock);
 
@@ -2939,15 +3131,15 @@ var _Gallery = __webpack_require__(54);
 
 var _Gallery2 = _interopRequireDefault(_Gallery);
 
-var _SaveButton = __webpack_require__(24);
+var _SaveButton = __webpack_require__(17);
 
 var _SaveButton2 = _interopRequireDefault(_SaveButton);
 
-var _Select = __webpack_require__(80);
+var _Select = __webpack_require__(56);
 
 var _Select2 = _interopRequireDefault(_Select);
 
-var _ListCreator = __webpack_require__(82);
+var _ListCreator = __webpack_require__(58);
 
 var _ListCreator2 = _interopRequireDefault(_ListCreator);
 
@@ -3136,7 +3328,7 @@ var _Gallery2 = _interopRequireDefault(_Gallery);
 
 var _config = __webpack_require__(1);
 
-var _ImageBlock = __webpack_require__(10);
+var _ImageBlock = __webpack_require__(8);
 
 var _ImageBlock2 = _interopRequireDefault(_ImageBlock);
 
@@ -3223,7 +3415,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _config = __webpack_require__(1);
 
-var _socket = __webpack_require__(23);
+var _socket = __webpack_require__(26);
 
 var _socket2 = _interopRequireDefault(_socket);
 
@@ -3423,1332 +3615,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var p404 = function p404() {
-  return _react2.default.createElement(
-    "div",
-    { className: "page__container p404" },
-    _react2.default.createElement(
-      "h3",
-      { className: "title-page" },
-      "404"
-    ),
-    _react2.default.createElement(
-      "p",
-      null,
-      "\u0421\u0442\u0440\u0430\u043D\u0438\u0446\u0430 \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u0430"
-    )
-  );
-};
-
-exports.default = p404;
-
-/***/ }),
-/* 57 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = Header;
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _Menu = __webpack_require__(58);
-
-var _Menu2 = _interopRequireDefault(_Menu);
-
-var _Logo = __webpack_require__(61);
-
-var _Logo2 = _interopRequireDefault(_Logo);
-
-var _User = __webpack_require__(62);
-
-var _User2 = _interopRequireDefault(_User);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function Header() {
-  return _react2.default.createElement(
-    "div",
-    { className: "header" },
-    _react2.default.createElement(_Logo2.default, null),
-    _react2.default.createElement(_Menu2.default, null),
-    _react2.default.createElement(_User2.default, null)
-  );
-}
-
-/***/ }),
-/* 58 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _Item = __webpack_require__(59);
-
-var _Item2 = _interopRequireDefault(_Item);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Menu = function Menu() {
-  return _react2.default.createElement(
-    "div",
-    { className: "header__menu" },
-    _react2.default.createElement(_Item2.default, {
-      src: [{ name: "Категории", src: "/admin/categories" }, { name: "Товары", src: "/admin/catalog" }, { name: "Бренды", src: "/admin/brands" }, { name: "Склад", src: "/admin/stock" }],
-      name: "\u0422\u043E\u0432\u0430\u0440\u044B",
-      isDropDown: "yes"
-    }),
-    _react2.default.createElement(_Item2.default, { src: "/admin/orders", name: "\u0417\u0430\u043A\u0430\u0437\u044B", isDropDown: "no" }),
-    _react2.default.createElement(_Item2.default, { src: "/admin/statistics", name: "\u0421\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043A\u0430", isDropDown: "no" }),
-    _react2.default.createElement(_Item2.default, { src: "/admin/ads", name: "\u0420\u0435\u043A\u043B\u0430\u043C\u0430", isDropDown: "no" }),
-    _react2.default.createElement(_Item2.default, {
-      src: [{ name: "Настрока оплаты", src: "/admin/payment" }, { name: "Настройка доставки", src: "/admin/delivery" }],
-      name: "\u041E\u043F\u043B\u0430\u0442\u0430 \u0438 \u0434\u043E\u0441\u0442\u0430\u0432\u043A\u0430",
-      isDropDown: "yes"
-    }),
-    _react2.default.createElement(_Item2.default, {
-      src: [{ name: "Администраторы", src: "/admin/admins" }, { name: "Клиенты", src: "/admin/clients" }],
-      name: "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438",
-      isDropDown: "yes"
-    }),
-    _react2.default.createElement(_Item2.default, { src: "/admin/contacts", name: "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B", isDropDown: "no" })
-  );
-};
-
-exports.default = Menu;
-
-/***/ }),
-/* 59 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouterDom = __webpack_require__(3);
-
-var _itemHOC = __webpack_require__(60);
-
-var _itemHOC2 = _interopRequireDefault(_itemHOC);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ItemMenu = function ItemMenu(_ref) {
-  var src = _ref.src,
-      name = _ref.name,
-      isDropDown = _ref.isDropDown;
-  return _react2.default.createElement(
-    "div",
-    { className: "item" },
-    isDropDown === "yes" ? _react2.default.createElement(
-      _react2.default.Fragment,
-      null,
-      _react2.default.createElement(
-        "span",
-        { className: "item__drop" },
-        name
-      ),
-      _react2.default.createElement(
-        "div",
-        { className: "item__down" },
-        src.map(function (item, idx) {
-          return _react2.default.createElement(
-            _reactRouterDom.Link,
-            { key: idx, className: "link", to: item.src },
-            item.name
-          );
-        })
-      )
-    ) : _react2.default.createElement(
-      _reactRouterDom.Link,
-      { className: "item__link", to: src },
-      name
-    )
-  );
-};
-
-exports.default = (0, _itemHOC2.default)(ItemMenu);
-
-/***/ }),
-/* 60 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var withMenuButton = function withMenuButton(Component) {
-  var WithMenuButton = function (_React$Component) {
-    _inherits(WithMenuButton, _React$Component);
-
-    function WithMenuButton(props) {
-      _classCallCheck(this, WithMenuButton);
-
-      var _this = _possibleConstructorReturn(this, (WithMenuButton.__proto__ || Object.getPrototypeOf(WithMenuButton)).call(this, props));
-
-      _this.state = {
-        active: false,
-        menuDown: false
-      };
-      return _this;
-    }
-
-    _createClass(WithMenuButton, [{
-      key: "render",
-      value: function render() {
-        var _state = this.state,
-            menuDown = _state.menuDown,
-            active = _state.active;
-
-        return _react2.default.createElement(Component, _extends({}, this.props, { menuDown: menuDown, active: active }));
-      }
-    }]);
-
-    return WithMenuButton;
-  }(_react2.default.Component);
-
-  WithMenuButton.displayName = "WithMenuButton(" + (Component.displayName || Component.name || "Component") + ")";
-  return WithMenuButton;
-};
-
-exports.default = withMenuButton;
-
-/***/ }),
-/* 61 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouterDom = __webpack_require__(3);
-
-var _config = __webpack_require__(1);
-
-var _ImageBlock = __webpack_require__(10);
-
-var _ImageBlock2 = _interopRequireDefault(_ImageBlock);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Logo = function Logo() {
-  return _react2.default.createElement(
-    _reactRouterDom.Link,
-    { className: "header__logo", to: "/admin" },
-    _react2.default.createElement(_ImageBlock2.default, { src: _config.API_PREFIX + "/Static/Images/logo.png", classes: "img" })
-  );
-};
-
-exports.default = Logo;
-
-/***/ }),
-/* 62 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _HOC = __webpack_require__(63);
-
-var _HOC2 = _interopRequireDefault(_HOC);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var User = function User(_ref) {
-  var name = _ref.name,
-      logout = _ref.logout;
-  return _react2.default.createElement(
-    "div",
-    { className: "header__user" },
-    _react2.default.createElement(
-      "p",
-      { className: "name" },
-      name
-    ),
-    _react2.default.createElement(
-      "p",
-      { onClick: logout, className: "logout clickable" },
-      "\u0412\u044B\u0445\u043E\u0434"
-    )
-  );
-};
-
-exports.default = (0, _HOC2.default)(User);
-
-/***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var withUser = function withUser(Component) {
-  var WithUser = function (_React$Component) {
-    _inherits(WithUser, _React$Component);
-
-    function WithUser(props) {
-      _classCallCheck(this, WithUser);
-
-      var _this = _possibleConstructorReturn(this, (WithUser.__proto__ || Object.getPrototypeOf(WithUser)).call(this, props));
-
-      _this.state = {
-        name: "Root"
-      };
-      _this.logout = _this.logout.bind(_this);
-      return _this;
-    }
-
-    _createClass(WithUser, [{
-      key: "logout",
-      value: function logout() {
-        console.log("logout");
-      }
-    }, {
-      key: "render",
-      value: function render() {
-        var name = this.state.name;
-
-        return _react2.default.createElement(Component, _extends({}, this.props, { name: name, logout: this.logout }));
-      }
-    }]);
-
-    return WithUser;
-  }(_react2.default.Component);
-
-  WithUser.displayName = "WithUser(" + (Component.displayName || Component.name || "Component") + ")";
-  return WithUser;
-};
-
-exports.default = withUser;
-
-/***/ }),
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Confirm = function Confirm(_ref) {
-  var text = _ref.text,
-      handler = _ref.handler,
-      close = _ref.close,
-      data = _ref.data;
-  return _react2.default.createElement(
-    "div",
-    { className: "confirm" },
-    _react2.default.createElement(
-      "div",
-      { className: "confirm__container" },
-      _react2.default.createElement(
-        "p",
-        { className: "text" },
-        text
-      ),
-      _react2.default.createElement(
-        "div",
-        { className: "menu" },
-        _react2.default.createElement(
-          "span",
-          { onClick: function onClick() {
-              return handler(data);
-            }, className: "clickable menu__true" },
-          "\u0414\u0430"
-        ),
-        _react2.default.createElement(
-          "span",
-          {
-            onClick: function onClick() {
-              return close({ open: false });
-            },
-            className: "clickable menu__false"
-          },
-          "\u041D\u0435\u0442"
-        )
-      )
-    )
-  );
-};
-
-exports.default = Confirm;
-
-/***/ }),
-/* 65 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = Error;
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function Error(_ref) {
-  var error = _ref.error,
-      ok = _ref.ok;
-
-  return _react2.default.createElement(
-    "div",
-    { className: "error" },
-    _react2.default.createElement(
-      "div",
-      null,
-      _react2.default.createElement(
-        "p",
-        null,
-        error
-      ),
-      _react2.default.createElement(
-        "div",
-        { onClick: function onClick() {
-            return ok("");
-          }, className: "button" },
-        "Ok"
-      )
-    )
-  );
-}
-
-/***/ }),
-/* 66 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _categories = __webpack_require__(67);
-
-var _categories2 = _interopRequireDefault(_categories);
-
-var _products = __webpack_require__(68);
-
-var _products2 = _interopRequireDefault(_products);
-
-var _brands = __webpack_require__(76);
-
-var _brands2 = _interopRequireDefault(_brands);
-
-var _file = __webpack_require__(69);
-
-var _file2 = _interopRequireDefault(_file);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = {
-  file: _file2.default,
-  categories: _categories2.default,
-  products: _products2.default,
-  brands: _brands2.default
-};
-
-/***/ }),
-/* 67 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _express = __webpack_require__(4);
-
-var _express2 = _interopRequireDefault(_express);
-
-var _mongoose = __webpack_require__(2);
-
-var _mongoose2 = _interopRequireDefault(_mongoose);
-
-var _files = __webpack_require__(11);
-
-__webpack_require__(25);
-
-__webpack_require__(26);
-
-var _Queries = __webpack_require__(27);
-
-var _Queries2 = _interopRequireDefault(_Queries);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var router = _express2.default.Router();
-
-var Category = _mongoose2.default.model("Category");
-
-var Product = _mongoose2.default.model("Product");
-
-router.get("/get_by_params", function (req, res) {
-  var categories = new _Queries2.default(Category);
-  categories.getByParams({ sort: "position=1" }).then(function (data) {
-    return res.json(data);
-  }).catch(function (err) {
-    return res.status(400).json(err);
-  });
-});
-
-router.get("/get_by_id/:id", function (req, res) {
-  var categories = new _Queries2.default(Category);
-  categories.getById(req.params.id).then(function (data) {
-    return res.json(data);
-  }).catch(function (err) {
-    return res.status(400).json(err);
-  });
-});
-
-router.post("/add", function (req, res) {
-  var categories = new _Queries2.default(Category);
-  categories.getByParams({ limit: 1, sort: "position=-1" }).then(function (data) {
-    if (data && data.ok && data.data.length > 0) {
-      var body = req.body;
-
-      body.position = data.data[0].position + 1;
-      return categories.add(body);
-    } else {
-      return categories.add(req.body);
-    }
-  }).then(function (data) {
-    return res.json(data);
-  }).catch(function (err) {
-    return res.status(400).json(err);
-  });
-});
-
-router.post("/position", function (req, res) {
-  var categories = new _Queries2.default(Category);
-  categories.arrEditer(req.body, 0).then(function (data) {
-    return res.json(data);
-  }).catch(function (err) {
-    return res.status(400).json(err);
-  });
-});
-
-router.post("/edit", function (req, res) {
-  var categories = new _Queries2.default(Category);
-  var data = {
-    name: req.body.name,
-    description: req.body.description,
-    image: req.body.image || ""
-  };
-  var id = req.body._id;
-  categories.edit(id, data).then(function (data) {
-    return res.json(data);
-  }).catch(function (err) {
-    return res.status(400).json(err);
-  });
-});
-
-router.get("/delete/:id", function (req, res) {
-  var categories = new _Queries2.default(Category);
-  var products = new _Queries2.default(Product);
-  var id = req.params.id;
-
-  products.getByParams({ params: "category=" + id }).then(function (data) {
-    if (data.data && data.data.length > 0) {
-      return {
-        ok: false,
-        message: "Не поднимается рука, чтобы удалить данную категорию. У вас имеются товары, относящиеся к ней. Измените категорию в этих товарах или удалите их."
-      };
-    }
-    return { ok: true };
-  }).then(function (data) {
-    if (data.ok) {
-      return categories.delete(id);
-    } else {
-      return data;
-    }
-  }).then(function (data) {
-    if (data.data && data.data.image) {
-      (0, _files.deleteFile)(data.data.image);
-    }
-    return res.json(data);
-  }).catch(function (err) {
-    return res.status(400).json({ ok: false, message: "Ошибка сервера, попробуйте позже!" });
-  });
-});
-
-module.exports = router;
-
-/***/ }),
-/* 68 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _express = __webpack_require__(4);
-
-var _express2 = _interopRequireDefault(_express);
-
-var _mongoose = __webpack_require__(2);
-
-var _mongoose2 = _interopRequireDefault(_mongoose);
-
-var _files = __webpack_require__(11);
-
-__webpack_require__(25);
-
-__webpack_require__(26);
-
-var _Queries = __webpack_require__(27);
-
-var _Queries2 = _interopRequireDefault(_Queries);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var router = _express2.default.Router();
-
-var Category = _mongoose2.default.model("Category");
-
-var Product = _mongoose2.default.model("Product");
-
-router.get("/get_by_params", function (req, res) {
-  var products = new _Queries2.default(Product);
-  products.getByParams({ limit: 10 }).then(function (data) {
-    return res.json(data);
-  }).catch(function (err) {
-    return res.status(400).json(err);
-  });
-});
-
-router.post("/add", function (req, res) {
-  var products = new _Queries2.default(Product);
-  products.add(req.body).then(function (data) {
-    return res.json(data);
-  }).catch(function (err) {
-    return res.status(400).json(err);
-  });
-});
-
-module.exports = router;
-
-/***/ }),
-/* 69 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _express = __webpack_require__(4);
-
-var _express2 = _interopRequireDefault(_express);
-
-var _multer = __webpack_require__(70);
-
-var _multer2 = _interopRequireDefault(_multer);
-
-var _path = __webpack_require__(6);
-
-var _path2 = _interopRequireDefault(_path);
-
-var _fs = __webpack_require__(7);
-
-var _fs2 = _interopRequireDefault(_fs);
-
-var _mongoXlsx = __webpack_require__(71);
-
-var _mongoXlsx2 = _interopRequireDefault(_mongoXlsx);
-
-var _City = __webpack_require__(72);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var router = _express2.default.Router();
-
-router.get("/test/:page", function (req, res) {
-  return res.json({ page: req.params.page });
-});
-
-router.post("/city-xls", function (req, res) {
-  var storage = _multer2.default.diskStorage({
-    destination: function destination(req, file, callback) {
-      callback(null, "public/Uploads/Tmp");
-    },
-    filename: function filename(req, file, callback) {
-      callback(null, Date.now() + _path2.default.extname(file.originalname));
-    }
-  });
-  var upload = (0, _multer2.default)({
-    storage: storage,
-    limits: {},
-    fileFilter: function fileFilter(req, file, callback) {
-      var ext = _path2.default.extname(file.originalname);
-      if (ext !== ".xlsx" && ext !== ".xls") {
-        var err = new Error("Extention");
-        err.code = "EXTENTION";
-        return callback(err);
-      }
-      callback(null, true);
-    }
-  }).single("file");
-
-  upload(req, res, function (err) {
-    var error = "";
-    var filename = "";
-    if (err) {
-      if (err.code === "LIMIT_FILE_SIZE") {
-        error = "Слишком большой файл!";
-      }
-      if (err.code === "EXTENTION") {
-        error = "Можно загружать файлы с расширениями XLSX, XLS!";
-      }
-      return res.status(400).json({
-        ok: false,
-        err: err,
-        data: error
-      });
-    } else {
-      if (req.file && req.file.filename) {
-        filename = req.file.filename;
-      }
-      var model = null;
-      var xlsx = "public/Uploads/Tmp/" + filename;
-      _mongoXlsx2.default.xlsx2MongoData(xlsx, model, function (err, data) {
-        _fs2.default.unlinkSync(xlsx);
-        if (err) {
-          return res.json({
-            ok: false,
-            err: err,
-            data: "Ошибка чтения файла"
-          });
-        }
-        var newData = [];
-        data.map(function (city, idx) {
-          if (city.ID) {
-            newData.push(city);
-          }
-        });
-        var AddCity = newData.map(function (city) {
-          return new Promise(function (resolve, reject) {
-            (0, _City.PushCity)(city).then(function (result) {
-              console.log(result);
-              resolve(city);
-            });
-          });
-        });
-        return Promise.all(AddCity).then(function (sub) {
-          return res.json({ ok: true });
-        }, function (err) {
-          console.log(err);
-        });
-      });
-    }
-  });
-});
-
-module.exports = router;
-
-/***/ }),
-/* 70 */
-/***/ (function(module, exports) {
-
-module.exports = require("multer");
-
-/***/ }),
-/* 71 */
-/***/ (function(module, exports) {
-
-module.exports = require("mongo-xlsx");
-
-/***/ }),
-/* 72 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _mongoose = __webpack_require__(2);
-
-var _mongoose2 = _interopRequireDefault(_mongoose);
-
-__webpack_require__(73);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var City = _mongoose2.default.model("City");
-
-module.exports.PushCity = function (data) {
-  var ID = data.ID,
-      FullName = data.FullName,
-      CityName = data.CityName,
-      OblName = data.OblName,
-      Center = data.Center,
-      NalSumLimit = data.NalSumLimit,
-      EngName = data.EngName,
-      PostCodeList = data.PostCodeList,
-      EngFullName = data.EngFullName,
-      EngOblName = data.EngOblName,
-      CountryCode = data.CountryCode,
-      CountryName = data.CountryName,
-      EngCountryName = data.EngCountryName,
-      FullNameFIAS = data.FullNameFIAS,
-      FIAS = data.FIAS,
-      KLADR = data.KLADR,
-      cityDD = data.cityDD,
-      pvzCode = data.pvzCode;
-
-  return City.findOne({ CityID: ID }, function (err, doc) {
-    if (err) {
-      return { ok: false };
-    }
-    if (doc) {
-      return City.findByIdAndUpdate({ id: doc._id }, {
-        $set: {
-          CityID: ID,
-          FullName: FullName,
-          CityName: CityName,
-          OblName: OblName,
-          Center: Center,
-          NalSumLimit: NalSumLimit,
-          EngName: EngName,
-          PostCodeList: PostCodeList,
-          EngFullName: EngFullName,
-          EngOblName: EngOblName,
-          CountryCode: CountryCode,
-          CountryName: CountryName,
-          EngCountryName: EngCountryName,
-          FullNameFIAS: FullNameFIAS,
-          FIAS: FIAS,
-          KLADR: KLADR,
-          cityDD: cityDD,
-          pvzCode: pvzCode
-        }
-      }, function (err, docum) {
-        if (err) {
-          return { ok: false };
-        }
-        return { ok: true };
-      });
-    } else {
-      var newCity = new City({
-        CityID: ID,
-        FullName: FullName,
-        CityName: CityName,
-        OblName: OblName,
-        Center: Center,
-        NalSumLimit: NalSumLimit,
-        EngName: EngName,
-        PostCodeList: PostCodeList,
-        EngFullName: EngFullName,
-        EngOblName: EngOblName,
-        CountryCode: CountryCode,
-        CountryName: CountryName,
-        EngCountryName: EngCountryName,
-        FullNameFIAS: FullNameFIAS,
-        FIAS: FIAS,
-        KLADR: KLADR,
-        cityDD: cityDD,
-        pvzCode: pvzCode
-      });
-      return newCity.save({}, function (err, doc) {
-        if (err) {
-          return { ok: false };
-        }
-        return { ok: true };
-      });
-    }
-  });
-};
-
-/***/ }),
-/* 73 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var mongoose = __webpack_require__(2);
-
-var Schema = mongoose.Schema;
-
-var CitySchema = new Schema({
-  CityID: {
-    type: String
-  },
-  FullName: {
-    type: String
-  },
-  CityName: {
-    type: String
-  },
-  OblName: {
-    type: String
-  },
-  Center: {
-    type: String
-  },
-  NalSumLimit: {
-    type: String
-  },
-  EngName: {
-    type: String
-  },
-  PostCodeList: {
-    type: String
-  },
-  EngFullName: {
-    type: String
-  },
-  EngOblName: {
-    type: String
-  },
-  CountryCode: {
-    type: String
-  },
-  CountryName: {
-    type: String
-  },
-  EngCountryName: {
-    type: String
-  },
-  FullNameFIAS: {
-    type: String
-  },
-  FIAS: {
-    type: String
-  },
-  KLADR: {
-    type: String
-  },
-  cityDD: {
-    type: String
-  },
-  pvzCode: {
-    type: String
-  }
-}, { timestamps: { createdAt: "created_at" } });
-
-var City = mongoose.model("City", CitySchema);
-
-/***/ }),
-/* 74 */
-/***/ (function(module, exports) {
-
-module.exports = require("http");
-
-/***/ }),
-/* 75 */
-/***/ (function(module, exports) {
-
-module.exports = require("socket.io");
-
-/***/ }),
-/* 76 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _express = __webpack_require__(4);
-
-var _express2 = _interopRequireDefault(_express);
-
-var _mongoose = __webpack_require__(2);
-
-var _mongoose2 = _interopRequireDefault(_mongoose);
-
-var _files = __webpack_require__(11);
-
-__webpack_require__(77);
-
-__webpack_require__(26);
-
-var _Queries = __webpack_require__(27);
-
-var _Queries2 = _interopRequireDefault(_Queries);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var router = _express2.default.Router();
-
-var Brand = _mongoose2.default.model("Brand");
-
-var Product = _mongoose2.default.model("Product");
-
-router.get("/get_by_params", function (req, res) {
-  var brand = new _Queries2.default(Brand);
-  brand.getByParams(req.params).then(function (data) {
-    return res.json(data);
-  }).catch(function (err) {
-    return res.status(400).json(err);
-  });
-});
-
-router.post("/add", function (req, res) {
-  var brands = new _Queries2.default(Brand);
-  brands.add(req.body).then(function (data) {
-    return res.json(data);
-  }).catch(function (err) {
-    return res.status(400).json(err);
-  });
-});
-
-router.get("/get_by_id/:id", function (req, res) {
-  var brands = new _Queries2.default(Brand);
-  brands.getById(req.params.id).then(function (data) {
-    return res.json(data);
-  }).catch(function (err) {
-    return res.status(400).json(err);
-  });
-});
-
-router.post("/edit", function (req, res) {
-  var brands = new _Queries2.default(Brand);
-  var data = {
-    name: req.body.name,
-    description: req.body.description || "",
-    image: req.body.image
-  };
-  var id = req.body._id;
-  brands.edit(id, data).then(function (data) {
-    return res.json(data);
-  }).catch(function (err) {
-    return res.status(400).json(err);
-  });
-});
-
-router.get("/delete/:id", function (req, res) {
-  var brands = new _Queries2.default(Brand);
-  var products = new _Queries2.default(Product);
-  var id = req.params.id;
-
-  products.getByParams({ params: "brand=" + id }).then(function (data) {
-    if (data.data && data.data.length > 0) {
-      return {
-        ok: false,
-        message: "Не поднимается рука, чтобы удалить данный бренд. У вас имеются товары, относящиеся к нему. Измените бренд в этих товарах или удалите их."
-      };
-    }
-    return { ok: true };
-  }).then(function (data) {
-    if (data.ok) {
-      return brands.delete(id);
-    } else {
-      return data;
-    }
-  }).then(function (data) {
-    if (data.data && data.data.image) {
-      (0, _files.deleteFile)(data.data.image);
-    }
-    return res.json(data);
-  }).catch(function (err) {
-    return res.status(400).json({ ok: false, message: "Ошибка сервера, попробуйте позже!" });
-  });
-});
-
-module.exports = router;
-
-/***/ }),
-/* 77 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var mongoose = __webpack_require__(2);
-
-var Schema = mongoose.Schema;
-
-var BrandSchema = new Schema({
-  name: {
-    type: String
-  },
-  image: {
-    type: String
-  },
-  description: {
-    type: String
-  }
-}, { timestamps: { createdAt: "created_at" } });
-
-var Brand = mongoose.model("Brand", BrandSchema);
-
-/***/ }),
-/* 78 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouterDom = __webpack_require__(3);
-
-var _WithMany = __webpack_require__(15);
-
-var _WithMany2 = _interopRequireDefault(_WithMany);
-
-var _config = __webpack_require__(1);
-
-var _ImageBlock = __webpack_require__(10);
-
-var _ImageBlock2 = _interopRequireDefault(_ImageBlock);
-
-var _AddButton = __webpack_require__(19);
-
-var _AddButton2 = _interopRequireDefault(_AddButton);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var brandsPage = function brandsPage(_ref) {
-  var data = _ref.data,
-      confirmToggle = _ref.confirmToggle,
-      deleteField = _ref.deleteField;
-  return _react2.default.createElement(
-    "div",
-    { className: "page__container brands-page" },
-    _react2.default.createElement(
-      "h2",
-      { className: "title-page" },
-      "\u0411\u0440\u0435\u043D\u0434\u044B"
-    ),
-    data.length > 0 ? _react2.default.createElement(
-      "div",
-      { className: "brands-page__list" },
-      data.map(function (item) {
-        return _react2.default.createElement(
-          "div",
-          { className: "item", key: item._id },
-          _react2.default.createElement(_ImageBlock2.default, {
-            src: _config.IMAGE_PREFIX + "/" + item.image,
-            classes: "item__image"
-          }),
-          _react2.default.createElement(
-            "h3",
-            { className: "item__name" },
-            item.name
-          ),
-          _react2.default.createElement(
-            "div",
-            { className: "item__menu" },
-            _react2.default.createElement(
-              _reactRouterDom.Link,
-              {
-                className: "edit clickable",
-                to: "/admin/edit-brand/" + item._id
-              },
-              "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C"
-            ),
-            _react2.default.createElement(
-              "span",
-              {
-                onClick: function onClick() {
-                  return confirmToggle({
-                    open: true,
-                    text: "Вы действительно хотите удалить этот бренд?",
-                    handler: deleteField,
-                    data: item._id
-                  });
-                },
-                className: "delete clickable"
-              },
-              "\u0423\u0434\u0430\u043B\u0438\u0442\u044C"
-            )
-          )
-        );
-      })
-    ) : "",
-    _react2.default.createElement(_AddButton2.default, { src: "/admin/add-brand" })
-  );
-};
-
-exports.default = (0, _WithMany2.default)(brandsPage, { get: "brands/get_by_params", delete: "brands/delete" }, "Бренды");
-
-/***/ }),
-/* 79 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _WithForm = __webpack_require__(20);
-
-var _WithForm2 = _interopRequireDefault(_WithForm);
-
-var _TextField = __webpack_require__(21);
-
-var _TextField2 = _interopRequireDefault(_TextField);
-
-var _UploadBlock = __webpack_require__(22);
-
-var _UploadBlock2 = _interopRequireDefault(_UploadBlock);
-
-var _SaveButton = __webpack_require__(24);
-
-var _SaveButton2 = _interopRequireDefault(_SaveButton);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var addBrandPage = function addBrandPage(_ref) {
-  var handlerChange = _ref.handlerChange,
-      data = _ref.data,
-      onSave = _ref.onSave,
-      isEmpty = _ref.isEmpty;
-  return _react2.default.createElement(
-    "div",
-    { className: "page__container add-brand-page" },
-    _react2.default.createElement(
-      "h2",
-      { className: "title-page" },
-      "\u0411\u0440\u0435\u043D\u0434"
-    ),
-    _react2.default.createElement(
-      "div",
-      { className: "form" },
-      _react2.default.createElement(_TextField2.default, {
-        type: "input",
-        placeholder: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435",
-        name: "name",
-        handlerChange: handlerChange,
-        value: data.name,
-        isEmpty: isEmpty.name ? true : false
-      }),
-      _react2.default.createElement(_TextField2.default, {
-        type: "textarea",
-        placeholder: "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435",
-        name: "description",
-        handlerChange: handlerChange,
-        value: data.description,
-        isEmpty: isEmpty.description ? true : false
-      }),
-      _react2.default.createElement(_UploadBlock2.default, {
-        handlerChange: handlerChange,
-        name: "image",
-        placeholder: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u043B\u043E\u0433\u043E\u0442\u0438\u043F",
-        isEmpty: isEmpty.image ? true : false,
-        value: data.image || ""
-      }),
-      _react2.default.createElement(_SaveButton2.default, { name: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C", submit: onSave })
-    )
-  );
-};
-
-exports.default = (0, _WithForm2.default)(addBrandPage, {
-  set: "brands/add",
-  edit: "brands/edit",
-  redirect: "/admin/brands",
-  get: "brands/get_by_id"
-}, "Бренд", { name: true, description: false, image: true });
-
-/***/ }),
-/* 80 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _Select = __webpack_require__(81);
+var _Select = __webpack_require__(57);
 
 var _Select2 = _interopRequireDefault(_Select);
 
@@ -4816,7 +3683,7 @@ var Select = function Select(_ref) {
 exports.default = (0, _Select2.default)(Select);
 
 /***/ }),
-/* 81 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4834,7 +3701,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _load = __webpack_require__(8);
+var _load = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4942,7 +3809,7 @@ var withSelect = function withSelect(Component) {
 exports.default = withSelect;
 
 /***/ }),
-/* 82 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4956,11 +3823,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _ListCreator = __webpack_require__(83);
+var _ListCreator = __webpack_require__(59);
 
 var _ListCreator2 = _interopRequireDefault(_ListCreator);
 
-var _TextField = __webpack_require__(21);
+var _TextField = __webpack_require__(7);
 
 var _TextField2 = _interopRequireDefault(_TextField);
 
@@ -5055,7 +3922,7 @@ var ListCreator = function ListCreator(_ref) {
 exports.default = (0, _ListCreator2.default)(ListCreator);
 
 /***/ }),
-/* 83 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5168,6 +4035,1416 @@ var withListCreator = function withListCreator(Component, API_URLS, title) {
 };
 
 exports.default = withListCreator;
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(3);
+
+var _WithMany = __webpack_require__(12);
+
+var _WithMany2 = _interopRequireDefault(_WithMany);
+
+var _config = __webpack_require__(1);
+
+var _ImageBlock = __webpack_require__(8);
+
+var _ImageBlock2 = _interopRequireDefault(_ImageBlock);
+
+var _AddButton = __webpack_require__(14);
+
+var _AddButton2 = _interopRequireDefault(_AddButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var brandsPage = function brandsPage(_ref) {
+  var data = _ref.data,
+      confirmToggle = _ref.confirmToggle,
+      deleteField = _ref.deleteField;
+  return _react2.default.createElement(
+    "div",
+    { className: "page__container brands-page" },
+    _react2.default.createElement(
+      "h2",
+      { className: "title-page" },
+      "\u0411\u0440\u0435\u043D\u0434\u044B"
+    ),
+    data.length > 0 ? _react2.default.createElement(
+      "div",
+      { className: "brands-page__list" },
+      data.map(function (item) {
+        return _react2.default.createElement(
+          "div",
+          { className: "item", key: item._id },
+          _react2.default.createElement(_ImageBlock2.default, {
+            src: _config.IMAGE_PREFIX + "/" + item.image,
+            classes: "item__image"
+          }),
+          _react2.default.createElement(
+            "h3",
+            { className: "item__name" },
+            item.name
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "item__menu" },
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              {
+                className: "edit clickable",
+                to: "/admin/edit-brand/" + item._id
+              },
+              "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C"
+            ),
+            _react2.default.createElement(
+              "span",
+              {
+                onClick: function onClick() {
+                  return confirmToggle({
+                    open: true,
+                    text: "Вы действительно хотите удалить этот бренд?",
+                    handler: deleteField,
+                    data: item._id
+                  });
+                },
+                className: "delete clickable"
+              },
+              "\u0423\u0434\u0430\u043B\u0438\u0442\u044C"
+            )
+          )
+        );
+      })
+    ) : "",
+    _react2.default.createElement(_AddButton2.default, { src: "/admin/add-brand" })
+  );
+};
+
+exports.default = (0, _WithMany2.default)(brandsPage, { get: "brands/get_by_params", delete: "brands/delete" }, "Бренды");
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _WithForm = __webpack_require__(15);
+
+var _WithForm2 = _interopRequireDefault(_WithForm);
+
+var _TextField = __webpack_require__(7);
+
+var _TextField2 = _interopRequireDefault(_TextField);
+
+var _UploadBlock = __webpack_require__(16);
+
+var _UploadBlock2 = _interopRequireDefault(_UploadBlock);
+
+var _SaveButton = __webpack_require__(17);
+
+var _SaveButton2 = _interopRequireDefault(_SaveButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var addBrandPage = function addBrandPage(_ref) {
+  var handlerChange = _ref.handlerChange,
+      data = _ref.data,
+      onSave = _ref.onSave,
+      isEmpty = _ref.isEmpty;
+  return _react2.default.createElement(
+    "div",
+    { className: "page__container add-brand-page" },
+    _react2.default.createElement(
+      "h2",
+      { className: "title-page" },
+      "\u0411\u0440\u0435\u043D\u0434"
+    ),
+    _react2.default.createElement(
+      "div",
+      { className: "form" },
+      _react2.default.createElement(_TextField2.default, {
+        type: "input",
+        placeholder: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435",
+        name: "name",
+        handlerChange: handlerChange,
+        value: data.name,
+        isEmpty: isEmpty.name ? true : false
+      }),
+      _react2.default.createElement(_TextField2.default, {
+        type: "textarea",
+        placeholder: "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435",
+        name: "description",
+        handlerChange: handlerChange,
+        value: data.description,
+        isEmpty: isEmpty.description ? true : false
+      }),
+      _react2.default.createElement(_UploadBlock2.default, {
+        handlerChange: handlerChange,
+        name: "image",
+        placeholder: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u043B\u043E\u0433\u043E\u0442\u0438\u043F",
+        isEmpty: isEmpty.image ? true : false,
+        value: data.image || ""
+      }),
+      _react2.default.createElement(_SaveButton2.default, { name: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C", submit: onSave })
+    )
+  );
+};
+
+exports.default = (0, _WithForm2.default)(addBrandPage, {
+  set: "brands/add",
+  edit: "brands/edit",
+  redirect: "/admin/brands",
+  get: "brands/get_by_id"
+}, "Бренд", { name: true, description: false, image: true });
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var p404 = function p404() {
+  return _react2.default.createElement(
+    "div",
+    { className: "page__container p404" },
+    _react2.default.createElement(
+      "h3",
+      { className: "title-page" },
+      "404"
+    ),
+    _react2.default.createElement(
+      "p",
+      null,
+      "\u0421\u0442\u0440\u0430\u043D\u0438\u0446\u0430 \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u0430"
+    )
+  );
+};
+
+exports.default = p404;
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Header;
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Menu = __webpack_require__(64);
+
+var _Menu2 = _interopRequireDefault(_Menu);
+
+var _Logo = __webpack_require__(67);
+
+var _Logo2 = _interopRequireDefault(_Logo);
+
+var _User = __webpack_require__(68);
+
+var _User2 = _interopRequireDefault(_User);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Header() {
+  return _react2.default.createElement(
+    "div",
+    { className: "header" },
+    _react2.default.createElement(_Logo2.default, null),
+    _react2.default.createElement(_Menu2.default, null),
+    _react2.default.createElement(_User2.default, null)
+  );
+}
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Item = __webpack_require__(65);
+
+var _Item2 = _interopRequireDefault(_Item);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Menu = function Menu() {
+  return _react2.default.createElement(
+    "div",
+    { className: "header__menu" },
+    _react2.default.createElement(_Item2.default, {
+      src: [{ name: "Категории", src: "/admin/categories" }, { name: "Товары", src: "/admin/catalog" }, { name: "Бренды", src: "/admin/brands" }, { name: "Склад", src: "/admin/stock" }],
+      name: "\u0422\u043E\u0432\u0430\u0440\u044B",
+      isDropDown: "yes"
+    }),
+    _react2.default.createElement(_Item2.default, { src: "/admin/orders", name: "\u0417\u0430\u043A\u0430\u0437\u044B", isDropDown: "no" }),
+    _react2.default.createElement(_Item2.default, { src: "/admin/statistics", name: "\u0421\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043A\u0430", isDropDown: "no" }),
+    _react2.default.createElement(_Item2.default, { src: "/admin/ads", name: "\u0420\u0435\u043A\u043B\u0430\u043C\u0430", isDropDown: "no" }),
+    _react2.default.createElement(_Item2.default, {
+      src: [{ name: "Настрока оплаты", src: "/admin/payment" }, { name: "Настройка доставки", src: "/admin/delivery" }],
+      name: "\u041E\u043F\u043B\u0430\u0442\u0430 \u0438 \u0434\u043E\u0441\u0442\u0430\u0432\u043A\u0430",
+      isDropDown: "yes"
+    }),
+    _react2.default.createElement(_Item2.default, {
+      src: [{ name: "Администраторы", src: "/admin/admins" }, { name: "Клиенты", src: "/admin/clients" }],
+      name: "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438",
+      isDropDown: "yes"
+    }),
+    _react2.default.createElement(_Item2.default, { src: "/admin/contacts", name: "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B", isDropDown: "no" })
+  );
+};
+
+exports.default = Menu;
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(3);
+
+var _itemHOC = __webpack_require__(66);
+
+var _itemHOC2 = _interopRequireDefault(_itemHOC);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ItemMenu = function ItemMenu(_ref) {
+  var src = _ref.src,
+      name = _ref.name,
+      isDropDown = _ref.isDropDown;
+  return _react2.default.createElement(
+    "div",
+    { className: "item" },
+    isDropDown === "yes" ? _react2.default.createElement(
+      _react2.default.Fragment,
+      null,
+      _react2.default.createElement(
+        "span",
+        { className: "item__drop" },
+        name
+      ),
+      _react2.default.createElement(
+        "div",
+        { className: "item__down" },
+        src.map(function (item, idx) {
+          return _react2.default.createElement(
+            _reactRouterDom.Link,
+            { key: idx, className: "link", to: item.src },
+            item.name
+          );
+        })
+      )
+    ) : _react2.default.createElement(
+      _reactRouterDom.Link,
+      { className: "item__link", to: src },
+      name
+    )
+  );
+};
+
+exports.default = (0, _itemHOC2.default)(ItemMenu);
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var withMenuButton = function withMenuButton(Component) {
+  var WithMenuButton = function (_React$Component) {
+    _inherits(WithMenuButton, _React$Component);
+
+    function WithMenuButton(props) {
+      _classCallCheck(this, WithMenuButton);
+
+      var _this = _possibleConstructorReturn(this, (WithMenuButton.__proto__ || Object.getPrototypeOf(WithMenuButton)).call(this, props));
+
+      _this.state = {
+        active: false,
+        menuDown: false
+      };
+      return _this;
+    }
+
+    _createClass(WithMenuButton, [{
+      key: "render",
+      value: function render() {
+        var _state = this.state,
+            menuDown = _state.menuDown,
+            active = _state.active;
+
+        return _react2.default.createElement(Component, _extends({}, this.props, { menuDown: menuDown, active: active }));
+      }
+    }]);
+
+    return WithMenuButton;
+  }(_react2.default.Component);
+
+  WithMenuButton.displayName = "WithMenuButton(" + (Component.displayName || Component.name || "Component") + ")";
+  return WithMenuButton;
+};
+
+exports.default = withMenuButton;
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(3);
+
+var _config = __webpack_require__(1);
+
+var _ImageBlock = __webpack_require__(8);
+
+var _ImageBlock2 = _interopRequireDefault(_ImageBlock);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Logo = function Logo() {
+  return _react2.default.createElement(
+    _reactRouterDom.Link,
+    { className: "header__logo", to: "/admin" },
+    _react2.default.createElement(_ImageBlock2.default, { src: _config.API_PREFIX + "/Static/Images/logo.png", classes: "img" })
+  );
+};
+
+exports.default = Logo;
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _HOC = __webpack_require__(69);
+
+var _HOC2 = _interopRequireDefault(_HOC);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var User = function User(_ref) {
+  var name = _ref.name,
+      logout = _ref.logout;
+  return _react2.default.createElement(
+    "div",
+    { className: "header__user" },
+    _react2.default.createElement(
+      "p",
+      { className: "name" },
+      name
+    ),
+    _react2.default.createElement(
+      "p",
+      { onClick: logout, className: "logout clickable" },
+      "\u0412\u044B\u0445\u043E\u0434"
+    )
+  );
+};
+
+exports.default = (0, _HOC2.default)(User);
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var withUser = function withUser(Component) {
+  var WithUser = function (_React$Component) {
+    _inherits(WithUser, _React$Component);
+
+    function WithUser(props) {
+      _classCallCheck(this, WithUser);
+
+      var _this = _possibleConstructorReturn(this, (WithUser.__proto__ || Object.getPrototypeOf(WithUser)).call(this, props));
+
+      _this.state = {
+        name: "Root"
+      };
+      _this.logout = _this.logout.bind(_this);
+      return _this;
+    }
+
+    _createClass(WithUser, [{
+      key: "logout",
+      value: function logout() {
+        console.log("logout");
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var name = this.state.name;
+
+        return _react2.default.createElement(Component, _extends({}, this.props, { name: name, logout: this.logout }));
+      }
+    }]);
+
+    return WithUser;
+  }(_react2.default.Component);
+
+  WithUser.displayName = "WithUser(" + (Component.displayName || Component.name || "Component") + ")";
+  return WithUser;
+};
+
+exports.default = withUser;
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Confirm = function Confirm(_ref) {
+  var text = _ref.text,
+      handler = _ref.handler,
+      close = _ref.close,
+      data = _ref.data;
+  return _react2.default.createElement(
+    "div",
+    { className: "confirm" },
+    _react2.default.createElement(
+      "div",
+      { className: "confirm__container" },
+      _react2.default.createElement(
+        "p",
+        { className: "text" },
+        text
+      ),
+      _react2.default.createElement(
+        "div",
+        { className: "menu" },
+        _react2.default.createElement(
+          "span",
+          { onClick: function onClick() {
+              return handler(data);
+            }, className: "clickable menu__true" },
+          "\u0414\u0430"
+        ),
+        _react2.default.createElement(
+          "span",
+          {
+            onClick: function onClick() {
+              return close({ open: false });
+            },
+            className: "clickable menu__false"
+          },
+          "\u041D\u0435\u0442"
+        )
+      )
+    )
+  );
+};
+
+exports.default = Confirm;
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Error;
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Error(_ref) {
+  var error = _ref.error,
+      ok = _ref.ok;
+
+  return _react2.default.createElement(
+    "div",
+    { className: "error" },
+    _react2.default.createElement(
+      "div",
+      null,
+      _react2.default.createElement(
+        "p",
+        null,
+        error
+      ),
+      _react2.default.createElement(
+        "div",
+        { onClick: function onClick() {
+            return ok("");
+          }, className: "button" },
+        "Ok"
+      )
+    )
+  );
+}
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _categories = __webpack_require__(73);
+
+var _categories2 = _interopRequireDefault(_categories);
+
+var _products = __webpack_require__(74);
+
+var _products2 = _interopRequireDefault(_products);
+
+var _brands = __webpack_require__(75);
+
+var _brands2 = _interopRequireDefault(_brands);
+
+var _file = __webpack_require__(77);
+
+var _file2 = _interopRequireDefault(_file);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = {
+  file: _file2.default,
+  categories: _categories2.default,
+  products: _products2.default,
+  brands: _brands2.default
+};
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _express = __webpack_require__(4);
+
+var _express2 = _interopRequireDefault(_express);
+
+var _mongoose = __webpack_require__(2);
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+var _files = __webpack_require__(9);
+
+__webpack_require__(27);
+
+__webpack_require__(18);
+
+var _Queries = __webpack_require__(19);
+
+var _Queries2 = _interopRequireDefault(_Queries);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var router = _express2.default.Router();
+
+var Category = _mongoose2.default.model("Category");
+
+var Product = _mongoose2.default.model("Product");
+
+router.get("/get_by_params", function (req, res) {
+  var categories = new _Queries2.default(Category);
+  categories.getByParams({ sort: "position=1" }).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.get("/get_by_id/:id", function (req, res) {
+  var categories = new _Queries2.default(Category);
+  categories.getById(req.params.id).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.post("/add", function (req, res) {
+  var categories = new _Queries2.default(Category);
+  categories.getByParams({ limit: 1, sort: "position=-1" }).then(function (data) {
+    if (data && data.ok && data.data.length > 0) {
+      var body = req.body;
+
+      body.position = data.data[0].position + 1;
+      return categories.add(body);
+    } else {
+      return categories.add(req.body);
+    }
+  }).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.post("/position", function (req, res) {
+  var categories = new _Queries2.default(Category);
+  categories.arrEditer(req.body, 0).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.post("/edit", function (req, res) {
+  var categories = new _Queries2.default(Category);
+  var data = {
+    name: req.body.name,
+    description: req.body.description,
+    image: req.body.image || ""
+  };
+  var id = req.body._id;
+  categories.edit(id, data).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.get("/delete/:id", function (req, res) {
+  var categories = new _Queries2.default(Category);
+  var products = new _Queries2.default(Product);
+  var id = req.params.id;
+
+  products.getByParams({ params: "category=" + id }).then(function (data) {
+    if (data.data && data.data.length > 0) {
+      return {
+        ok: false,
+        message: "Не поднимается рука, чтобы удалить данную категорию. У вас имеются товары, относящиеся к ней. Измените категорию в этих товарах или удалите их."
+      };
+    }
+    return { ok: true };
+  }).then(function (data) {
+    if (data.ok) {
+      return categories.delete(id);
+    } else {
+      return data;
+    }
+  }).then(function (data) {
+    if (data.data && data.data.image) {
+      (0, _files.deleteFile)(data.data.image);
+    }
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json({ ok: false, message: "Ошибка сервера, попробуйте позже!" });
+  });
+});
+
+module.exports = router;
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _express = __webpack_require__(4);
+
+var _express2 = _interopRequireDefault(_express);
+
+var _mongoose = __webpack_require__(2);
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+var _files = __webpack_require__(9);
+
+__webpack_require__(27);
+
+__webpack_require__(18);
+
+var _Queries = __webpack_require__(19);
+
+var _Queries2 = _interopRequireDefault(_Queries);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var router = _express2.default.Router();
+
+var Category = _mongoose2.default.model("Category");
+
+var Product = _mongoose2.default.model("Product");
+
+router.get("/get_by_params(/:params/:search)?", function (req, res) {
+  var products = new _Queries2.default(Product);
+  var params = req.params;
+
+  params.limit = 5;
+  products.getByParams(params).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.post("/add", function (req, res) {
+  var products = new _Queries2.default(Product);
+  products.add(req.body).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.get("/delete/:id", function (req, res) {
+  var products = new _Queries2.default(Product);
+  var id = req.params.id;
+
+  products.delete(id).then(function (data) {
+    if (data.data && data.data.image) {
+      (0, _files.deleteFile)(data.data.image);
+    }
+    if (data.data && data.data.gallery && data.data.gallery.length > 0) {
+      data.data.gallery.map(function (img) {
+        (0, _files.deleteFile)(img);
+      });
+    }
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json({ ok: false, message: "Ошибка сервера, попробуйте позже!" });
+  });
+});
+
+module.exports = router;
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _express = __webpack_require__(4);
+
+var _express2 = _interopRequireDefault(_express);
+
+var _mongoose = __webpack_require__(2);
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+var _files = __webpack_require__(9);
+
+__webpack_require__(76);
+
+__webpack_require__(18);
+
+var _Queries = __webpack_require__(19);
+
+var _Queries2 = _interopRequireDefault(_Queries);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var router = _express2.default.Router();
+
+var Brand = _mongoose2.default.model("Brand");
+
+var Product = _mongoose2.default.model("Product");
+
+router.get("/get_by_params", function (req, res) {
+  var brand = new _Queries2.default(Brand);
+  brand.getByParams(req.params).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.post("/add", function (req, res) {
+  var brands = new _Queries2.default(Brand);
+  brands.add(req.body).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.get("/get_by_id/:id", function (req, res) {
+  var brands = new _Queries2.default(Brand);
+  brands.getById(req.params.id).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.post("/edit", function (req, res) {
+  var brands = new _Queries2.default(Brand);
+  var data = {
+    name: req.body.name,
+    description: req.body.description || "",
+    image: req.body.image
+  };
+  var id = req.body._id;
+  brands.edit(id, data).then(function (data) {
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json(err);
+  });
+});
+
+router.get("/delete/:id", function (req, res) {
+  var brands = new _Queries2.default(Brand);
+  var products = new _Queries2.default(Product);
+  var id = req.params.id;
+
+  products.getByParams({ params: "brand=" + id }).then(function (data) {
+    if (data.data && data.data.length > 0) {
+      return {
+        ok: false,
+        message: "Не поднимается рука, чтобы удалить данный бренд. У вас имеются товары, относящиеся к нему. Измените бренд в этих товарах или удалите их."
+      };
+    }
+    return { ok: true };
+  }).then(function (data) {
+    if (data.ok) {
+      return brands.delete(id);
+    } else {
+      return data;
+    }
+  }).then(function (data) {
+    if (data.data && data.data.image) {
+      (0, _files.deleteFile)(data.data.image);
+    }
+    return res.json(data);
+  }).catch(function (err) {
+    return res.status(400).json({ ok: false, message: "Ошибка сервера, попробуйте позже!" });
+  });
+});
+
+module.exports = router;
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var mongoose = __webpack_require__(2);
+
+var Schema = mongoose.Schema;
+
+var BrandSchema = new Schema({
+  name: {
+    type: String
+  },
+  image: {
+    type: String
+  },
+  description: {
+    type: String
+  }
+}, { timestamps: { createdAt: "created_at" } });
+
+var Brand = mongoose.model("Brand", BrandSchema);
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _express = __webpack_require__(4);
+
+var _express2 = _interopRequireDefault(_express);
+
+var _multer = __webpack_require__(78);
+
+var _multer2 = _interopRequireDefault(_multer);
+
+var _path = __webpack_require__(10);
+
+var _path2 = _interopRequireDefault(_path);
+
+var _fs = __webpack_require__(11);
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _mongoXlsx = __webpack_require__(79);
+
+var _mongoXlsx2 = _interopRequireDefault(_mongoXlsx);
+
+var _City = __webpack_require__(80);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var router = _express2.default.Router();
+
+router.get("/test/:page", function (req, res) {
+  return res.json({ page: req.params.page });
+});
+
+router.post("/city-xls", function (req, res) {
+  var storage = _multer2.default.diskStorage({
+    destination: function destination(req, file, callback) {
+      callback(null, "public/Uploads/Tmp");
+    },
+    filename: function filename(req, file, callback) {
+      callback(null, Date.now() + _path2.default.extname(file.originalname));
+    }
+  });
+  var upload = (0, _multer2.default)({
+    storage: storage,
+    limits: {},
+    fileFilter: function fileFilter(req, file, callback) {
+      var ext = _path2.default.extname(file.originalname);
+      if (ext !== ".xlsx" && ext !== ".xls") {
+        var err = new Error("Extention");
+        err.code = "EXTENTION";
+        return callback(err);
+      }
+      callback(null, true);
+    }
+  }).single("file");
+
+  upload(req, res, function (err) {
+    var error = "";
+    var filename = "";
+    if (err) {
+      if (err.code === "LIMIT_FILE_SIZE") {
+        error = "Слишком большой файл!";
+      }
+      if (err.code === "EXTENTION") {
+        error = "Можно загружать файлы с расширениями XLSX, XLS!";
+      }
+      return res.status(400).json({
+        ok: false,
+        err: err,
+        data: error
+      });
+    } else {
+      if (req.file && req.file.filename) {
+        filename = req.file.filename;
+      }
+      var model = null;
+      var xlsx = "public/Uploads/Tmp/" + filename;
+      _mongoXlsx2.default.xlsx2MongoData(xlsx, model, function (err, data) {
+        _fs2.default.unlinkSync(xlsx);
+        if (err) {
+          return res.json({
+            ok: false,
+            err: err,
+            data: "Ошибка чтения файла"
+          });
+        }
+        var newData = [];
+        data.map(function (city, idx) {
+          if (city.ID) {
+            newData.push(city);
+          }
+        });
+        var AddCity = newData.map(function (city) {
+          return new Promise(function (resolve, reject) {
+            (0, _City.PushCity)(city).then(function (result) {
+              console.log(result);
+              resolve(city);
+            });
+          });
+        });
+        return Promise.all(AddCity).then(function (sub) {
+          return res.json({ ok: true });
+        }, function (err) {
+          console.log(err);
+        });
+      });
+    }
+  });
+});
+
+module.exports = router;
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports) {
+
+module.exports = require("multer");
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports) {
+
+module.exports = require("mongo-xlsx");
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _mongoose = __webpack_require__(2);
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+__webpack_require__(81);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var City = _mongoose2.default.model("City");
+
+module.exports.PushCity = function (data) {
+  var ID = data.ID,
+      FullName = data.FullName,
+      CityName = data.CityName,
+      OblName = data.OblName,
+      Center = data.Center,
+      NalSumLimit = data.NalSumLimit,
+      EngName = data.EngName,
+      PostCodeList = data.PostCodeList,
+      EngFullName = data.EngFullName,
+      EngOblName = data.EngOblName,
+      CountryCode = data.CountryCode,
+      CountryName = data.CountryName,
+      EngCountryName = data.EngCountryName,
+      FullNameFIAS = data.FullNameFIAS,
+      FIAS = data.FIAS,
+      KLADR = data.KLADR,
+      cityDD = data.cityDD,
+      pvzCode = data.pvzCode;
+
+  return City.findOne({ CityID: ID }, function (err, doc) {
+    if (err) {
+      return { ok: false };
+    }
+    if (doc) {
+      return City.findByIdAndUpdate({ id: doc._id }, {
+        $set: {
+          CityID: ID,
+          FullName: FullName,
+          CityName: CityName,
+          OblName: OblName,
+          Center: Center,
+          NalSumLimit: NalSumLimit,
+          EngName: EngName,
+          PostCodeList: PostCodeList,
+          EngFullName: EngFullName,
+          EngOblName: EngOblName,
+          CountryCode: CountryCode,
+          CountryName: CountryName,
+          EngCountryName: EngCountryName,
+          FullNameFIAS: FullNameFIAS,
+          FIAS: FIAS,
+          KLADR: KLADR,
+          cityDD: cityDD,
+          pvzCode: pvzCode
+        }
+      }, function (err, docum) {
+        if (err) {
+          return { ok: false };
+        }
+        return { ok: true };
+      });
+    } else {
+      var newCity = new City({
+        CityID: ID,
+        FullName: FullName,
+        CityName: CityName,
+        OblName: OblName,
+        Center: Center,
+        NalSumLimit: NalSumLimit,
+        EngName: EngName,
+        PostCodeList: PostCodeList,
+        EngFullName: EngFullName,
+        EngOblName: EngOblName,
+        CountryCode: CountryCode,
+        CountryName: CountryName,
+        EngCountryName: EngCountryName,
+        FullNameFIAS: FullNameFIAS,
+        FIAS: FIAS,
+        KLADR: KLADR,
+        cityDD: cityDD,
+        pvzCode: pvzCode
+      });
+      return newCity.save({}, function (err, doc) {
+        if (err) {
+          return { ok: false };
+        }
+        return { ok: true };
+      });
+    }
+  });
+};
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var mongoose = __webpack_require__(2);
+
+var Schema = mongoose.Schema;
+
+var CitySchema = new Schema({
+  CityID: {
+    type: String
+  },
+  FullName: {
+    type: String
+  },
+  CityName: {
+    type: String
+  },
+  OblName: {
+    type: String
+  },
+  Center: {
+    type: String
+  },
+  NalSumLimit: {
+    type: String
+  },
+  EngName: {
+    type: String
+  },
+  PostCodeList: {
+    type: String
+  },
+  EngFullName: {
+    type: String
+  },
+  EngOblName: {
+    type: String
+  },
+  CountryCode: {
+    type: String
+  },
+  CountryName: {
+    type: String
+  },
+  EngCountryName: {
+    type: String
+  },
+  FullNameFIAS: {
+    type: String
+  },
+  FIAS: {
+    type: String
+  },
+  KLADR: {
+    type: String
+  },
+  cityDD: {
+    type: String
+  },
+  pvzCode: {
+    type: String
+  }
+}, { timestamps: { createdAt: "created_at" } });
+
+var City = mongoose.model("City", CitySchema);
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports) {
+
+module.exports = require("http");
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports) {
+
+module.exports = require("socket.io");
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _TextField = __webpack_require__(7);
+
+var _TextField2 = _interopRequireDefault(_TextField);
+
+var _Select = __webpack_require__(56);
+
+var _Select2 = _interopRequireDefault(_Select);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Filter = function Filter(_ref) {
+  var controllers = _ref.controllers,
+      addError = _ref.addError;
+  return _react2.default.createElement(
+    "div",
+    { className: "filter" },
+    _react2.default.createElement(
+      "div",
+      { className: "filter__container" },
+      controllers.map(function (ctrl, idx) {
+        return _react2.default.createElement(
+          _react2.default.Fragment,
+          { key: idx },
+          ctrl.type === "text" ? _react2.default.createElement(_TextField2.default, {
+            type: "input",
+            placeholder: ctrl.placeholder,
+            name: ctrl.name,
+            handlerChange: ctrl.handlerChange,
+            value: ctrl.value,
+            isEmpty: false
+          }) : _react2.default.createElement(_Select2.default, {
+            value: ctrl.value,
+            name: ctrl.name,
+            handlerChange: ctrl.handlerChange,
+            isEmpty: false,
+            chooseField: ctrl.chooseField,
+            apiUrl: ctrl.apiUrl,
+            placeholder: ctrl.placeholder,
+            addError: addError
+          })
+        );
+      })
+    )
+  );
+};
+
+exports.default = Filter;
 
 /***/ })
 /******/ ]);

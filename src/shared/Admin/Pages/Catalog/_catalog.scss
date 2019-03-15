@@ -1,0 +1,42 @@
+.catalog-page {
+  &__list {
+    width: $content_width;
+    margin: auto;
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: $grey;
+      border-radius: 24px;
+      padding: 16px;
+      margin-bottom: 16px;
+      .name {
+        color: #fff;
+        font-weight: 600;
+        font-size: 18px;
+      }
+      .menu {
+        display: flex;
+        .edit,
+        .delete {
+          width: 160px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+          color: #fff;
+          cursor: pointer;
+        }
+        .edit {
+          margin-right: 8px;
+          background-color: $green;
+        }
+        .delete {
+          background-color: $red;
+        }
+      }
+    }
+  }
+}
