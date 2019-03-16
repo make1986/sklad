@@ -7,6 +7,7 @@ import Brands from "./Pages/Brands";
 import AddBrand from "./Pages/AddBrand";
 import Skills from "./Pages/Skills";
 import AddSkills from "./Pages/AddSkills";
+import Stock from "./Pages/Stock";
 
 import { MultiBootloader } from "./api/load";
 
@@ -80,6 +81,17 @@ const routes = [
       params: path => getParams(path, "/admin/edit-product/")
     },
     title: "Товар"
+  },
+  {
+    path: "/admin/stock",
+    exact: false,
+    component: Stock,
+    handlerClass: MultiBootloader,
+    params: {
+      url: "products/get_by_params",
+      params: path => getParams(path, "/admin/stock/")
+    },
+    title: "Каталог товаров"
   },
   {
     path: "/admin/brands",

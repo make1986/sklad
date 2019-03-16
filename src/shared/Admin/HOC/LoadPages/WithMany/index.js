@@ -1,6 +1,7 @@
 import React from "react";
 
 import { MultiBootloader } from "../../../api/load";
+import { FieldCreator } from "../../../api/add";
 
 import Preloader from "../../../Components/Preloader";
 
@@ -29,6 +30,8 @@ const withMany = (Component, API_URL, title) => {
       this.changeSearch = this.changeSearch.bind(this);
       this.changeParams = this.changeParams.bind(this);
       this.loadMore = this.loadMore.bind(this);
+      this.editData = this.editData.bind(this);
+      this.incrementData = this.incrementData.bind(this);
     }
     componentDidMount() {
       window.scrollTo(0, 0);
@@ -148,12 +151,46 @@ const withMany = (Component, API_URL, title) => {
           this.setState({
             data: data && data.data ? data.data : [],
             withData: data && data.data ? true : false,
-            count: data && data.count ? data.count : 0
+            count: data && data.count ? data.count : 0,
+            page: 1
           });
         })
         .catch(err => {
           this.props.addError("Произошла ошибка на сервере. Попробуйте позже.");
         });
+    }
+    editData(name, value) {
+      const keys = name.split("=");
+      const id = keys[0];
+      const field = keys[1];
+      if (id && field) {
+        let { data } = this.state;
+        const idx = data.findIndex(x => x._id === id);
+        data[idx][field] = value;
+        this.setState({ data }, () => {
+          const editer = new FieldCreator(API_URL.edit, {
+            _id: id,
+            [field]: value
+          });
+          editer.response().then(data => {
+            if (!data || !data.ok) {
+              this.props.addError(
+                "Произошла ошибка на сервере. Попробуйте позже."
+              );
+            }
+          });
+        });
+      } else {
+        this.props.addError(
+          "Произошла ошибка в клиентской части приложения. Обратитесь к разработчику."
+        );
+      }
+    }
+
+    incrementData(name, value) {
+      const keys = name.split("=");
+      const id = keys[0];
+      const field = keys[1];
     }
 
     render() {
@@ -173,6 +210,8 @@ const withMany = (Component, API_URL, title) => {
               count={count}
               moreLoading={moreLoading}
               loadMore={this.loadMore}
+              editData={this.editData}
+              incrementData={this.incrementData}
             />
           ) : (
             <Preloader />

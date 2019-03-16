@@ -70,6 +70,7 @@ textarea {
 }
 
 .clickable {
+  cursor: pointer;
   &:hover {
     box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302),
       0 4px 8px 3px rgba(60, 64, 67, 0.149);
@@ -127,6 +128,7 @@ textarea {
 @import "./Components/Select/select";
 @import "./Components/ListCreator/listCreator";
 @import "./Components/Filter/filter";
+@import "./Components/PopUp/popup";
 
 //pages
 @import "./Pages/Categories/categories";

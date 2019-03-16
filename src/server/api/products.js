@@ -53,6 +53,18 @@ router.get("/get_by_id/:id", (req, res) => {
     });
 });
 
+router.get("/get_one/:fields", (req, res) => {
+  const products = new DataBase(Product);
+  products
+    .getOne(req.params.fields)
+    .then(data => {
+      return res.json(data);
+    })
+    .catch(err => {
+      return res.status(400).json(err);
+    });
+});
+
 router.get("/delete/:id", (req, res) => {
   const products = new DataBase(Product);
   const { id } = req.params;

@@ -11,6 +11,7 @@ export default class DataBase {
     this.getFindParams = this.getFindParams.bind(this);
     this.arrEditer = this.arrEditer.bind(this);
     this.getCount = this.getCount.bind(this);
+    this.getOne = this.getOne.bind(this);
   }
   // get several objects by parameters
   getByParams(params) {
@@ -30,6 +31,18 @@ export default class DataBase {
         });
     });
   }
+  // get one by params
+  getOne(params) {
+    return new Promise((resolve, reject) => {
+      this.Model.findOne(this.getParams(params)).exec((err, doc) => {
+        if (err) {
+          reject({ ok: false, err });
+        }
+        resolve({ ok: true, data: doc });
+      });
+    });
+  }
+
   // get count
   getCount(params, data) {
     const { search } = params;

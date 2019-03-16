@@ -18,6 +18,11 @@
       }
       .menu {
         display: flex;
+
+        .text-field {
+          width: 180px;
+          margin-left: 8px;
+        }
         .edit,
         .delete {
           width: 160px;
@@ -50,5 +55,37 @@
     color: #fff;
     cursor: pointer;
     margin: 30px auto;
+  }
+  .add-stock {
+    padding: 30px;
+    width: 400px;
+
+    .message {
+      color: $grey;
+      margin: 0;
+
+      &.count {
+        font-weight: bold;
+      }
+    }
+
+    .product-block {
+      width: calc(100% - 30px);
+      margin-top: 30px;
+      border: 1px solid $grey;
+      padding: 15px;
+
+      .save {
+        width: 200px;
+        height: 40px;
+        border-radius: 8px;
+        background-color: $green;
+        color: #fff;
+        margin: 15px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
   }
 }
