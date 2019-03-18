@@ -67,7 +67,7 @@ const withForm = (Component, API_URLS, title, required) => {
         }
       }
       for (const key in data) {
-        if (typeof data[key] === "object") {
+        if (typeof data[key] === "object" && Array.isArray(data[key])) {
           data[key].map(item => {
             if (typeof item === "object") {
               for (const i in item) {

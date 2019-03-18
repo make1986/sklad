@@ -17,7 +17,7 @@ const Menu = () => (
     />
     <Item src="/admin/orders" name="Заказы" isDropDown="no" />
     <Item src="/admin/statistics" name="Статистика" isDropDown="no" />
-    <Item src="/admin/ads" name="Реклама" isDropDown="no" />
+    <Item src="/admin/adsense" name="Реклама" isDropDown="no" />
     <Item
       src={[
         { name: "Настрока оплаты", src: "/admin/payment" },

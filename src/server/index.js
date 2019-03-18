@@ -17,7 +17,15 @@ import db from "./db/connect";
 import sessionStore from "./sessionStore";
 
 import routes from "./router";
-import { file, categories, products, brands, skills } from "./api";
+import {
+  file,
+  categories,
+  products,
+  brands,
+  skills,
+  admins,
+  adsense
+} from "./api";
 import { loadImage, deleteFile } from "./socket/files";
 
 db.setUpConnect();
@@ -44,6 +52,8 @@ app.use("/api/categories", categories);
 app.use("/api/products", products);
 app.use("/api/brands", brands);
 app.use("/api/skills", skills);
+app.use("/api/admins", admins);
+app.use("/api/adsense", adsense);
 
 app.use(express.static("public"));
 app.use(routes);

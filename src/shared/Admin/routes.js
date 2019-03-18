@@ -8,6 +8,10 @@ import AddBrand from "./Pages/AddBrand";
 import Skills from "./Pages/Skills";
 import AddSkills from "./Pages/AddSkills";
 import Stock from "./Pages/Stock";
+import Admins from "./Pages/Admins";
+import AddAdmin from "./Pages/AddAdmin";
+import Adsense from "./Pages/Adsense";
+import AddAdsense from "./Pages/AddAdsense";
 
 import { MultiBootloader } from "./api/load";
 
@@ -148,6 +152,62 @@ const routes = [
       params: path => getParams(path, "/admin/edit-skills/")
     },
     title: "Навык"
+  },
+  {
+    path: "/admin/admins",
+    exact: false,
+    component: Admins,
+    handlerClass: MultiBootloader,
+    params: {
+      url: "admins/get_by_params",
+      params: path => getParams(path, "/admin/admins/")
+    },
+    title: "Администраторы"
+  },
+  {
+    path: "/admin/add-admin",
+    exact: false,
+    component: AddAdmin,
+    title: "Администратор"
+  },
+  {
+    path: "/admin/edit-admin/:id",
+    exact: false,
+    component: AddAdmin,
+    handlerClass: MultiBootloader,
+    params: {
+      url: "admins/get_by_id",
+      params: path => getParams(path, "/admin/edit-admin/")
+    },
+    title: "Администратор"
+  },
+  {
+    path: "/admin/adsense",
+    exact: false,
+    component: Adsense,
+    handlerClass: MultiBootloader,
+    params: {
+      url: "adsense/get_by_params",
+      params: path => getParams(path, "/admin/adsense/")
+    },
+    title: "Реклама"
+  },
+  {
+    path: "/admin/add-adsense",
+    exact: false,
+    component: AddAdsense,
+    title: "Рекламный модуль"
+  },
+  {
+    path: "/admin/edit-adsense/:id",
+    exact: false,
+    component: AddAdsense,
+    handlerClass: MultiBootloader,
+    params: {
+      url: "adsense/get_by_id",
+      params: path => getParams(path, "/admin/edit-adsense/")
+    },
+    title: "Рекламный модуль"
   }
 ];
 
