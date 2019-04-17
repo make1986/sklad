@@ -61,6 +61,9 @@ const ProductSchema = new Schema(
     sold: {
       type: Number,
       default: 0
+    },
+    colors: {
+      type: Array
     }
   },
   { timestamps: { createdAt: "created_at" } }

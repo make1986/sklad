@@ -1,5 +1,6 @@
 import React from "react";
 import withForm from "../../HOC/LoadPages/WithForm";
+import withColor from "./HOCs/withColor";
 
 import TextField from "../../Components/TextField";
 import UploadBlock from "../../Components/UploadBlock";
@@ -7,8 +8,17 @@ import Gallery from "../../Components/Gallery";
 import SaveButton from "../../Components/SaveButton";
 import Select from "../../Components/Select";
 import ListCreator from "../../Components/ListCreator";
+import Checkbox from "../../Components/Checkbox";
 
-const productPage = ({ handlerChange, data, onSave, isEmpty, addError }) => (
+const productPage = ({
+  handlerChange,
+  data,
+  onSave,
+  isEmpty,
+  addError,
+  isColor,
+  chooseColor
+}) => (
   <div className="page__container add-categories-page">
     <h2 className="title-page">Товар</h2>
     <div className="form">
@@ -138,13 +148,30 @@ const productPage = ({ handlerChange, data, onSave, isEmpty, addError }) => (
         handlerChange={handlerChange}
         value={data.features}
       />
+      <Checkbox
+        name="colors"
+        placeholder="Несколько цветов"
+        handlerChange={chooseColor}
+        value={isColor}
+      />
+      {isColor ? (
+        <ListCreator
+          name="colors"
+          placeholder="Ключ (цвет) - Значение (HEX)"
+          type="pair"
+          handlerChange={handlerChange}
+          value={data.colors}
+        />
+      ) : (
+        ""
+      )}
       <SaveButton name="Сохранить" submit={onSave} />
     </div>
   </div>
 );
 
 export default withForm(
-  productPage,
+  withColor(productPage),
   {
     set: "products/add",
     edit: "products/edit",
@@ -164,6 +191,8 @@ export default withForm(
     minAge: true,
     maxAge: true,
     weight: true,
-    youtube: false
+    youtube: false,
+    features: false,
+    colors: false
   }
 );

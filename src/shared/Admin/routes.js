@@ -12,6 +12,7 @@ import Admins from "./Pages/Admins";
 import AddAdmin from "./Pages/AddAdmin";
 import Adsense from "./Pages/Adsense";
 import AddAdsense from "./Pages/AddAdsense";
+import Homepage from "./Pages/Content/Homepage";
 
 import { MultiBootloader } from "./api/load";
 
@@ -208,6 +209,17 @@ const routes = [
       params: path => getParams(path, "/admin/edit-adsense/")
     },
     title: "Рекламный модуль"
+  },
+  {
+    path: "/admin/homepage",
+    exact: false,
+    component: Homepage,
+    handlerClass: MultiBootloader,
+    params: {
+      url: "content/get_homepage",
+      params: path => getParams(path, "/admin/homepage/")
+    },
+    title: "Контент"
   }
 ];
 

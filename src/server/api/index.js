@@ -5,6 +5,7 @@ import skills from "./skills";
 import admins from "./admins";
 import file from "./file";
 import adsense from "./adsense";
+import content from "./content";
 
 module.exports = {
   file,
@@ -13,5 +14,6 @@ module.exports = {
   brands,
   skills,
   admins,
-  adsense
+  adsense,
+  content
 };

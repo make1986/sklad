@@ -103,6 +103,19 @@ const stockPage = ({
           apiUrl: "brands/get_by_params",
           addError: addError,
           columns: 3
+        },
+        {
+          type: "checkbox",
+          placeholder: "С нулевым остатком",
+          name: "qt",
+          handlerChange: changeParams,
+          value:
+            params.findIndex(x => x.key === "qt") >= 0
+              ? params[params.findIndex(x => x.key === "qt")].value
+              : "",
+          apiUrl: "brands/get_by_params",
+          addError: addError,
+          columns: 3
         }
       ]}
     />

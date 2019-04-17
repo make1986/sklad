@@ -24,7 +24,8 @@ import {
   brands,
   skills,
   admins,
-  adsense
+  adsense,
+  content
 } from "./api";
 import { loadImage, deleteFile } from "./socket/files";
 
@@ -54,6 +55,7 @@ app.use("/api/brands", brands);
 app.use("/api/skills", skills);
 app.use("/api/admins", admins);
 app.use("/api/adsense", adsense);
+app.use("/api/content", content);
 
 app.use(express.static("public"));
 app.use(routes);

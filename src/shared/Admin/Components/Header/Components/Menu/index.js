@@ -34,7 +34,15 @@ const Menu = () => (
       name="Пользователи"
       isDropDown="yes"
     />
-    <Item src="/admin/contacts" name="Контакты" isDropDown="no" />
+    <Item
+      src={[
+        { name: "Главная страница", src: "/admin/homepage" },
+        { name: "Footer", src: "/admin/footer" },
+        { name: "Контакты", src: "/admin/contacts" }
+      ]}
+      name="Контент"
+      isDropDown="yes"
+    />
   </div>
 );
 
